@@ -98,14 +98,14 @@ const AK = {
   init() {
     this.cacheElements();
     this.bindGlobalEvents();
-    this.loadAllData()
-      .then(() => {
-        this.loadStateFromStorage();
-        this.ensureDailyReset();
-        this.computeLevel();
-        this.renderAll();
-        this.startResetTimer();
-        window.AK = this; // debug handle
+    window.AK_DataLoader.loadAll(this)
+  .then(() => {
+    this.loadStateFromStorage();
+    this.ensureDailyReset();
+    this.computeLevel();
+    this.renderAll();
+    this.startResetTimer();
+    window.AK = this; // debug handle
       })
       .catch((err) => {
         console.error("Akatsuki init error:", err);
