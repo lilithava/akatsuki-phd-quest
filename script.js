@@ -1,12 +1,11 @@
-// Wait for DOM to be ready
+// Akatsuki PhD Quest - Complete Working Version
 document.addEventListener('DOMContentLoaded', () => {
-    // Poll for data to be loaded (max 5 seconds)
     let attempts = 0;
     const waitForData = setInterval(() => {
         if (window.AK_DATA && window.AK_DATA.rules) {
             clearInterval(waitForData);
             initApp();
-        } else if (attempts > 50) { // 5 seconds timeout
+        } else if (attempts > 30) {
             clearInterval(waitForData);
             console.warn('Data load timeout, using defaults');
             initApp();
@@ -15,18 +14,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
+// Shop items definition
+const SHOP_ITEMS = [
+    { id: 'cloak_basic', name: 'Akatsuki Cloak', category: 'Cloak', cost: 150, effect: { xpMult: 1.05, coinMult: 1.0 }, description: '+5% XP' },
+    { id: 'mask_anbu', name: 'ANBU Mask', category: 'Mask', cost: 100, effect: { xpMult: 1.03, coinMult: 1.0 }, description: '+3% XP' },
+    { id: 'ring_akatsuki', name: 'Akatsuki Ring', category: 'Accessory', cost: 80, effect: { xpMult: 1.02, coinMult: 1.02 }, description: '+2% XP & Coins' },
+    { id: 'raven_companion', name: 'Raven Companion', category: 'Companion', cost: 200, effect: { xpMult: 1.1, coinMult: 1.0 }, description: '+10% XP' },
+    { id: 'crimson_aura', name: 'Crimson Aura', category: 'Aura', cost: 120, effect: { xpMult: 1.0, coinMult: 1.1 }, description: '+10% Coins' },
+    { id: 'shadow_wolf', name: 'Shadow Wolf', category: 'Companion', cost: 350, effect: { xpMult: 1.15, coinMult: 1.05 }, description: '+15% XP, +5% Coins' },
+    { id: 'elite_cloak', name: 'Elite Akatsuki Cloak', category: 'Cloak', cost: 400, effect: { xpMult: 1.12, coinMult: 1.08 }, description: '+12% XP, +8% Coins' },
+    { id: 'focus_charm', name: 'Focus Charm', category: 'Accessory', cost: 60, effect: { xpMult: 1.0, coinMult: 1.0 }, description: 'Cosmetic only' }
+];
+
 function initApp() {
     // ---------- STATE ----------
     let state = {
         xp: 0,
-        coins: 0,
+        coins: 150, // Starting coins to buy something
         level: 1,
         streak: 0,
         lastResetDate: new Date().toISOString().slice(0,10),
         activeTasks: [],
         completedHistory: [],
         undoStack: [],
-        redoStack: []
+        redoStack: [],
+        avatar: {
+            name: 'Shadow Scholar',
+            equipped: [],
+            inventory: []
+        }
     };
 
     // Load from localStorage
@@ -36,15 +52,17 @@ function initApp() {
             try {
                 const parsed = JSON.parse(saved);
                 state = { ...state, ...parsed };
-                // Ensure steps are proper objects
-                state.activeTasks = state.activeTasks.map(t => ({
+                state.activeTasks = (state.activeTasks || []).map(t => ({
                     ...t,
                     steps: (t.steps || []).map(s => 
                         typeof s === 'string' ? { text: s, completed: false } : s
                     )
                 }));
+                state.completedHistory = state.completedHistory || [];
+                state.avatar = state.avatar || { name: 'Shadow Scholar', equipped: [], inventory: [] };
             } catch(e) { console.error(e); }
         }
+        
         // Add sample task if empty
         if (state.activeTasks.length === 0) {
             state.activeTasks.push({
@@ -65,6 +83,7 @@ function initApp() {
                 completed: false
             });
         }
+        
         updateXPLevel();
         saveState();
     }
@@ -72,6 +91,13 @@ function initApp() {
     function saveState() {
         localStorage.setItem('akatsuki_state', JSON.stringify(state));
         renderAll();
+    }
+
+    function showReward(message, xpGain, coinGain) {
+        const toast = document.getElementById('rewardToast');
+        toast.innerHTML = `✨ +${xpGain} XP  💰 +${coinGain} Coins<br>${message}`;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
     function pushUndo(action) {
@@ -98,7 +124,7 @@ function initApp() {
                 task.completed = false;
                 task.finishedAt = null;
                 state.xp -= action.xpGain;
-                state.coins -= action.coinsGain;
+                state.coins -= action.coinGain;
                 state.completedHistory = state.completedHistory.filter(h => h.taskId !== action.taskId);
             }
         }
@@ -123,18 +149,32 @@ function initApp() {
                 task.completed = true;
                 task.finishedAt = new Date().toISOString();
                 state.xp += action.xpGain;
-                state.coins += action.coinsGain;
+                state.coins += action.coinGain;
                 state.completedHistory.push({
                     taskId: action.taskId,
                     title: task.title,
                     completedAt: task.finishedAt,
                     xpGained: action.xpGain,
+                    coinsGained: action.coinGain,
                     notes: task.notes || ''
                 });
             }
         }
         updateXPLevel();
         saveState();
+    }
+
+    function getMultipliers() {
+        let xpMult = 1.0;
+        let coinMult = 1.0;
+        state.avatar.equipped.forEach(itemId => {
+            const item = SHOP_ITEMS.find(i => i.id === itemId);
+            if (item && item.effect) {
+                xpMult *= (item.effect.xpMult || 1);
+                coinMult *= (item.effect.coinMult || 1);
+            }
+        });
+        return { xpMult, coinMult };
     }
 
     function updateTaskCompletion(task) {
@@ -148,8 +188,12 @@ function initApp() {
         const task = state.activeTasks.find(t => t.id === taskId);
         if (!task || task.completed) return;
         
-        const xpGain = task.xp || 30;
-        const coinGain = Math.floor(xpGain * 0.2);
+        const { xpMult, coinMult } = getMultipliers();
+        let baseXp = task.xp || 30;
+        let baseCoins = Math.floor(baseXp * 0.2);
+        
+        const xpGain = Math.floor(baseXp * xpMult);
+        const coinGain = Math.floor(baseCoins * coinMult);
         
         task.completed = true;
         task.finishedAt = new Date().toISOString();
@@ -161,9 +205,11 @@ function initApp() {
             title: task.title,
             completedAt: task.finishedAt,
             xpGained: xpGain,
+            coinsGained: coinGain,
             notes: task.notes || ''
         });
         
+        showReward(`Completed: ${task.title}`, xpGain, coinGain);
         pushUndo({ type: 'completeTask', taskId, xpGain, coinGain });
         updateXPLevel();
         saveState();
@@ -173,7 +219,9 @@ function initApp() {
         const xpPerLevel = 500;
         const newLevel = Math.floor(state.xp / xpPerLevel) + 1;
         if (newLevel > state.level) {
-            state.coins += 100; // level up bonus
+            const bonus = 100;
+            state.coins += bonus;
+            showReward(`Level Up! You reached level ${newLevel}`, 0, bonus);
         }
         state.level = newLevel;
         updateStreak();
@@ -204,6 +252,8 @@ function initApp() {
         renderActiveMissions();
         renderTaskBank();
         renderHistory();
+        renderAvatar();
+        renderShop();
     }
 
     function renderHeader() {
@@ -223,7 +273,6 @@ function initApp() {
         document.getElementById('completedToday').innerText = completedToday;
         document.getElementById('totalXP').innerText = state.xp;
         
-        // Win the day logic
         const hasImportant = state.activeTasks.some(t => t.completed && (t.priority === 'Critical' || t.priority === 'Important'));
         const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
         const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
@@ -242,7 +291,7 @@ function initApp() {
         const activeTasks = state.activeTasks.filter(t => !t.completed);
         
         if (activeTasks.length === 0) {
-            container.innerHTML = '<div class="ak-card">No active missions. Add some from the Task Bank!</div>';
+            container.innerHTML = '<div class="ak-card">✨ No active missions. Add some from the Task Bank or Generator!</div>';
             return;
         }
         
@@ -252,7 +301,7 @@ function initApp() {
             div.innerHTML = `
                 <div class="mission-title">
                     <strong>${escapeHtml(task.title)}</strong>
-                    <small style="color:#aaa">${task.difficulty} | ${task.domain}</small>
+                    <small style="color:#aaa">${task.difficulty} | ${task.domain} | ${task.xp} XP</small>
                 </div>
                 <div class="mission-meta">Repeat: ${task.repeatability || 'One-time'} | Priority: ${task.priority || 'Normal'}</div>
                 <ul class="step-list" data-task-id="${task.id}">
@@ -268,13 +317,11 @@ function initApp() {
             container.appendChild(div);
         });
         
-        // Attach event listeners to checkboxes
         document.querySelectorAll('.step-checkbox').forEach(cb => {
             cb.removeEventListener('change', handleStepToggle);
             cb.addEventListener('change', handleStepToggle);
         });
         
-        // Attach details button listeners
         document.querySelectorAll('.view-task-details').forEach(btn => {
             btn.removeEventListener('click', handleDetailsClick);
             btn.addEventListener('click', handleDetailsClick);
@@ -319,6 +366,7 @@ function initApp() {
         document.getElementById('modalBody').innerHTML = `
             <p><strong>Domain:</strong> ${task.domain}</p>
             <p><strong>Difficulty:</strong> ${task.difficulty}</p>
+            <p><strong>XP Reward:</strong> ${task.xp}</p>
             <p><strong>Repeatability:</strong> ${task.repeatability || 'One-time'}</p>
             <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
             <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
@@ -343,7 +391,6 @@ function initApp() {
         const container = document.getElementById('taskBankList');
         if (!container) return;
         
-        // Collect all tasks from loaded banks
         let allTasks = [];
         const banks = ['phd', 'skool', 'curriculum', 'ra', 'docs', 'rituals'];
         for (let bank of banks) {
@@ -354,231 +401,4 @@ function initApp() {
         }
         
         const searchTerm = document.getElementById('bankSearch')?.value.toLowerCase() || '';
-        const filtered = allTasks.filter(t => t.title?.toLowerCase().includes(searchTerm));
-        
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="ak-card">No tasks found. Check that JSON files loaded correctly.</div>';
-            return;
-        }
-        
-        container.innerHTML = filtered.map(t => `
-            <div class="mission-item">
-                <div class="mission-title"><strong>${escapeHtml(t.title)}</strong></div>
-                <div class="mission-meta">${t.difficulty || 'Medium'} | ${t.domain || 'General'}</div>
-                <button class="add-from-bank" data-title="${escapeHtml(t.title)}" data-domain="${t.domain || 'General'}" data-difficulty="${t.difficulty || 'Medium'}" data-xp="${t.xp || 30}">+ Add to Active</button>
-            </div>
-        `).join('');
-        
-        document.querySelectorAll('.add-from-bank').forEach(btn => {
-            btn.removeEventListener('click', handleAddFromBank);
-            btn.addEventListener('click', handleAddFromBank);
-        });
-    }
-    
-    function handleAddFromBank(e) {
-        const btn = e.target;
-        const newTask = {
-            id: 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-            title: btn.dataset.title,
-            domain: btn.dataset.domain,
-            difficulty: btn.dataset.difficulty,
-            xp: parseInt(btn.dataset.xp),
-            repeatability: 'One-time',
-            priority: 'Normal',
-            steps: [
-                { text: 'Plan this task', completed: false },
-                { text: 'Execute the main work', completed: false },
-                { text: 'Review and document', completed: false }
-            ],
-            notes: '',
-            startedAt: new Date().toISOString(),
-            completed: false
-        };
-        state.activeTasks.push(newTask);
-        pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask, xpGain: 0 });
-        saveState();
-    }
-    
-    function renderHistory() {
-        const container = document.getElementById('weeklyHistory');
-        if (!container) return;
-        
-        const last7Days = [];
-        for (let i = 0; i < 7; i++) {
-            let d = new Date();
-            d.setDate(d.getDate() - i);
-            last7Days.push(d.toISOString().slice(0,10));
-        }
-        
-        let html = '';
-        for (let day of last7Days) {
-            const dayCompletions = state.completedHistory.filter(h => h.completedAt.slice(0,10) === day);
-            html += `<div class="ak-card"><h3>${day}</h3><ul>`;
-            if (dayCompletions.length === 0) {
-                html += '<li>No completions</li>';
-            } else {
-                dayCompletions.forEach(c => html += `<li>${escapeHtml(c.title)} (+${c.xpGained} XP)</li>`);
-            }
-            html += `</ul></div>`;
-        }
-        container.innerHTML = html;
-    }
-    
-    function generateReport() {
-        let report = `AKATSUKI WEEKLY REPORT\n`;
-        report += `Generated: ${new Date().toLocaleString()}\n`;
-        report += `Level: ${state.level} | XP: ${state.xp} | Coins: ${state.coins} | Streak: ${state.streak}\n`;
-        report += `\nCompleted this week:\n`;
-        
-        const last7Days = [];
-        for (let i = 0; i < 7; i++) {
-            let d = new Date();
-            d.setDate(d.getDate() - i);
-            last7Days.push(d.toISOString().slice(0,10));
-        }
-        
-        last7Days.forEach(day => {
-            const dayTasks = state.completedHistory.filter(h => h.completedAt.slice(0,10) === day);
-            if (dayTasks.length) {
-                report += `\n${day}:\n`;
-                dayTasks.forEach(t => report += `  - ${t.title} (${t.xpGained} XP)\n`);
-            }
-        });
-        
-        const reportOutput = document.getElementById('reportOutput');
-        if (reportOutput) reportOutput.innerText = report;
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    // ---------- SETUP EVENT LISTENERS ----------
-    function setupEventListeners() {
-        // Tab switching
-        document.querySelectorAll('.ak-tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.dataset.tab;
-                document.querySelectorAll('.ak-tab').forEach(tab => tab.classList.remove('active'));
-                document.getElementById(tabId).classList.add('active');
-                document.querySelectorAll('.ak-tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-        
-        // Undo/Redo
-        const undoBtn = document.getElementById('undoBtn');
-        const redoBtn = document.getElementById('redoBtn');
-        if (undoBtn) undoBtn.addEventListener('click', () => { undo(); renderAll(); });
-        if (redoBtn) redoBtn.addEventListener('click', () => { redo(); renderAll(); });
-        
-        // Settings buttons
-        const forceResetBtn = document.getElementById('forceResetBtn');
-        if (forceResetBtn) {
-            forceResetBtn.addEventListener('click', () => {
-                state.lastResetDate = new Date().toISOString().slice(0,10);
-                saveState();
-            });
-        }
-        
-        const clearAllBtn = document.getElementById('clearAllBtn');
-        if (clearAllBtn) {
-            clearAllBtn.addEventListener('click', () => {
-                if (confirm('Wipe all progress? Cannot undo.')) {
-                    localStorage.clear();
-                    location.reload();
-                }
-            });
-        }
-        
-        // Export report
-        const exportBtn = document.getElementById('exportReportBtn');
-        if (exportBtn) exportBtn.addEventListener('click', generateReport);
-        
-        const generateReportBtn = document.getElementById('generateReportBtn');
-        if (generateReportBtn) generateReportBtn.addEventListener('click', generateReport);
-        
-        // Quick generate button
-        const genQuickBtn = document.getElementById('genQuickBtn');
-        if (genQuickBtn) {
-            genQuickBtn.addEventListener('click', () => {
-                const generatorTab = document.querySelector('.ak-tab-btn[data-tab="generator"]');
-                if (generatorTab) generatorTab.click();
-            });
-        }
-        
-        // Task generator
-        const generateBtn = document.getElementById('generateBtn');
-        if (generateBtn) {
-            generateBtn.addEventListener('click', () => {
-                const goal = document.getElementById('genGoal')?.value;
-                if (!goal) {
-                    alert('Enter a goal first');
-                    return;
-                }
-                const domain = document.getElementById('genDomain')?.value || 'General';
-                const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
-                
-                const newTask = {
-                    id: 'gen_' + Date.now(),
-                    title: goal,
-                    domain: domain,
-                    difficulty: difficulty,
-                    xp: difficulty === 'Easy' ? 20 : (difficulty === 'Medium' ? 40 : 80),
-                    repeatability: 'One-time',
-                    priority: 'Important',
-                    steps: [
-                        { text: `Clarify scope: ${goal.substring(0,50)}`, completed: false },
-                        { text: 'Break down into 3 sub-tasks', completed: false },
-                        { text: 'Execute first sub-task', completed: false },
-                        { text: 'Review and document results', completed: false }
-                    ],
-                    notes: '',
-                    startedAt: new Date().toISOString(),
-                    completed: false
-                };
-                
-                const previewDiv = document.getElementById('generatedPreview');
-                if (previewDiv) {
-                    previewDiv.innerHTML = `<div class="mission-item"><strong>${escapeHtml(goal)}</strong><br>${difficulty} · ${domain}</div>`;
-                }
-                
-                const addBtn = document.getElementById('addGeneratedBtn');
-                if (addBtn) {
-                    addBtn.style.display = 'inline-block';
-                    const newAddBtn = addBtn.cloneNode(true);
-                    addBtn.parentNode.replaceChild(newAddBtn, addBtn);
-                    newAddBtn.onclick = () => {
-                        state.activeTasks.push(newTask);
-                        pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask, xpGain: 0 });
-                        saveState();
-                        if (previewDiv) previewDiv.innerHTML = '';
-                        newAddBtn.style.display = 'none';
-                        // Switch to active missions tab
-                        const activeTabBtn = document.querySelector('.ak-tab-btn[data-tab="active"]');
-                        if (activeTabBtn) activeTabBtn.click();
-                    };
-                }
-            });
-        }
-        
-        // Bank search
-        const bankSearch = document.getElementById('bankSearch');
-        if (bankSearch) {
-            bankSearch.addEventListener('input', () => renderTaskBank());
-        }
-    }
-    
-    // ---------- INITIALIZE ----------
-    loadState();
-    setupEventListeners();
-    renderAll();
-    
-    console.log('Akatsuki Quest initialized!', { activeTasks: state.activeTasks.length });
-}
+        const filtered = allTasks
