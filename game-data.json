@@ -1,29 +1,46 @@
 {
-  "tasks": [
-    {
-      "id": "t1",
-      "title": "Read 1 research article",
-      "xp": 15
+  "sections": {
+    "phd": {
+      "title": "PhD Journey",
+      "items": [
+        {"title": "Topic Exploration", "xp": 20},
+        {"title": "Research Skill-Building", "xp": 25},
+        {"title": "Coursework & Reading", "xp": 15},
+        {"title": "Academic Writing", "xp": 30}
+      ]
     },
-    {
-      "id": "t2",
-      "title": "Extract 3 insights from today’s reading",
-      "xp": 10
+    "skool": {
+      "title": "Skool Community",
+      "items": [
+        {"title": "Lesson Recording", "xp": 20},
+        {"title": "Community Engagement", "xp": 15},
+        {"title": "Curriculum Development", "xp": 25}
+      ]
     },
-    {
-      "id": "t3",
-      "title": "Write daily documentation log",
-      "xp": 10
+    "doc": {
+      "title": "Documentary Tracking",
+      "items": [
+        {"title": "Daily Logs", "xp": 10},
+        {"title": "Monthly Reflection", "xp": 20}
+      ]
     },
-    {
-      "id": "t4",
-      "title": "Work on Skool community for 15 minutes",
-      "xp": 20
+    "daily": {
+      "title": "Daily Systems",
+      "items": [
+        {"title": "Morning Routine", "xp": 10},
+        {"title": "Deep Work Block", "xp": 40},
+        {"title": "Evening Reflection", "xp": 10}
+      ]
     },
-    {
-      "id": "t5",
-      "title": "Complete one deep work block",
-      "xp": 40
-    }
-  ]
-}
+    "weekly": {
+      "title": "Weekly Systems",
+      "items": [
+        {"title": "Weekly Review", "xp": 20},
+        {"title": "Academic Progress Check", "xp": 25}
+      ]
+    },
+    "monthly": {
+      "title": "Monthly Systems",
+      "items": [
+        {"title": "Monthly Reflection", "xp": 30},
+        {"title": "Ecos
