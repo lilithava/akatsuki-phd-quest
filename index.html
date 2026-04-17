@@ -1,734 +1,900 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
   <title>Akatsuki PhD Quest – RPG</title>
-
-  <!-- Inline CSS so replacing index.html alone will upgrade the site -->
-  <style>
-    :root{
-      --bg-1:#050406;
-      --bg-2:#1a0b0b;
-      --accent:#ff2b2b;
-      --accent-2:#b30000;
-      --muted:#bda7a7;
-      --panel:rgba(0,0,0,0.6);
-      --glass:rgba(255,255,255,0.03);
-      --radius:10px;
-      --max-width:1100px;
-      --sidebar-w:220px;
-    }
-
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
-    body{
-      background:
-        radial-gradient(1200px 600px at 10% 10%, rgba(179,0,0,0.06), transparent 8%),
-        radial-gradient(900px 400px at 90% 90%, rgba(255,43,43,0.03), transparent 6%),
-        linear-gradient(180deg,var(--bg-1),#000 60%);
-      color:#ffecec;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-    }
-
-    header{
-      width:100%;
-      max-width:var(--max-width);
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 18px;
-      margin-top:18px;
-      background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));
-      border:1px solid rgba(255,0,0,0.08);
-      border-radius:12px;
-      box-shadow:0 6px 30px rgba(0,0,0,0.6);
-      position:relative;
-      z-index:20;
-    }
-
-    #menu-toggle{
-      background:linear-gradient(180deg,var(--accent),var(--accent-2));
-      border:none;color:white;padding:8px 10px;border-radius:8px;font-weight:700;cursor:pointer;
-      box-shadow:0 6px 18px rgba(179,0,0,0.18);
-    }
-
-    header h1{margin:0;font-size:1.05rem;color:var(--accent);letter-spacing:0.6px;}
-    #level-display{margin-left:auto;color:var(--muted);font-size:0.9rem;}
-
-    /* XP bar */
-    .xp-wrap{width:100%;max-width:var(--max-width);margin-top:12px;padding:0 18px;}
-    #xp-bar{
-      height:18px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-      border-radius:999px;border:1px solid rgba(255,0,0,0.08);overflow:hidden;
-    }
-    #xp-fill{
-      height:100%;width:0%;
-      background:linear-gradient(90deg,var(--accent),#ff8a8a);
-      transition:width 600ms cubic-bezier(.2,.9,.2,1);
-      box-shadow:0 6px 18px rgba(179,0,0,0.12) inset;
-    }
-    #xp-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:0.85rem;margin-top:6px;padding:0 6px;}
-
-    /* Layout */
-    .app{
-      width:100%;
-      max-width:var(--max-width);
-      display:grid;
-      grid-template-columns: var(--sidebar-w) 1fr;
-      gap:18px;
-      margin:20px 0 60px;
-      align-items:start;
-    }
-
-    /* Sidebar */
-    #sidebar{
-      background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.45));
-      border-radius:12px;padding:14px;border:1px solid rgba(255,0,0,0.06);
-      height:calc(100vh - 220px);overflow:auto;
-      position:relative;transition:transform 320ms ease,opacity 320ms ease;
-      box-shadow:0 10px 40px rgba(0,0,0,0.6);
-    }
-    #sidebar.hidden{transform:translateX(-260px);opacity:0.02;pointer-events:none;}
-    #sidebar h2{margin:0 0 10px 0;color:var(--accent);font-size:1rem;}
-    .menu-group{display:flex;flex-direction:column;gap:6px;}
-    .tab-btn{
-      background:transparent;border:none;color:var(--muted);text-align:left;padding:10px;border-radius:8px;cursor:pointer;font-weight:600;
-    }
-    .tab-btn:hover{background:rgba(179,0,0,0.08);color:#fff;}
-    .tab-btn.active{background:linear-gradient(90deg, rgba(179,0,0,0.12), rgba(179,0,0,0.06));color:#fff;box-shadow:inset 0 0 0 1px rgba(255,0,0,0.02);}
-
-    /* Content area */
-    main#content{
-      background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));
-      border-radius:12px;padding:18px;border:1px solid rgba(255,0,0,0.06);
-      min-height:420px;box-shadow:0 10px 40px rgba(0,0,0,0.6);
-    }
-
-    .tab-content{display:none;}
-    .tab-content.active{display:block;animation:fadeIn 320ms ease both;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-    .section-header h2{margin:0;color:var(--accent);font-size:1.05rem;}
-    .controls{display:flex;gap:8px;align-items:center;}
-
-    /* Tasks */
-    .task-list{display:flex;flex-direction:column;gap:8px;}
-    .task{
-      display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:10px;background:var(--panel);
-      border-left:4px solid var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.4);
-    }
-    .task .left{display:flex;gap:12px;align-items:center;}
-    .task .title{font-weight:600;color:#fff;}
-    .task .meta{color:var(--muted);font-size:0.85rem;}
-    .task button{background:var(--accent);border:none;color:white;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:700;}
-    .task button:hover{background:var(--accent-2);}
-
-    /* Shop */
-    #shop-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
-    .shop-item{background:var(--panel);padding:12px;border-radius:10px;border:1px solid rgba(255,0,0,0.04);}
-    .shop-item h3{margin:0;color:#ffbdbd;}
-    .shop-item p{margin:6px 0;color:var(--muted);font-size:0.9rem;}
-    .shop-item button{width:100%;padding:8px;border-radius:8px;border:none;background:var(--accent);color:white;font-weight:700;cursor:pointer;}
-    .shop-item button:disabled{background:#444;cursor:not-allowed;opacity:0.6;}
-
-    /* Avatar card */
-    #avatar-card{display:flex;flex-direction:column;gap:8px;align-items:center;padding:16px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));border:1px solid rgba(255,0,0,0.04);}
-    #avatar-visual{font-size:64px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;}
-    .avatar-controls{display:flex;gap:8px;margin-top:8px;}
-    .avatar-controls input[type="text"]{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;}
-    .avatar-controls button{padding:8px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;}
-
-    /* Footer */
-    footer{color:var(--muted);font-size:0.85rem;margin-bottom:40px;}
-
-    /* Responsive */
-    @media (max-width:980px){
-      .app{grid-template-columns:1fr; padding:0 12px;}
-      #sidebar{position:fixed;left:12px;top:110px;z-index:40;height:calc(100vh - 160px);width:calc(100% - 24px);}
-      main#content{margin-top:12px;}
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header>
-    <button id="menu-toggle" aria-label="Toggle menu">☰</button>
-    <h1>🩸 Akatsuki PhD Quest – RPG</h1>
-    <div id="level-display">Level: 1 | XP: 0 | 💰 Coins: 0 | 🔥 Streak: 0 days</div>
-  </header>
+<body class="ak-body">
+  <div id="app" class="ak-app" data-ak-root>
+    <!-- ================= HEADER ================= -->
+    <header class="ak-header" data-ak-header>
+      <div class="ak-header-left">
+        <div class="ak-logo">
+          <span class="ak-logo-icon">🌙</span>
+          <div class="ak-logo-text">
+            <h1 class="ak-title">Akatsuki PhD Quest – RPG</h1>
+            <p class="ak-subtitle">Shadow missions for serious work</p>
+          </div>
+        </div>
+      </div>
 
-  <div class="xp-wrap">
-    <div id="xp-bar"><div id="xp-fill"></div></div>
-    <div id="xp-meta">
-      <div id="xp-next">0 XP to next level</div>
-      <div id="xp-percent">0%</div>
+      <div class="ak-header-center">
+        <div class="ak-xp-bar" data-ak-xp-bar>
+          <div class="ak-xp-bar-label">
+            <span>XP</span>
+            <span id="ak-xp-value" data-ak-xp-value>0</span>
+            <span>/</span>
+            <span id="ak-xp-next" data-ak-xp-next>500</span>
+          </div>
+          <div class="ak-xp-bar-track">
+            <div
+              class="ak-xp-bar-fill"
+              id="ak-xp-bar-fill"
+              data-ak-xp-bar-fill
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ak-header-right">
+        <div class="ak-header-stat">
+          <span class="ak-stat-label">Level</span>
+          <span
+            class="ak-stat-value"
+            id="ak-level"
+            data-ak-level
+          >1</span>
+        </div>
+        <div class="ak-header-stat">
+          <span class="ak-stat-label">Coins</span>
+          <span
+            class="ak-stat-value"
+            id="ak-coins"
+            data-ak-coins
+          >0</span>
+        </div>
+        <div class="ak-header-stat">
+          <span class="ak-stat-label">Streak</span>
+          <span
+            class="ak-stat-value"
+            id="ak-streak"
+            data-ak-streak
+          >0</span>
+        </div>
+        <div class="ak-header-stat ak-header-reset">
+          <span class="ak-stat-label">Daily Reset</span>
+          <span
+            class="ak-stat-value"
+            id="ak-reset-timer"
+            data-ak-reset-timer
+          >--:--:--</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= LAYOUT ================= -->
+    <div class="ak-layout">
+      <!-- ============ SIDEBAR ============ -->
+      <nav class="ak-sidebar" data-ak-sidebar>
+        <button
+          class="ak-sidebar-toggle"
+          type="button"
+          id="ak-sidebar-toggle"
+          data-ak-sidebar-toggle
+        >
+          ☰
+        </button>
+
+        <ul class="ak-sidebar-tabs" data-ak-tab-list>
+          <li>
+            <button
+              class="ak-tab-button ak-tab-button--active"
+              type="button"
+              data-ak-tab-target="tab-dashboard"
+            >
+              Dashboard
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-active-missions"
+            >
+              Active Missions
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-task-generator"
+            >
+              Task Generator
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-task-bank"
+            >
+              Task Bank
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-avatar"
+            >
+              Avatar
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-shop"
+            >
+              Shop
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-logs"
+            >
+              Logs & Scrolls
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-settings"
+            >
+              Settings & Data
+            </button>
+          </li>
+          <li>
+            <button
+              class="ak-tab-button"
+              type="button"
+              data-ak-tab-target="tab-history"
+            >
+              Undo / Redo
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- ============ MAIN CONTENT ============ -->
+      <main class="ak-main" data-ak-main>
+        <!-- ===== TAB: DASHBOARD ===== -->
+        <section
+          id="tab-dashboard"
+          class="ak-tab-panel ak-tab-panel--active"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Dashboard</h2>
+            <p>Overview of your current arc in the Akatsuki quest.</p>
+          </header>
+
+          <div class="ak-dashboard-grid">
+            <section class="ak-card ak-card--stat">
+              <h3>Today’s Status</h3>
+              <p id="ak-win-the-day-status" data-ak-win-the-day-status>
+                Win condition not yet met.
+              </p>
+              <ul class="ak-status-list">
+                <li>
+                  <span>Important mission:</span>
+                  <span
+                    id="ak-status-important"
+                    data-ak-status-important
+                  >0 / 1</span>
+                </li>
+                <li>
+                  <span>Ritual mission:</span>
+                  <span
+                    id="ak-status-ritual"
+                    data-ak-status-ritual
+                  >0 / 1</span>
+                </li>
+                <li>
+                  <span>Documentation mission:</span>
+                  <span
+                    id="ak-status-doc"
+                    data-ak-status-doc
+                  >0 / 1</span>
+                </li>
+              </ul>
+            </section>
+
+            <section class="ak-card ak-card--stat">
+              <h3>Progress Overview</h3>
+              <ul class="ak-status-list">
+                <li>
+                  <span>Total XP:</span>
+                  <span id="ak-dashboard-xp" data-ak-dashboard-xp>0</span>
+                </li>
+                <li>
+                  <span>Completed missions:</span>
+                  <span
+                    id="ak-dashboard-completed"
+                    data-ak-dashboard-completed
+                  >0</span>
+                </li>
+                <li>
+                  <span>Active missions:</span>
+                  <span
+                    id="ak-dashboard-active"
+                    data-ak-dashboard-active
+                  >0</span>
+                </li>
+              </ul>
+            </section>
+
+            <section class="ak-card ak-card--stat">
+              <h3>Streak & Rituals</h3>
+              <ul class="ak-status-list">
+                <li>
+                  <span>Current streak:</span>
+                  <span
+                    id="ak-dashboard-streak"
+                    data-ak-dashboard-streak
+                  >0 days</span>
+                </li>
+                <li>
+                  <span>Documentation streak:</span>
+                  <span
+                    id="ak-dashboard-doc-streak"
+                    data-ak-dashboard-doc-streak
+                  >0 days</span>
+                </li>
+                <li>
+                  <span>Last reset:</span>
+                  <span
+                    id="ak-dashboard-last-reset"
+                    data-ak-dashboard-last-reset
+                  >--</span>
+                </li>
+              </ul>
+            </section>
+
+            <section class="ak-card ak-card--stat">
+              <h3>Quick Actions</h3>
+              <div class="ak-quick-actions">
+                <button
+                  type="button"
+                  class="ak-button ak-button--primary"
+                  data-ak-open-task-generator
+                >
+                  Generate Mission Chain
+                </button>
+                <button
+                  type="button"
+                  class="ak-button ak-button--ghost"
+                  data-ak-open-mini-quests
+                >
+                  Draw Mini-Quest
+                </button>
+                <button
+                  type="button"
+                  class="ak-button ak-button--ghost"
+                  data-ak-open-recovery
+                >
+                  Recovery Protocol
+                </button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ===== TAB: ACTIVE MISSIONS ===== -->
+        <section
+          id="tab-active-missions"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Active Missions</h2>
+            <p>Current missions you’re running across all domains.</p>
+          </header>
+
+          <section class="ak-filters" data-ak-active-filters>
+            <div class="ak-filter-group">
+              <label for="ak-filter-domain">Domain</label>
+              <select
+                id="ak-filter-domain"
+                data-ak-filter-domain
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-filter-difficulty">Difficulty</label>
+              <select
+                id="ak-filter-difficulty"
+                data-ak-filter-difficulty
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-filter-priority">Priority</label>
+              <select
+                id="ak-filter-priority"
+                data-ak-filter-priority
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-filter-energy">Energy</label>
+              <select
+                id="ak-filter-energy"
+                data-ak-filter-energy
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-filter-status">Status</label>
+              <select
+                id="ak-filter-status"
+                data-ak-filter-status
+              >
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+          </section>
+
+          <section
+            class="ak-mission-list"
+            id="ak-active-mission-list"
+            data-ak-active-mission-list
+          >
+            <!-- Active missions rendered here -->
+          </section>
+        </section>
+
+        <!-- ===== TAB: TASK GENERATOR ===== -->
+        <section
+          id="tab-task-generator"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Task Generator</h2>
+            <p>
+              Describe what you want to do—Akatsuki logic will forge a mission
+              chain for you.
+            </p>
+          </header>
+
+          <section class="ak-card ak-card--form">
+            <form
+              id="ak-task-generator-form"
+              data-ak-task-generator-form
+            >
+              <div class="ak-form-row">
+                <label for="ak-gen-goal">Goal / Mission Intent</label>
+                <textarea
+                  id="ak-gen-goal"
+                  data-ak-gen-goal
+                  rows="3"
+                  placeholder="Example: Prepare RA report for PI meeting next week."
+                ></textarea>
+              </div>
+
+              <div class="ak-form-row ak-form-row--grid">
+                <div>
+                  <label for="ak-gen-domain">Domain</label>
+                  <select
+                    id="ak-gen-domain"
+                    data-ak-gen-domain
+                  >
+                    <option value="">Auto-detect</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="ak-gen-difficulty">Difficulty</label>
+                  <select
+                    id="ak-gen-difficulty"
+                    data-ak-gen-difficulty
+                  >
+                    <option value="">Auto</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="ak-gen-horizon">Time Horizon</label>
+                  <select
+                    id="ak-gen-horizon"
+                    data-ak-gen-horizon
+                  >
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="ak-gen-type">Mission Type</label>
+                  <select
+                    id="ak-gen-type"
+                    data-ak-gen-type
+                  >
+                    <option value="">Auto</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="ak-form-row ak-form-row--grid">
+                <div>
+                  <label for="ak-gen-priority">Priority</label>
+                  <select
+                    id="ak-gen-priority"
+                    data-ak-gen-priority
+                  >
+                    <option value="">Auto</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="ak-gen-energy">Energy</label>
+                  <select
+                    id="ak-gen-energy"
+                    data-ak-gen-energy
+                  >
+                    <option value="">Auto</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="ak-gen-context">Context</label>
+                  <select
+                    id="ak-gen-context"
+                    data-ak-gen-context
+                  >
+                    <option value="">Auto</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="ak-form-actions">
+                <button
+                  type="button"
+                  class="ak-button ak-button--primary"
+                  id="ak-gen-generate"
+                  data-ak-gen-generate
+                >
+                  Generate Mission Chain
+                </button>
+                <button
+                  type="reset"
+                  class="ak-button ak-button--ghost"
+                >
+                  Clear
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section
+            class="ak-card ak-card--list"
+            id="ak-gen-results"
+            data-ak-gen-results
+          >
+            <header class="ak-card-header">
+              <h3>Generated Mission Chain</h3>
+              <p>Review, tweak, then add to your active missions or save as a template.</p>
+            </header>
+
+            <div
+              class="ak-mission-list"
+              id="ak-gen-mission-list"
+              data-ak-gen-mission-list
+            >
+              <!-- Generated missions appear here -->
+            </div>
+
+            <div class="ak-gen-actions">
+              <button
+                type="button"
+                class="ak-button ak-button--primary"
+                id="ak-gen-add-active"
+                data-ak-gen-add-active
+              >
+                Add Chain to Active Missions
+              </button>
+              <button
+                type="button"
+                class="ak-button ak-button--ghost"
+                id="ak-gen-save-template"
+                data-ak-gen-save-template
+              >
+                Save Chain as Template
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <!-- ===== TAB: TASK BANK ===== -->
+        <section
+          id="tab-task-bank"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Task Bank</h2>
+            <p>Browse all official missions by domain, theme, and difficulty.</p>
+          </header>
+
+          <section class="ak-filters" data-ak-bank-filters>
+            <div class="ak-filter-group">
+              <label for="ak-bank-domain">Domain</label>
+              <select
+                id="ak-bank-domain"
+                data-ak-bank-domain
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-bank-theme">Theme</label>
+              <select
+                id="ak-bank-theme"
+                data-ak-bank-theme
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-bank-difficulty">Difficulty</label>
+              <select
+                id="ak-bank-difficulty"
+                data-ak-bank-difficulty
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-bank-type">Mission Type</label>
+              <select
+                id="ak-bank-type"
+                data-ak-bank-type
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+          </section>
+
+          <section
+            class="ak-mission-list"
+            id="ak-bank-mission-list"
+            data-ak-bank-mission-list
+          >
+            <!-- Bank missions rendered here -->
+          </section>
+        </section>
+
+        <!-- ===== TAB: AVATAR ===== -->
+        <section
+          id="tab-avatar"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Avatar</h2>
+            <p>Customize your Akatsuki scholar and see gear effects.</p>
+          </header>
+
+          <div class="ak-avatar-layout">
+            <section class="ak-card ak-card--avatar">
+              <header class="ak-card-header">
+                <h3>Shadow Scholar</h3>
+              </header>
+              <div class="ak-avatar-display">
+                <svg
+                  id="ak-avatar-svg"
+                  data-ak-avatar-svg
+                  viewBox="0 0 200 200"
+                  aria-label="Avatar"
+                >
+                  <!-- Avatar layers injected here -->
+                </svg>
+              </div>
+              <div class="ak-avatar-name">
+                <label for="ak-avatar-name-input">Name</label>
+                <input
+                  id="ak-avatar-name-input"
+                  data-ak-avatar-name-input
+                  type="text"
+                  maxlength="40"
+                  placeholder="Shadow Scholar"
+                />
+              </div>
+              <div class="ak-avatar-stats">
+                <div>
+                  <span>XP Multiplier</span>
+                  <span
+                    id="ak-avatar-xp-mult"
+                    data-ak-avatar-xp-mult
+                  >1.0x</span>
+                </div>
+                <div>
+                  <span>Coin Multiplier</span>
+                  <span
+                    id="ak-avatar-coin-mult"
+                    data-ak-avatar-coin-mult
+                  >1.0x</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="ak-card ak-card--inventory">
+              <header class="ak-card-header">
+                <h3>Equipped Gear</h3>
+              </header>
+              <ul
+                class="ak-gear-list"
+                id="ak-gear-equipped-list"
+                data-ak-gear-equipped-list
+              >
+                <!-- Equipped items -->
+              </ul>
+
+              <header class="ak-card-header ak-card-header--sub">
+                <h3>Inventory</h3>
+              </header>
+              <ul
+                class="ak-gear-list"
+                id="ak-gear-inventory-list"
+                data-ak-gear-inventory-list
+              >
+                <!-- Owned items -->
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <!-- ===== TAB: SHOP ===== -->
+        <section
+          id="tab-shop"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Shop</h2>
+            <p>Spend coins on Akatsuki gear, cosmetics, and bonuses.</p>
+          </header>
+
+          <section class="ak-filters" data-ak-shop-filters>
+            <div class="ak-filter-group">
+              <label for="ak-shop-type">Type</label>
+              <select
+                id="ak-shop-type"
+                data-ak-shop-type
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+            <div class="ak-filter-group">
+              <label for="ak-shop-bonus">Bonus</label>
+              <select
+                id="ak-shop-bonus"
+                data-ak-shop-bonus
+              >
+                <option value="">All</option>
+              </select>
+            </div>
+          </section>
+
+          <section
+            class="ak-shop-grid"
+            id="ak-shop-item-list"
+            data-ak-shop-item-list
+          >
+            <!-- Shop items rendered here -->
+          </section>
+        </section>
+
+        <!-- ===== TAB: LOGS & SCROLLS ===== -->
+        <section
+          id="tab-logs"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Logs & Eternal Scrolls</h2>
+            <p>Daily logs, documentation streaks, and proof-of-work archives.</p>
+          </header>
+
+          <div class="ak-logs-layout">
+            <section class="ak-card ak-card--form">
+              <header class="ak-card-header">
+                <h3>Daily Mission Log</h3>
+              </header>
+              <form
+                id="ak-log-form"
+                data-ak-log-form
+              >
+                <div class="ak-form-row">
+                  <label for="ak-log-text">What did you do today?</label>
+                  <textarea
+                    id="ak-log-text"
+                    data-ak-log-text
+                    rows="4"
+                    placeholder="Capture key work, blockers, and next moves."
+                  ></textarea>
+                </div>
+                <div class="ak-form-actions">
+                  <button
+                    type="button"
+                    class="ak-button ak-button--primary"
+                    id="ak-log-save"
+                    data-ak-log-save
+                  >
+                    Save Log
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <section class="ak-card ak-card--list">
+              <header class="ak-card-header">
+                <h3>Log History</h3>
+              </header>
+              <ul
+                class="ak-log-list"
+                id="ak-log-list"
+                data-ak-log-list
+              >
+                <!-- Logs rendered here -->
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <!-- ===== TAB: SETTINGS & DATA ===== -->
+        <section
+          id="tab-settings"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Settings & Data Banks</h2>
+            <p>Control banks, reset options, and debug tools.</p>
+          </header>
+
+          <section class="ak-card ak-card--settings">
+            <header class="ak-card-header">
+              <h3>Data Banks</h3>
+            </header>
+            <table class="ak-data-table">
+              <thead>
+                <tr>
+                  <th>Bank</th>
+                  <th>File</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="ak-data-banks" data-ak-data-banks>
+                <!-- Populated from script.js -->
+              </tbody>
+            </table>
+          </section>
+
+          <section class="ak-card ak-card--settings">
+            <header class="ak-card-header">
+              <h3>System Controls</h3>
+            </header>
+            <div class="ak-settings-actions">
+              <button
+                type="button"
+                class="ak-button ak-button--ghost"
+                id="ak-reset-day"
+                data-ak-reset-day
+              >
+                Force Daily Reset
+              </button>
+              <button
+                type="button"
+                class="ak-button ak-button--ghost"
+                id="ak-reset-all"
+                data-ak-reset-all
+              >
+                Wipe All Progress (Local)
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <!-- ===== TAB: UNDO / REDO ===== -->
+        <section
+          id="tab-history"
+          class="ak-tab-panel"
+          data-ak-tab-panel
+        >
+          <header class="ak-panel-header">
+            <h2>Undo / Redo History</h2>
+            <p>Reverse or reapply recent actions without breaking your quest.</p>
+          </header>
+
+          <section class="ak-card ak-card--history">
+            <header class="ak-card-header">
+              <h3>Recent Actions</h3>
+            </header>
+            <div class="ak-history-controls">
+              <button
+                type="button"
+                class="ak-button ak-button--primary"
+                id="ak-undo-button"
+                data-ak-undo-button
+              >
+                Undo
+              </button>
+              <button
+                type="button"
+                class="ak-button ak-button--ghost"
+                id="ak-redo-button"
+                data-ak-redo-button
+              >
+                Redo
+              </button>
+            </div>
+            <ul
+              class="ak-history-list"
+              id="ak-history-list"
+              data-ak-history-list
+            >
+              <!-- Undo/redo entries -->
+            </ul>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <!-- ================= MODALS ================= -->
+    <div
+      class="ak-modal-backdrop"
+      id="ak-modal-backdrop"
+      data-ak-modal-backdrop
+      hidden
+    >
+      <div class="ak-modal" id="ak-modal" data-ak-modal>
+        <header class="ak-modal-header">
+          <h3 id="ak-modal-title" data-ak-modal-title>Modal</h3>
+          <button
+            type="button"
+            class="ak-modal-close"
+            id="ak-modal-close"
+            data-ak-modal-close
+          >
+            ✕
+          </button>
+        </header>
+        <div
+          class="ak-modal-body"
+          id="ak-modal-body"
+          data-ak-modal-body
+        >
+          <!-- Dynamic content -->
+        </div>
+        <footer class="ak-modal-footer" id="ak-modal-footer" data-ak-modal-footer>
+          <!-- Dynamic actions -->
+        </footer>
+      </div>
     </div>
   </div>
 
-  <div class="app" role="application" aria-label="Akatsuki RPG app">
-    <aside id="sidebar" aria-label="Main menu">
-      <h2>Menu</h2>
-      <div class="menu-group" role="navigation" aria-label="Sections">
-        <button class="tab-btn" data-target="phd">PhD Journey</button>
-        <button class="tab-btn" data-target="skool">Skool Community</button>
-        <button class="tab-btn" data-target="doc">Documentary Tracking</button>
-        <button class="tab-btn" data-target="daily">Daily Systems</button>
-        <button class="tab-btn" data-target="weekly">Weekly Systems</button>
-        <button class="tab-btn" data-target="monthly">Monthly Systems</button>
-        <button class="tab-btn" data-target="shop">Shop</button>
-        <button class="tab-btn" data-target="avatar">Avatar</button>
-      </div>
-
-      <div style="margin-top:14px;border-top:1px dashed rgba(255,0,0,0.04);padding-top:12px;">
-        <div style="color:var(--muted);font-size:0.9rem;margin-bottom:8px;">Quick actions</div>
-        <button id="add-global-task" class="tab-btn" style="font-weight:700;">+ Add Custom Task</button>
-        <button id="reset-progress" class="tab-btn" style="color:#ffbdbd;">Reset Progress</button>
-      </div>
-
-      <div style="position:absolute;left:14px;bottom:14px;color:var(--muted);font-size:0.85rem;">
-        Akatsuki Theme © Lilith
-      </div>
-    </aside>
-
-    <main id="content" tabindex="0">
-      <!-- Sections will be rendered here -->
-      <section id="phd" class="tab-content"></section>
-      <section id="skool" class="tab-content"></section>
-      <section id="doc" class="tab-content"></section>
-      <section id="daily" class="tab-content"></section>
-      <section id="weekly" class="tab-content"></section>
-      <section id="monthly" class="tab-content"></section>
-
-      <section id="shop" class="tab-content">
-        <div class="section-header">
-          <h2>Akatsuki Shop</h2>
-          <div class="controls"><div style="color:var(--muted)">Spend coins to customize your avatar</div></div>
-        </div>
-        <div id="shop-items"></div>
-      </section>
-
-      <section id="avatar" class="tab-content">
-        <div class="section-header">
-          <h2>Your Character</h2>
-          <div class="controls"><div style="color:var(--muted)">Customize your avatar and equip gear</div></div>
-        </div>
-
-        <div id="avatar-card">
-          <div id="avatar-visual" aria-hidden="true">🕶️</div>
-          <div id="avatar-name">Name: Rogue Scholar</div>
-          <div id="avatar-title">Title: Akatsuki Initiate</div>
-          <div id="avatar-gear">Gear: None</div>
-
-          <div class="avatar-controls" style="width:100%;justify-content:center;">
-            <input id="avatar-name-input" type="text" placeholder="Enter name" />
-            <button id="save-avatar">Save</button>
-          </div>
-
-          <div style="margin-top:8px;color:var(--muted);font-size:0.9rem;">
-            Choose emoji for your avatar:
-            <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;justify-content:center;">
-              <button class="emoji-btn">🕶️</button>
-              <button class="emoji-btn">🧥</button>
-              <button class="emoji-btn">🎭</button>
-              <button class="emoji-btn">💍</button>
-              <button class="emoji-btn">🐦</button>
-              <button class="emoji-btn">🗡️</button>
-              <button class="emoji-btn">📚</button>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <footer></footer>
-
-  <!-- Inline JS so replacing index.html alone will upgrade the site -->
-  <script>
-    /*************************************************************************
-     * Akatsuki PhD Quest – Self-contained index.html
-     * - Loads game-data.json if present, otherwise uses embedded defaults
-     * - Persists tasks, xp, coins, avatar to localStorage
-     * - Collapsible sidebar, tabs, shop, avatar, add custom tasks
-     * - Designed so replacing index.html alone will upgrade the site
-     *************************************************************************/
-
-    (function(){
-      // --- Defaults (fallback if game-data.json missing or malformed) ---
-      const FALLBACK_DATA = {
-        sections: {
-          phd: { title: "PhD Journey", items: [
-            { title: "Topic Exploration Session", xp: 20 },
-            { title: "Research Skill-Building Block", xp: 25 },
-            { title: "Coursework & Reading Sprint", xp: 15 },
-            { title: "Academic Writing Session", xp: 30 }
-          ]},
-          skool: { title: "Skool Community", items: [
-            { title: "Community Engagement (Reply + Post)", xp: 15 },
-            { title: "Lesson Recording Prep", xp: 20 },
-            { title: "Curriculum Development Block", xp: 25 }
-          ]},
-          doc: { title: "Documentary Tracking", items: [
-            { title: "Daily Log Entry", xp: 10 },
-            { title: "Milestone Capture", xp: 15 },
-            { title: "Monthly Reflection Draft", xp: 20 }
-          ]},
-          daily: { title: "Daily Systems", items: [
-            { title: "Morning Routine Complete", xp: 10 },
-            { title: "Deep Work Block (60 min)", xp: 40 },
-            { title: "Evening Reflection", xp: 10 }
-          ]},
-          weekly: { title: "Weekly Systems", items: [
-            { title: "Weekly Review", xp: 20 },
-            { title: "Academic Progress Check", xp: 25 }
-          ]},
-          monthly: { title: "Monthly Systems", items: [
-            { title: "Monthly Ecosystem Review", xp: 30 },
-            { title: "PhD Direction Check-in", xp: 30 }
-          ]}
-        },
-        shop: [
-          { id: "cloak", name: "Akatsuki Cloak", cost: 100, emoji: "🧥", type: "gear" },
-          { id: "ring", name: "Akatsuki Ring", cost: 60, emoji: "💍", type: "gear" },
-          { id: "mask", name: "Anbu Mask", cost: 80, emoji: "🎭", type: "gear" },
-          { id: "summon", name: "Summon Raven Companion", cost: 120, emoji: "🐦", type: "companion" }
-        ],
-        avatarDefaults: { name: "Rogue Scholar", title: "Akatsuki Initiate", gear: [], emoji: "🕶️" }
-      };
-
-      // --- State ---
-      const XP_PER_LEVEL = 150;
-      let state = {
-        xp: 0,
-        level: 1,
-        coins: 0,
-        streak: 0,
-        sections: null, // object of sections
-        shop: [],
-        avatar: null
-      };
-
-      // --- DOM refs ---
-      const sidebar = document.getElementById('sidebar');
-      const menuToggle = document.getElementById('menu-toggle');
-      const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
-      const tabContents = Array.from(document.querySelectorAll('.tab-content'));
-      const xpFill = document.getElementById('xp-fill');
-      const levelDisplay = document.getElementById('level-display');
-      const xpNext = document.getElementById('xp-next');
-      const xpPercent = document.getElementById('xp-percent');
-      const shopItemsEl = document.getElementById('shop-items');
-      const avatarVisual = document.getElementById('avatar-visual');
-      const avatarNameEl = document.getElementById('avatar-name');
-      const avatarTitleEl = document.getElementById('avatar-title');
-      const avatarGearEl = document.getElementById('avatar-gear');
-      const avatarNameInput = document.getElementById('avatar-name-input');
-      const saveAvatarBtn = document.getElementById('save-avatar');
-      const emojiBtns = Array.from(document.querySelectorAll('.emoji-btn'));
-      const addGlobalTaskBtn = document.getElementById('add-global-task');
-      const resetProgressBtn = document.getElementById('reset-progress');
-
-      // --- Utilities ---
-      function saveToStorage(){
-        localStorage.setItem('ak_xp', String(state.xp));
-        localStorage.setItem('ak_level', String(state.level));
-        localStorage.setItem('ak_coins', String(state.coins));
-        localStorage.setItem('ak_streak', String(state.streak));
-        localStorage.setItem('ak_sections', JSON.stringify(state.sections));
-        localStorage.setItem('ak_shop', JSON.stringify(state.shop));
-        localStorage.setItem('ak_avatar', JSON.stringify(state.avatar));
-      }
-
-      function loadFromStorage(){
-        const xp = parseInt(localStorage.getItem('ak_xp'));
-        if(!Number.isNaN(xp)) state.xp = xp;
-        const level = parseInt(localStorage.getItem('ak_level'));
-        if(!Number.isNaN(level)) state.level = level;
-        const coins = parseInt(localStorage.getItem('ak_coins'));
-        if(!Number.isNaN(coins)) state.coins = coins;
-        const streak = parseInt(localStorage.getItem('ak_streak'));
-        if(!Number.isNaN(streak)) state.streak = streak;
-        try{
-          const s = JSON.parse(localStorage.getItem('ak_sections'));
-          if(s && typeof s === 'object') state.sections = s;
-        }catch(e){}
-        try{
-          const sh = JSON.parse(localStorage.getItem('ak_shop'));
-          if(Array.isArray(sh)) state.shop = sh;
-        }catch(e){}
-        try{
-          const av = JSON.parse(localStorage.getItem('ak_avatar'));
-          if(av && typeof av === 'object') state.avatar = av;
-        }catch(e){}
-      }
-
-      function levelFromXp(xp){
-        return Math.floor(xp / XP_PER_LEVEL) + 1;
-      }
-
-      function xpToNext(xp){
-        const inLevel = xp % XP_PER_LEVEL;
-        return XP_PER_LEVEL - inLevel;
-      }
-
-      function updateUI(){
-        // Level display
-        state.level = levelFromXp(state.xp);
-        levelDisplay.textContent = `Level: ${state.level} | XP: ${state.xp} | 💰 Coins: ${state.coins} | 🔥 Streak: ${state.streak} days`;
-
-        // XP bar
-        const inLevel = state.xp % XP_PER_LEVEL;
-        const pct = Math.round((inLevel / XP_PER_LEVEL) * 100);
-        xpFill.style.width = pct + '%';
-        xpNext.textContent = `${xpToNext(state.xp)} XP to next level`;
-        xpPercent.textContent = `${pct}%`;
-
-        // Avatar
-        renderAvatar();
-
-        // Shop
-        renderShop();
-
-        // Sections
-        renderSections();
-
-        saveToStorage();
-      }
-
-      // --- Data loading: try fetch game-data.json, fallback to defaults ---
-      function loadGameData(){
-        return fetch('game-data.json', {cache: "no-store"})
-          .then(r => {
-            if(!r.ok) throw new Error('no json');
-            return r.json();
-          })
-          .then(data => {
-            // merge with fallback to ensure keys exist
-            state.sections = data.sections || FALLBACK_DATA.sections;
-            state.shop = data.shop || FALLBACK_DATA.shop;
-            state.avatar = data.avatarDefaults || FALLBACK_DATA.avatarDefaults;
-          })
-          .catch(err => {
-            // fallback
-            if(!state.sections) state.sections = FALLBACK_DATA.sections;
-            if(!state.shop || state.shop.length===0) state.shop = FALLBACK_DATA.shop;
-            if(!state.avatar) state.avatar = FALLBACK_DATA.avatarDefaults;
-          });
-      }
-
-      // --- Rendering functions ---
-      function renderSections(){
-        // For each section id, render tasks
-        Object.keys(state.sections).forEach(sectionId => {
-          const container = document.getElementById(sectionId);
-          if(!container) return;
-          const sec = state.sections[sectionId];
-          container.innerHTML = '';
-          const header = document.createElement('div');
-          header.className = 'section-header';
-          header.innerHTML = `<h2>${sec.title}</h2>
-            <div class="controls">
-              <button data-section="${sectionId}" class="add-task-section">+ Add</button>
-              <button data-section="${sectionId}" class="shuffle-section" title="Shuffle tasks">🔀</button>
-            </div>`;
-          container.appendChild(header);
-
-          const list = document.createElement('div');
-          list.className = 'task-list';
-          if(!Array.isArray(sec.items) || sec.items.length === 0){
-            const empty = document.createElement('div');
-            empty.style.color = 'var(--muted)';
-            empty.style.padding = '12px';
-            empty.textContent = 'No tasks in this section. Add a custom task or complete other tasks to earn XP.';
-            list.appendChild(empty);
-          } else {
-            sec.items.forEach((task, idx) => {
-              const t = document.createElement('div');
-              t.className = 'task';
-              t.innerHTML = `
-                <div class="left">
-                  <div class="title">${escapeHtml(task.title)}</div>
-                  <div class="meta">${task.xp} XP</div>
-                </div>
-                <div class="right">
-                  <button class="complete-btn" data-section="${sectionId}" data-index="${idx}">Complete</button>
-                </div>
-              `;
-              list.appendChild(t);
-            });
-          }
-          container.appendChild(list);
-        });
-
-        // attach listeners for newly created buttons
-        document.querySelectorAll('.complete-btn').forEach(btn=>{
-          btn.addEventListener('click', (e)=>{
-            const sec = btn.dataset.section;
-            const idx = Number(btn.dataset.index);
-            completeTask(sec, idx);
-          });
-        });
-        document.querySelectorAll('.add-task-section').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            const sec = btn.dataset.section;
-            addCustomTaskToSection(sec);
-          });
-        });
-        document.querySelectorAll('.shuffle-section').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            const sec = btn.dataset.section;
-            shuffleSection(sec);
-          });
-        });
-      }
-
-      function renderShop(){
-        shopItemsEl.innerHTML = '';
-        state.shop.forEach(item=>{
-          const div = document.createElement('div');
-          div.className = 'shop-item';
-          const owned = state.avatar.gear && state.avatar.gear.includes(item.id);
-          div.innerHTML = `
-            <h3>${item.emoji} ${escapeHtml(item.name)}</h3>
-            <p>Cost: ${item.cost} coins</p>
-            <button ${owned ? 'disabled' : ''} data-item="${item.id}">${owned ? 'Owned' : 'Buy'}</button>
-          `;
-          shopItemsEl.appendChild(div);
-        });
-        // attach buy listeners
-        shopItemsEl.querySelectorAll('button[data-item]').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            const id = btn.dataset.item;
-            buyItem(id);
-          });
-        });
-      }
-
-      function renderAvatar(){
-        avatarVisual.textContent = state.avatar.emoji || '🕶️';
-        avatarNameEl.textContent = `Name: ${state.avatar.name || 'Rogue Scholar'}`;
-        avatarTitleEl.textContent = `Title: ${state.avatar.title || 'Akatsuki Initiate'}`;
-        if(state.avatar.gear && state.avatar.gear.length>0){
-          const names = state.avatar.gear.map(id=>{
-            const it = state.shop.find(s=>s.id===id);
-            return it ? it.name : id;
-          });
-          avatarGearEl.textContent = 'Gear: ' + names.join(', ');
-        } else {
-          avatarGearEl.textContent = 'Gear: None';
-        }
-      }
-
-      // --- Actions ---
-      function completeTask(sectionId, index){
-        const sec = state.sections[sectionId];
-        if(!sec || !Array.isArray(sec.items) || !sec.items[index]) return;
-        const task = sec.items[index];
-        // XP and coins
-        state.xp += Number(task.xp) || 0;
-        // coins: half of xp rounded
-        state.coins += Math.round((Number(task.xp) || 0) * 0.5);
-        // remove task
-        sec.items.splice(index,1);
-        // small level-up bonus
-        const newLevel = levelFromXp(state.xp);
-        if(newLevel > state.level){
-          // level up animation & bonus coins
-          state.coins += 10 * (newLevel - state.level);
-          flashLevelUp(newLevel);
-        }
-        state.level = newLevel;
-        updateUI();
-      }
-
-      function buyItem(itemId){
-        const item = state.shop.find(i=>i.id===itemId);
-        if(!item) return alert('Item not found');
-        if(state.coins < item.cost) return alert('Not enough coins');
-        state.coins -= item.cost;
-        if(!Array.isArray(state.avatar.gear)) state.avatar.gear = [];
-        if(!state.avatar.gear.includes(itemId)) state.avatar.gear.push(itemId);
-        updateUI();
-      }
-
-      function addCustomTaskToSection(sectionId){
-        const title = prompt('Enter task title:');
-        if(!title) return;
-        const xp = parseInt(prompt('XP value (default 10):','10')) || 10;
-        if(!state.sections[sectionId]) state.sections[sectionId] = { title: sectionId, items: [] };
-        state.sections[sectionId].items.push({ title: title.trim(), xp });
-        updateUI();
-      }
-
-      function addGlobalCustomTask(){
-        // choose section
-        const sectionKeys = Object.keys(state.sections);
-        const choice = prompt('Add to which section? Options: ' + sectionKeys.join(', '), sectionKeys[0]);
-        if(!choice || !state.sections[choice]) return alert('Invalid section');
-        addCustomTaskToSection(choice);
-      }
-
-      function shuffleSection(sectionId){
-        const arr = state.sections[sectionId].items;
-        for(let i=arr.length-1;i>0;i--){
-          const j = Math.floor(Math.random()*(i+1));
-          [arr[i],arr[j]] = [arr[j],arr[i]];
-        }
-        updateUI();
-      }
-
-      function resetProgress(){
-        if(!confirm('Reset all progress and local data? This cannot be undone.')) return;
-        localStorage.removeItem('ak_xp');
-        localStorage.removeItem('ak_level');
-        localStorage.removeItem('ak_coins');
-        localStorage.removeItem('ak_streak');
-        localStorage.removeItem('ak_sections');
-        localStorage.removeItem('ak_shop');
-        localStorage.removeItem('ak_avatar');
-        location.reload();
-      }
-
-      // --- Small UI helpers ---
-      function flashLevelUp(newLevel){
-        // simple visual flash on header
-        const orig = levelDisplay.style.transform;
-        levelDisplay.style.transition = 'transform 220ms ease, color 220ms ease';
-        levelDisplay.style.transform = 'scale(1.06)';
-        levelDisplay.style.color = '#fff';
-        setTimeout(()=>{ levelDisplay.style.transform = orig; levelDisplay.style.color = ''; }, 700);
-        // small toast
-        showToast(`Level Up! You reached level ${newLevel} — bonus coins awarded`);
-      }
-
-      function showToast(text, timeout=2200){
-        const t = document.createElement('div');
-        t.textContent = text;
-        t.style.position='fixed';
-        t.style.right='18px';
-        t.style.bottom='18px';
-        t.style.background='linear-gradient(180deg, rgba(179,0,0,0.95), rgba(179,0,0,0.8))';
-        t.style.color='#fff';
-        t.style.padding='10px 14px';
-        t.style.borderRadius='10px';
-        t.style.boxShadow='0 10px 30px rgba(0,0,0,0.6)';
-        t.style.zIndex=9999;
-        document.body.appendChild(t);
-        setTimeout(()=>{ t.style.transition='opacity 300ms ease'; t.style.opacity='0'; }, timeout);
-        setTimeout(()=>t.remove(), timeout+400);
-      }
-
-      // --- Tab & sidebar behavior ---
-      function setupTabs(){
-        tabButtons.forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            tabButtons.forEach(b=>b.classList.remove('active'));
-            btn.classList.add('active');
-            const target = btn.dataset.target;
-            tabContents.forEach(tc=>tc.classList.remove('active'));
-            const el = document.getElementById(target);
-            if(el) el.classList.add('active');
-            // focus content for keyboard users
-            setTimeout(()=>el && el.scrollIntoView({behavior:'smooth', block:'start'}), 80);
-          });
-        });
-        // default: first tab
-        const first = tabButtons[0];
-        if(first) first.click();
-      }
-
-      function setupSidebarToggle(){
-        menuToggle.addEventListener('click', ()=>{
-          sidebar.classList.toggle('hidden');
-        });
-      }
-
-      // --- Avatar controls ---
-      function setupAvatarControls(){
-        saveAvatarBtn.addEventListener('click', ()=>{
-          const name = avatarNameInput.value.trim();
-          if(name) state.avatar.name = name;
-          updateUI();
-          showToast('Avatar saved');
-        });
-        emojiBtns.forEach(b=>{
-          b.addEventListener('click', ()=>{
-            state.avatar.emoji = b.textContent.trim();
-            updateUI();
-          });
-        });
-      }
-
-      // --- Helpers ---
-      function escapeHtml(str){
-        return String(str).replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]));
-      }
-
-      // --- Initialization sequence ---
-      function init(){
-        // load saved state first (so we don't overwrite)
-        loadFromStorage();
-
-        // load game-data.json (if present) then merge with saved sections
-        loadGameData().then(()=>{
-          // If saved sections exist, prefer them (so tasks don't regenerate)
-          try{
-            const savedSections = JSON.parse(localStorage.getItem('ak_sections'));
-            if(savedSections && typeof savedSections === 'object'){
-              // keep savedSections as authoritative
-              state.sections = savedSections;
-            }
-          }catch(e){}
-          // If no saved avatar, ensure defaults
-          if(!state.avatar) state.avatar = FALLBACK_DATA.avatarDefaults;
-          // If shop not loaded from storage, ensure we have shop
-          if(!state.shop || state.shop.length===0) state.shop = FALLBACK_DATA.shop;
-          // Update UI
-          updateUI();
-        });
-
-        // Setup UI interactions
-        setupTabs();
-        setupSidebarToggle();
-        setupAvatarControls();
-
-        // global actions
-        addGlobalTaskBtn.addEventListener('click', addGlobalCustomTask);
-        resetProgressBtn.addEventListener('click', resetProgress);
-
-        // keyboard shortcuts
-        window.addEventListener('keydown', (e)=>{
-          if(e.key === 'm' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault();
-            sidebar.classList.toggle('hidden');
-          }
-        });
-
-        // ensure content area is focusable for accessibility
-        document.getElementById('content').addEventListener('keydown', (e)=>{
-          // placeholder for future keyboard nav
-        });
-      }
-
-      // Run init
-      init();
-
-      // Expose some functions for debugging in console (optional)
-      window.AK = {
-        state,
-        saveToStorage,
-        loadFromStorage,
-        updateUI,
-        completeTask,
-        buyItem,
-        addCustomTaskToSection
-      };
-    })();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
