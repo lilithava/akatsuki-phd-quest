@@ -474,3 +474,33 @@ input[type="text"] {
     grid-template-columns: 1fr;
   }
 }
+/* === MODAL FIX === */
+.ak-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.ak-modal-backdrop.active {
+  display: flex;
+}
+
+.ak-modal {
+  background: #111827;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  padding: 1.5rem;
+  width: 350px;
+}
+
+.ak-modal-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
