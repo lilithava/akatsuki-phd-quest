@@ -2,23 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Akatsuki PhD Quest Console+</title>
+  <title>Akatsuki PhD Quest – RPG</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>🩸 Akatsuki PhD Quest Console+</h1>
-    <p id="level-display">Level: 1 | XP: 0 | 🔥 Streak: 0 days</p>
+    <button id="menu-toggle">☰</button>
+    <h1>🩸 Akatsuki PhD Quest – RPG</h1>
+    <p id="level-display">Level: 1 | XP: 0 | 💰 Coins: 0 | 🔥 Streak: 0 days</p>
     <div id="xp-bar"><div id="xp-fill"></div></div>
   </header>
 
   <nav id="sidebar">
+    <h2>Menu</h2>
     <button class="tab-btn" data-target="phd">PhD Journey</button>
     <button class="tab-btn" data-target="skool">Skool Community</button>
     <button class="tab-btn" data-target="doc">Documentary Tracking</button>
     <button class="tab-btn" data-target="daily">Daily Systems</button>
     <button class="tab-btn" data-target="weekly">Weekly Systems</button>
     <button class="tab-btn" data-target="monthly">Monthly Systems</button>
+    <button class="tab-btn" data-target="shop">Shop</button>
+    <button class="tab-btn" data-target="avatar">Avatar</button>
   </nav>
 
   <main id="content">
@@ -28,10 +32,25 @@
     <section id="daily" class="tab-content"></section>
     <section id="weekly" class="tab-content"></section>
     <section id="monthly" class="tab-content"></section>
+
+    <section id="shop" class="tab-content">
+      <h2>Akatsuki Shop</h2>
+      <div id="shop-items"></div>
+    </section>
+
+    <section id="avatar" class="tab-content">
+      <h2>Your Character</h2>
+      <div id="avatar-card">
+        <div id="avatar-visual">🕶️</div>
+        <p id="avatar-name">Name: Rogue Scholar</p>
+        <p id="avatar-title">Title: Akatsuki Initiate</p>
+        <p id="avatar-gear">Gear: None</p>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p>Akatsuki Theme © Lilith | Powered by GitHub Pages</p>
+    <p>Akatsuki Theme © Lilith</p>
   </footer>
 
   <script src="script.js"></script>
