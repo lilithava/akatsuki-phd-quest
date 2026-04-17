@@ -4,6 +4,31 @@
    AKATSUKI PH.D QUEST – RPG
    Core game engine: state, data loading, UI, logic
 ============================================================ */
+function initModalSystem() {
+  const backdrop = document.querySelector("[data-ak-modal-backdrop]");
+  const closeBtn = document.querySelector("[data-ak-modal-close]");
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      backdrop.classList.remove("active");
+    });
+  }
+}
+
+function openModal(title = "Modal", body = "") {
+  const backdrop = document.querySelector("[data-ak-modal-backdrop]");
+  const titleEl = document.querySelector("[data-ak-modal-title]");
+  const bodyEl = document.querySelector("[data-ak-modal-body]");
+
+  titleEl.textContent = title;
+  bodyEl.innerHTML = body;
+
+  backdrop.classList.add("active");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initModalSystem();
+});
 
 const AK = {
   config: {
