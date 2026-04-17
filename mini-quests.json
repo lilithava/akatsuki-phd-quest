@@ -1,0 +1,355 @@
+{
+  "meta": {
+    "name": "Akatsuki Mini-Quests – Swift Missions of the Hidden Village",
+    "version": "1.0.0",
+    "domain": "Mini-Quests",
+    "theme": "Swift Missions",
+    "description": "Short, low-friction missions designed for quick wins, momentum boosts, and micro-progress across all domains."
+  },
+
+  "categories": [
+    "Momentum",
+    "Clarity",
+    "Organization",
+    "Learning",
+    "Reflection",
+    "Maintenance",
+    "Social",
+    "Energy"
+  ],
+
+  "quests": [
+
+    /* ============================================================
+       MOMENTUM MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_start_30sec",
+      "title": "Start for 30 Seconds",
+      "category": "Momentum",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You work for 30 seconds.",
+      "failureCondition": "Not starting at all.",
+      "reward": "Momentum spark.",
+      "steps": [
+        "Open the task.",
+        "Work for 30 seconds.",
+        "Stop or continue — both count."
+      ],
+      "notes": "This is the smallest possible activation ritual."
+    },
+
+    {
+      "id": "mq_progress_1line",
+      "title": "Write One Line",
+      "category": "Momentum",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You write exactly one line.",
+      "failureCondition": "Trying to write too much.",
+      "reward": "Micro-progress.",
+      "steps": [
+        "Open the document.",
+        "Write one line.",
+        "Save and close."
+      ],
+      "notes": "One line is enough to break resistance."
+    },
+
+    /* ============================================================
+       CLARITY MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_clarity_1question",
+      "title": "Answer One Clarifying Question",
+      "category": "Clarity",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "You answer the question honestly.",
+      "failureCondition": "Avoiding clarity.",
+      "reward": "Direction restored.",
+      "steps": [
+        "Ask: What is the next action?",
+        "Write the answer.",
+        "Do NOT add more questions."
+      ],
+      "notes": "Clarity is often one question away."
+    },
+
+    {
+      "id": "mq_clarity_outline3",
+      "title": "Write a 3-Step Outline",
+      "category": "Clarity",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You write exactly 3 steps.",
+      "failureCondition": "Overplanning.",
+      "reward": "Immediate direction.",
+      "steps": [
+        "Write Step 1.",
+        "Write Step 2.",
+        "Write Step 3."
+      ],
+      "notes": "Three steps is enough to restart."
+    },
+
+    /* ============================================================
+       ORGANIZATION MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_org_clear1",
+      "title": "Clear One Small Area",
+      "category": "Organization",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "One area cleared.",
+      "failureCondition": "Trying to clean everything.",
+      "reward": "Reduced friction.",
+      "steps": [
+        "Pick one tiny area (desk corner, tab group, folder).",
+        "Clear it.",
+        "Stop immediately after."
+      ],
+      "notes": "Environment resets reduce cognitive load."
+    },
+
+    {
+      "id": "mq_org_rename3",
+      "title": "Rename 3 Files",
+      "category": "Organization",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "Exactly 3 files renamed.",
+      "failureCondition": "Renaming none.",
+      "reward": "Cleaner structure.",
+      "steps": [
+        "Pick 3 files.",
+        "Rename using YYYY-MM-DD + descriptor.",
+        "Move to correct folder if needed."
+      ],
+      "notes": "Small organization tasks compound over time."
+    },
+
+    /* ============================================================
+       LEARNING MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_learn_1concept",
+      "title": "Learn One Concept",
+      "category": "Learning",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 3,
+      "energy": "Low",
+      "successCriteria": "You understand one concept.",
+      "failureCondition": "Trying to study too much.",
+      "reward": "Knowledge gain.",
+      "steps": [
+        "Pick one concept.",
+        "Read a short explanation.",
+        "Write a 1-sentence summary."
+      ],
+      "notes": "Small learning beats big avoidance."
+    },
+
+    {
+      "id": "mq_learn_flash3",
+      "title": "Review 3 Flashcards",
+      "category": "Learning",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You review exactly 3 cards.",
+      "failureCondition": "Skipping review.",
+      "reward": "Memory reinforcement.",
+      "steps": [
+        "Open flashcards.",
+        "Review 3 cards.",
+        "Stop immediately after."
+      ],
+      "notes": "Micro-learning keeps knowledge alive."
+    },
+
+    /* ============================================================
+       REFLECTION MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_reflect_3sentences",
+      "title": "Write a 3-Sentence Reflection",
+      "category": "Reflection",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You write exactly 3 sentences.",
+      "failureCondition": "Overthinking.",
+      "reward": "Emotional clarity.",
+      "steps": [
+        "Sentence 1: What happened.",
+        "Sentence 2: How I feel.",
+        "Sentence 3: What I need next."
+      ],
+      "notes": "Short reflections prevent emotional buildup."
+    },
+
+    {
+      "id": "mq_reflect_win",
+      "title": "Record One Win",
+      "category": "Reflection",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You record one win.",
+      "failureCondition": "Ignoring progress.",
+      "reward": "Confidence boost.",
+      "steps": [
+        "Write one thing you did well.",
+        "Save it in your log."
+      ],
+      "notes": "Wins fuel motivation."
+    },
+
+    /* ============================================================
+       MAINTENANCE MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_maint_update_tracker",
+      "title": "Update One Tracker",
+      "category": "Maintenance",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "One tracker updated.",
+      "failureCondition": "Letting trackers fall behind.",
+      "reward": "System stability.",
+      "steps": [
+        "Open tracker.",
+        "Update one metric.",
+        "Save."
+      ],
+      "notes": "Small updates keep systems alive."
+    },
+
+    {
+      "id": "mq_maint_backup",
+      "title": "Backup One File",
+      "category": "Maintenance",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "One file backed up.",
+      "failureCondition": "Skipping backups.",
+      "reward": "Safety.",
+      "steps": [
+        "Pick one important file.",
+        "Copy to backup folder."
+      ],
+      "notes": "Backups prevent disasters."
+    },
+
+    /* ============================================================
+       SOCIAL MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_social_reply1",
+      "title": "Reply to One Message",
+      "category": "Social",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Low",
+      "successCriteria": "You reply to one message.",
+      "failureCondition": "Avoiding communication.",
+      "reward": "Reduced social backlog.",
+      "steps": [
+        "Pick one message.",
+        "Write a short reply.",
+        "Send it."
+      ],
+      "notes": "Small replies prevent communication overwhelm."
+    },
+
+    {
+      "id": "mq_social_thank",
+      "title": "Send One Thank-You",
+      "category": "Social",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You send one thank-you.",
+      "failureCondition": "Skipping appreciation.",
+      "reward": "Positive social energy.",
+      "steps": [
+        "Pick someone.",
+        "Send a short thank-you message."
+      ],
+      "notes": "Gratitude strengthens connections."
+    },
+
+    /* ============================================================
+       ENERGY MINI-QUESTS
+    ============================================================ */
+
+    {
+      "id": "mq_energy_water",
+      "title": "Drink Water",
+      "category": "Energy",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You drink water.",
+      "failureCondition": "Skipping hydration.",
+      "reward": "Energy boost.",
+      "steps": [
+        "Drink water.",
+        "Take 3 deep breaths."
+      ],
+      "notes": "Hydration improves focus."
+    },
+
+    {
+      "id": "mq_energy_stretch",
+      "title": "Do a 10-Second Stretch",
+      "category": "Energy",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You stretch for 10 seconds.",
+      "failureCondition": "Staying tense.",
+      "reward": "Physical reset.",
+      "steps": [
+        "Stand up.",
+        "Stretch arms or back for 10 seconds."
+      ],
+      "notes": "Micro-stretches reduce fatigue."
+    }
+
+  ]
+}
