@@ -1,11 +1,5 @@
-// Loads all JSON files and stores them in window.AK_DATA
+// Simple data loader for Akatsuki Quest
 window.AK_DATA = {};
-
-async function loadJSON(path) {
-    const res = await fetch(path);
-    if (!res.ok) throw new Error(`Failed to load ${path}`);
-    return res.json();
-}
 
 async function loadAllData() {
     const files = {
@@ -16,28 +10,32 @@ async function loadAllData() {
         curriculum: 'task-bank-curriculum.json',
         ra: 'task-bank-ra.json',
         docs: 'task-bank-docs.json',
-        rituals: 'task-bank-rituals.json',
-        bosses: 'boss-battles.json',
-        recovery: 'recovery-missions.json',
-        mini: 'mini-quests.json',
-        achievements: 'achievements.json',
-        shop: 'shop-items.json',
-        avatar: 'avatar-layers.json'
+        rituals: 'task-bank-rituals.json'
     };
-    const entries = await Promise.all(Object.entries(files).map(async ([key, path]) => {
+    
+    for (const [key, path] of Object.entries(files)) {
         try {
-            const data = await loadJSON(path);
-            return [key, data];
-        } catch(e) {
-            console.warn(`Could not load ${path}`, e);
-            return [key, null];
+            const response = await fetch(path);
+            if (response.ok) {
+                window.AK_DATA[key] = await response.json();
+                console.log(`Loaded: ${key}`);
+            } else {
+                console.warn(`Failed to load ${path}`);
+                window.AK_DATA[key] = null;
+            }
+        } catch (e) {
+            console.warn(`Error loading ${path}:`, e);
+            window.AK_DATA[key] = null;
         }
-    }));
-    for (let [key, data] of entries) {
-        window.AK_DATA[key] = data;
     }
-    console.log('All data loaded', window.AK_DATA);
+    
+    // Set a default rules object if none loaded
+    if (!window.AK_DATA.rules) {
+        window.AK_DATA.rules = { xpRules: { xpPerLevel: 500 } };
+    }
+    
+    console.log('All data loaded', Object.keys(window.AK_DATA));
 }
 
-// Start loading immediately
+// Start loading
 loadAllData();
