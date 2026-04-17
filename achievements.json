@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "name": "Akatsuki Achievements – Legendary Feats",
+    "version": "1.0.0",
+    "domain": "Achievements",
+    "theme": "Legendary Feats",
+    "description": "A complete achievement system covering streaks, milestones, boss victories, domain mastery, consistency, breakthroughs, and rare feats."
+  },
+
+  "categories": [
+    "Streaks",
+    "Consistency",
+    "Domain Mastery",
+    "Boss Victories",
+    "Milestones",
+    "Rare Feats",
+    "Progression",
+    "Special"
+  ],
+
+  "achievements": [
+
+    /* ============================================================
+       STREAK ACHIEVEMENTS
+    ============================================================ */
+
+    {
+      "id": "ach_streak_3",
+      "title": "Spark Ignited",
+      "category": "Streaks",
+      "description": "Complete missions 3 days in a row.",
+      "xp": 30,
+      "reward": "Streak Flame Icon",
+      "rarity": "Common"
+    },
+
+    {
+      "id": "ach_streak_7",
+      "title": "Week of Discipline",
+      "category": "Streaks",
+      "description": "Maintain a 7-day mission streak.",
+      "xp": 60,
+      "reward": "Discipline Band",
+      "rarity": "Uncommon"
+    },
+
+    {
+      "id": "ach_streak_30",
+      "title": "Unbroken Chain",
+      "category": "Streaks",
+      "description": "Maintain a 30-day streak.",
+      "xp": 200,
+      "reward": "Chain of Resolve",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_streak_100",
+      "title": "The Eternal Flame",
+      "category": "Streaks",
+      "description": "Maintain a 100-day streak.",
+      "xp": 600,
+      "reward": "Eternal Flame Aura",
+      "rarity": "Legendary"
+    },
+
+    /* ============================================================
+       CONSISTENCY ACHIEVEMENTS
+    ============================================================ */
+
+    {
+      "id": "ach_consistency_10missions",
+      "title": "Momentum Builder",
+      "category": "Consistency",
+      "description": "Complete 10 missions in a single week.",
+      "xp": 50,
+      "reward": "Momentum Crest",
+      "rarity": "Common"
+    },
+
+    {
+      "id": "ach_consistency_50missions",
+      "title": "Relentless",
+      "category": "Consistency",
+      "description": "Complete 50 missions total.",
+      "xp": 150,
+      "reward": "Relentless Band",
+      "rarity": "Uncommon"
+    },
+
+    {
+      "id": "ach_consistency_200missions",
+      "title": "Unstoppable Force",
+      "category": "Consistency",
+      "description": "Complete 200 missions total.",
+      "xp": 500,
+      "reward": "Unstoppable Cloak",
+      "rarity": "Epic"
+    },
+
+    /* ============================================================
+       DOMAIN MASTERY ACHIEVEMENTS
+    ============================================================ */
+
+    {
+      "id": "ach_mastery_phd",
+      "title": "Scholar of Shadows",
+      "category": "Domain Mastery",
+      "description": "Complete 20 PhD domain missions.",
+      "xp": 200,
+      "reward": "Scholar Headband",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_mastery_skool",
+      "title": "Community Architect",
+      "category": "Domain Mastery",
+      "description": "Complete 20 Skool domain missions.",
+      "xp": 200,
+      "reward": "Architect Sigil",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_mastery_curriculum",
+      "title": "Curriculum Sage",
+      "category": "Domain Mastery",
+      "description": "Complete 20 Curriculum domain missions.",
+      "xp": 200,
+      "reward": "Sage Scroll",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_mastery_docs",
+      "title": "Keeper of Scrolls",
+      "category": "Domain Mastery",
+      "description": "Complete 20 Documentation missions.",
+      "xp": 200,
+      "reward": "Scroll Keeper Cloak",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_mastery_ra",
+      "title": "Shadow Researcher",
+      "category": "Domain Mastery",
+      "description": "Complete 20 Research Assistant missions.",
+      "xp": 200,
+      "reward": "Shadow Lens",
+      "rarity": "Rare"
+    },
+
+    /* ============================================================
+       BOSS VICTORIES
+    ============================================================ */
+
+    {
+      "id": "ach_boss_hydra",
+      "title": "Hydra Slayer",
+      "category": "Boss Victories",
+      "description": "Defeat the Literature Hydra.",
+      "xp": 300,
+      "reward": "Hydra Fang Relic",
+      "rarity": "Epic"
+    },
+
+    {
+      "id": "ach_boss_golem",
+      "title": "Golem Breaker",
+      "category": "Boss Victories",
+      "description": "Defeat the Methodology Golem.",
+      "xp": 320,
+      "reward": "Golem Core Relic",
+      "rarity": "Epic"
+    },
+
+    {
+      "id": "ach_boss_serpent",
+      "title": "Serpent Tamer",
+      "category": "Boss Victories",
+      "description": "Defeat the Data Serpent.",
+      "xp": 250,
+      "reward": "Serpent Scale Relic",
+      "rarity": "Epic"
+    },
+
+    {
+      "id": "ach_boss_reaper",
+      "title": "Reaper Defier",
+      "category": "Boss Victories",
+      "description": "Defeat the Deadline Reaper.",
+      "xp": 260,
+      "reward": "Reaper Cloak Fragment",
+      "rarity": "Epic"
+    },
+
+    {
+      "id": "ach_boss_burnout",
+      "title": "Burnout Exorcist",
+      "category": "Boss Victories",
+      "description": "Defeat the Burnout Demon.",
+      "xp": 350,
+      "reward": "Demon Horn Relic",
+      "rarity": "Legendary"
+    },
+
+    /* ============================================================
+       MILESTONE ACHIEVEMENTS
+    ============================================================ */
+
+    {
+      "id": "ach_milestone_firstmission",
+      "title": "First Step Taken",
+      "category": "Milestones",
+      "description": "Complete your first mission.",
+      "xp": 20,
+      "reward": "Initiate Badge",
+      "rarity": "Common"
+    },
+
+    {
+      "id": "ach_milestone_10hours",
+      "title": "Ten Hours of Focus",
+      "category": "Milestones",
+      "description": "Accumulate 10 hours of focused work.",
+      "xp": 100,
+      "reward": "Focus Band",
+      "rarity": "Uncommon"
+    },
+
+    {
+      "id": "ach_milestone_50hours",
+      "title": "Fifty Hours of Mastery",
+      "category": "Milestones",
+      "description": "Accumulate 50 hours of focused work.",
+      "xp": 300,
+      "reward": "Mastery Cloak",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_milestone_100hours",
+      "title": "Hundred-Hour Sage",
+      "category": "Milestones",
+      "description": "Accumulate 100 hours of focused work.",
+      "xp": 600,
+      "reward": "Sage Crown",
+      "rarity": "Legendary"
+    },
+
+    /* ============================================================
+       RARE FEATS
+    ============================================================ */
+
+    {
+      "id": "ach_rare_nightowl",
+      "title": "Night Owl of the Hidden Village",
+      "category": "Rare Feats",
+      "description": "Complete a mission between 2 AM and 4 AM.",
+      "xp": 40,
+      "reward": "Moonlit Band",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_rare_speedrun",
+      "title": "Speedrunner",
+      "category": "Rare Feats",
+      "description": "Complete 5 missions in under 1 hour.",
+      "xp": 80,
+      "reward": "Speed Sigil",
+      "rarity": "Epic"
+    },
+
+    {
+      "id": "ach_rare_perfectweek",
+      "title": "Perfect Week",
+      "category": "Rare Feats",
+      "description": "Complete every daily ritual for 7 days straight.",
+      "xp": 150,
+      "reward": "Perfect Flame",
+      "rarity": "Epic"
+    },
+
+    /* ============================================================
+       PROGRESSION ACHIEVEMENTS
+    ============================================================ */
+
+    {
+      "id": "ach_progress_lvl10",
+      "title": "Level 10 — Rising Shadow",
+      "category": "Progression",
+      "description": "Reach Level 10.",
+      "xp": 100,
+      "reward": "Rising Shadow Aura",
+      "rarity": "Uncommon"
+    },
+
+    {
+      "id": "ach_progress_lvl25",
+      "title": "Level 25 — Crimson Adept",
+      "category": "Progression",
+      "description": "Reach Level 25.",
+      "xp": 250,
+      "reward": "Crimson Adept Cloak",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_progress_lvl50",
+      "title": "Level 50 — Akatsuki Elite",
+      "category": "Progression",
+      "description": "Reach Level 50.",
+      "xp": 600,
+      "reward": "Elite Akatsuki Cloak",
+      "rarity": "Legendary"
+    },
+
+    /* ============================================================
+       SPECIAL ACHIEVEMENTS
+    ============================================================ */
+
+    {
+      "id": "ach_special_perfectionist",
+      "title": "Perfectionist",
+      "category": "Special",
+      "description": "Complete every mission in a category.",
+      "xp": 300,
+      "reward": "Perfection Crest",
+      "rarity": "Epic"
+    },
+
+    {
+      "id": "ach_special_resurrection",
+      "title": "Resurrection",
+      "category": "Special",
+      "description": "Return after a long break and complete a mission.",
+      "xp": 50,
+      "reward": "Phoenix Feather",
+      "rarity": "Rare"
+    },
+
+    {
+      "id": "ach_special_unbroken",
+      "title": "Unbroken Spirit",
+      "category": "Special",
+      "description": "Recover from burnout using a Recovery Mission and complete a full mission afterward.",
+      "xp": 120,
+      "reward": "Unbroken Sigil",
+      "rarity": "Epic"
+    }
+
+  ]
+}
