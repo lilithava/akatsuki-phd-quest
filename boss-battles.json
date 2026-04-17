@@ -1,0 +1,298 @@
+{
+  "meta": {
+    "name": "Akatsuki Boss Battles – High-Stakes Arc Missions",
+    "version": "1.0.0",
+    "domain": "Boss Battles",
+    "theme": "Shadow Confrontations",
+    "description": "Major multi-phase boss battles representing high-stakes academic, research, and life challenges. Each boss includes phases, weak points, victory conditions, failure states, rewards, and recovery missions."
+  },
+
+  "bosses": [
+
+    /* ============================================================
+       BOSS 1 — THE LITERATURE HYDRA
+    ============================================================ */
+
+    {
+      "id": "boss_lit_hydra",
+      "name": "The Literature Hydra",
+      "domain": "PhD",
+      "theme": "Shadow Confrontations",
+      "difficulty": "S-Rank",
+      "xp": 300,
+      "lore": "A multi-headed beast formed from endless PDFs, contradictory theories, and citation chaos. Each head represents a different theoretical school trying to pull you apart.",
+      "phases": [
+        {
+          "phase": 1,
+          "title": "Head of Overwhelm",
+          "objective": "Tame the chaos by organizing sources.",
+          "weakPoint": "Lack of structure.",
+          "steps": [
+            "Create or update your literature matrix.",
+            "Sort 10–15 articles into categories.",
+            "Identify 3 major conceptual threads."
+          ]
+        },
+        {
+          "phase": 2,
+          "title": "Head of Contradiction",
+          "objective": "Resolve conflicting findings.",
+          "weakPoint": "Unexamined assumptions.",
+          "steps": [
+            "Pick 2–3 conflicting articles.",
+            "Write a short memo explaining the contradiction.",
+            "Identify which explanation is stronger and why."
+          ]
+        },
+        {
+          "phase": 3,
+          "title": "Head of Synthesis",
+          "objective": "Forge a unified narrative.",
+          "weakPoint": "Fragmented notes.",
+          "steps": [
+            "Write a 300–500 word synthesis.",
+            "Connect threads into a coherent argument.",
+            "Define the gap your research fills."
+          ]
+        }
+      ],
+      "victoryCondition": "A coherent literature synthesis + updated matrix.",
+      "failureCondition": "Collecting more PDFs without integrating them.",
+      "reward": {
+        "xp": 300,
+        "items": ["Hydra Fang (Synthesis Buff)", "Literature Mastery Badge"],
+        "unlocks": ["Advanced Theory Missions"]
+      },
+      "recoveryMission": "Write a 5-bullet synthesis of one conceptual thread."
+    },
+
+    /* ============================================================
+       BOSS 2 — THE METHODOLOGY GOLEM
+    ============================================================ */
+
+    {
+      "id": "boss_method_golem",
+      "name": "The Methodology Golem",
+      "domain": "PhD",
+      "theme": "Shadow Confrontations",
+      "difficulty": "S-Rank",
+      "xp": 320,
+      "lore": "A towering stone guardian forged from paradigms, assumptions, and methodological debates. It blocks the path until your design is unshakeable.",
+      "phases": [
+        {
+          "phase": 1,
+          "title": "Foundation of Paradigms",
+          "objective": "Clarify your philosophical stance.",
+          "weakPoint": "Unclear epistemology.",
+          "steps": [
+            "Write your paradigm in 3–5 sentences.",
+            "Explain why it fits your research question.",
+            "Identify one alternative paradigm and why you rejected it."
+          ]
+        },
+        {
+          "phase": 2,
+          "title": "Design Core",
+          "objective": "Choose and justify your research design.",
+          "weakPoint": "Unjustified choices.",
+          "steps": [
+            "Compare 2 possible designs.",
+            "Select the strongest one.",
+            "Write a justification paragraph."
+          ]
+        },
+        {
+          "phase": 3,
+          "title": "Operationalization Chamber",
+          "objective": "Define how you will collect and analyze data.",
+          "weakPoint": "Vague procedures.",
+          "steps": [
+            "Write your data collection plan.",
+            "Write your analysis plan.",
+            "Define reliability/validity or trustworthiness strategies."
+          ]
+        }
+      ],
+      "victoryCondition": "A complete, justified methodology section.",
+      "failureCondition": "Design remains vague or contradictory.",
+      "reward": {
+        "xp": 320,
+        "items": ["Golem Core (Clarity Buff)", "Methodology Master Badge"],
+        "unlocks": ["Data Collection Boss Battles"]
+      },
+      "recoveryMission": "Write a 5-bullet summary of your chosen design."
+    },
+
+    /* ============================================================
+       BOSS 3 — THE DATA SERPENT
+    ============================================================ */
+
+    {
+      "id": "boss_data_serpent",
+      "name": "The Data Serpent",
+      "domain": "Research Assistantship",
+      "theme": "Shadow Confrontations",
+      "difficulty": "A-Rank",
+      "xp": 250,
+      "lore": "A massive serpent made of tangled transcripts, missing data, and messy notes. It coils around your progress, squeezing tighter with every delay.",
+      "phases": [
+        {
+          "phase": 1,
+          "title": "Coil of Chaos",
+          "objective": "Organize raw data.",
+          "weakPoint": "Disorder.",
+          "steps": [
+            "Sort transcripts into folders.",
+            "Rename files using naming standards.",
+            "Create a data inventory sheet."
+          ]
+        },
+        {
+          "phase": 2,
+          "title": "Coil of Noise",
+          "objective": "Clean and prepare data.",
+          "weakPoint": "Unclean transcripts.",
+          "steps": [
+            "Anonymize transcripts.",
+            "Fix formatting issues.",
+            "Mark unclear sections."
+          ]
+        },
+        {
+          "phase": 3,
+          "title": "Coil of Insight",
+          "objective": "Begin coding.",
+          "weakPoint": "Avoidance.",
+          "steps": [
+            "Open codebook.",
+            "Code first 3–5 pages.",
+            "Write a short memo."
+          ]
+        }
+      ],
+      "victoryCondition": "Clean, organized, partially coded dataset.",
+      "failureCondition": "Data remains untouched or disorganized.",
+      "reward": {
+        "xp": 250,
+        "items": ["Serpent Scale (Momentum Buff)", "Data Tamer Badge"],
+        "unlocks": ["Thematic Analysis Boss Battles"]
+      },
+      "recoveryMission": "Code 1 page and write 3 bullet insights."
+    },
+
+    /* ============================================================
+       BOSS 4 — THE DEADLINE REAPER
+    ============================================================ */
+
+    {
+      "id": "boss_deadline_reaper",
+      "name": "The Deadline Reaper",
+      "domain": "Documentation",
+      "theme": "Shadow Confrontations",
+      "difficulty": "A-Rank",
+      "xp": 260,
+      "lore": "A cloaked figure carrying a scythe forged from overdue tasks and forgotten commitments. It grows stronger the longer you avoid it.",
+      "phases": [
+        {
+          "phase": 1,
+          "title": "Shadow of Avoidance",
+          "objective": "Face the backlog.",
+          "weakPoint": "Unacknowledged tasks.",
+          "steps": [
+            "List all overdue tasks.",
+            "Sort them by domain.",
+            "Mark which ones are still relevant."
+          ]
+        },
+        {
+          "phase": 2,
+          "title": "Scythe of Priorities",
+          "objective": "Cut through the noise.",
+          "weakPoint": "Lack of prioritization.",
+          "steps": [
+            "Pick top 3 tasks.",
+            "Define micro‑steps for each.",
+            "Schedule them."
+          ]
+        },
+        {
+          "phase": 3,
+          "title": "Reaper’s Bargain",
+          "objective": "Complete one overdue mission.",
+          "weakPoint": "Procrastination.",
+          "steps": [
+            "Choose one overdue mission.",
+            "Do 10–20 minutes of progress.",
+            "Log completion in documentation."
+          ]
+        }
+      ],
+      "victoryCondition": "Backlog reduced + one overdue mission completed.",
+      "failureCondition": "Avoiding backlog entirely.",
+      "reward": {
+        "xp": 260,
+        "items": ["Reaper Cloak (Discipline Buff)", "Deadline Slayer Badge"],
+        "unlocks": ["High-Stress Ritual Missions"]
+      },
+      "recoveryMission": "Do 5 minutes on any overdue task."
+    },
+
+    /* ============================================================
+       BOSS 5 — THE BURNOUT DEMON
+    ============================================================ */
+
+    {
+      "id": "boss_burnout_demon",
+      "name": "The Burnout Demon",
+      "domain": "Rituals",
+      "theme": "Shadow Confrontations",
+      "difficulty": "S-Rank",
+      "xp": 350,
+      "lore": "A towering demon formed from exhaustion, guilt, and overwork. It drains your energy and whispers that you’re falling behind.",
+      "phases": [
+        {
+          "phase": 1,
+          "title": "Flame of Exhaustion",
+          "objective": "Stabilize energy.",
+          "weakPoint": "Ignoring fatigue.",
+          "steps": [
+            "Do a 5-minute energy ritual.",
+            "Drink water.",
+            "Take 10 deep breaths."
+          ]
+        },
+        {
+          "phase": 2,
+          "title": "Ashes of Guilt",
+          "objective": "Release self-blame.",
+          "weakPoint": "Negative self-talk.",
+          "steps": [
+            "Write a 3-sentence self-compassion note.",
+            "Identify one unrealistic expectation.",
+            "Replace it with a realistic one."
+          ]
+        },
+        {
+          "phase": 3,
+          "title": "Rekindling Ember",
+          "objective": "Restart momentum.",
+          "weakPoint": "Fear of restarting.",
+          "steps": [
+            "Pick one stalled mission.",
+            "Define smallest possible next step.",
+            "Do 2–5 minutes of progress."
+          ]
+        }
+      ],
+      "victoryCondition": "Energy stabilized + momentum restored.",
+      "failureCondition": "Pushing through burnout without recovery.",
+      "reward": {
+        "xp": 350,
+        "items": ["Demon Horn (Resilience Buff)", "Burnout Slayer Badge"],
+        "unlocks": ["Emergency Ritual Missions"]
+      },
+      "recoveryMission": "Do a 2-minute re-entry ritual."
+    }
+
+  ]
+}
