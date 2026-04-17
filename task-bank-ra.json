@@ -1,0 +1,426 @@
+{
+  "meta": {
+    "name": "Akatsuki RA Task Bank – Intelligence Gathering",
+    "version": "1.0.0",
+    "domain": "Research Assistantship",
+    "theme": "Intelligence Gathering",
+    "description": "Complete mission bank for research assistantship work: interview prep, execution, transcription, cleaning, coding, memoing, thematic analysis, report writing, PI alignment, admin support, and follow-up."
+  },
+
+  "subjects": [
+    "Interview Preparation",
+    "Interview Execution",
+    "Transcription & Cleaning",
+    "Coding",
+    "Memos",
+    "Thematic Analysis",
+    "Report Writing",
+    "PI Alignment",
+    "Admin Support",
+    "Follow-Up"
+  ],
+
+  "tasks": [
+
+    /* ============================================================
+       INTERVIEW PREPARATION
+    ============================================================ */
+
+    {
+      "id": "ra_prep_protocol_review",
+      "title": "Review Interview Protocol & Highlight Key Probes",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Interview Preparation",
+      "sideTopic": "protocol review",
+      "missionType": "Standard Mission",
+      "difficulty": "Medium",
+      "xp": 35,
+      "repeatability": "Repeatable",
+      "estimatedTime": 30,
+      "priority": "Critical",
+      "energy": "Standard Focus",
+      "context": "RA",
+      "successCriteria": "Protocol reviewed with probes highlighted and notes added.",
+      "failureCondition": "Going into interview without knowing the flow.",
+      "reward": "Smoother interview execution.",
+      "recoveryMission": "Highlight only the top 5 probes.",
+      "steps": [
+        { "label": "Open the interview protocol.", "completed": false },
+        { "label": "Read through each section slowly.", "completed": false },
+        { "label": "Highlight key probes and follow-up questions.", "completed": false },
+        { "label": "Add notes for transitions or sensitive areas.", "completed": false },
+        { "label": "Save updated protocol in RA folder.", "completed": false }
+      ],
+      "tags": ["interview", "prep", "protocol"],
+      "notes": "Use consistent highlighting colors for probes vs transitions."
+    },
+
+    {
+      "id": "ra_prep_logistics",
+      "title": "Confirm Interview Logistics",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Interview Preparation",
+      "sideTopic": "logistics",
+      "missionType": "Standard Mission",
+      "difficulty": "Easy",
+      "xp": 20,
+      "repeatability": "Repeatable",
+      "estimatedTime": 15,
+      "priority": "Important",
+      "energy": "Low Energy",
+      "context": "Admin",
+      "successCriteria": "Time, link/location, and participant confirmation completed.",
+      "failureCondition": "Interview scheduled but logistics unclear.",
+      "reward": "Reduced risk of no-shows or confusion.",
+      "recoveryMission": "Send a single confirmation message.",
+      "steps": [
+        { "label": "Check interview date and time.", "completed": false },
+        { "label": "Confirm Zoom/Teams link or physical location.", "completed": false },
+        { "label": "Send confirmation message to participant.", "completed": false },
+        { "label": "Prepare backup recording method.", "completed": false },
+        { "label": "Add event to your calendar.", "completed": false }
+      ],
+      "tags": ["logistics", "interview"],
+      "notes": "Always have a backup recording plan."
+    },
+
+    /* ============================================================
+       INTERVIEW EXECUTION
+    ============================================================ */
+
+    {
+      "id": "ra_execute_interview",
+      "title": "Conduct One Interview Mission",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Interview Execution",
+      "sideTopic": "rapport",
+      "missionType": "Deep Work Mission",
+      "difficulty": "Hard",
+      "xp": 90,
+      "repeatability": "Repeatable",
+      "estimatedTime": 60,
+      "priority": "Critical",
+      "energy": "Deep Focus",
+      "context": "RA",
+      "successCriteria": "Interview completed with clear audio and full protocol coverage.",
+      "failureCondition": "Missing key sections or poor recording quality.",
+      "reward": "High-quality data for analysis.",
+      "recoveryMission": "Record a short debrief note summarizing what happened.",
+      "steps": [
+        { "label": "Start recording and confirm audio quality.", "completed": false },
+        { "label": "Build rapport with participant.", "completed": false },
+        { "label": "Follow protocol while staying flexible.", "completed": false },
+        { "label": "Probe deeper when needed.", "completed": false },
+        { "label": "End with gratitude and next steps.", "completed": false }
+      ],
+      "tags": ["interview", "data-collection"],
+      "notes": "Always check audio before starting the interview."
+    },
+
+    /* ============================================================
+       TRANSCRIPTION & CLEANING
+    ============================================================ */
+
+    {
+      "id": "ra_transcribe_segment",
+      "title": "Transcribe One Interview Segment",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Transcription & Cleaning",
+      "sideTopic": "transcription",
+      "missionType": "Standard Mission",
+      "difficulty": "Medium",
+      "xp": 35,
+      "repeatability": "Repeatable",
+      "estimatedTime": 45,
+      "priority": "Important",
+      "energy": "Standard Focus",
+      "context": "RA",
+      "successCriteria": "One segment transcribed accurately.",
+      "failureCondition": "Transcript contains major gaps or errors.",
+      "reward": "Clean data for coding.",
+      "recoveryMission": "Transcribe 5 minutes only.",
+      "steps": [
+        { "label": "Open audio file and transcription tool.", "completed": false },
+        { "label": "Transcribe 10–15 minutes of audio.", "completed": false },
+        { "label": "Correct obvious errors.", "completed": false },
+        { "label": "Mark unclear sections with timestamps.", "completed": false },
+        { "label": "Save transcript in RA folder.", "completed": false }
+      ],
+      "tags": ["transcription", "cleaning"],
+      "notes": "Use consistent formatting for speaker labels."
+    },
+
+    {
+      "id": "ra_clean_transcript",
+      "title": "Clean & Anonymize Transcript",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Transcription & Cleaning",
+      "sideTopic": "anonymization",
+      "missionType": "Standard Mission",
+      "difficulty": "Medium",
+      "xp": 40,
+      "repeatability": "Repeatable",
+      "estimatedTime": 45,
+      "priority": "Critical",
+      "energy": "Standard Focus",
+      "context": "RA",
+      "successCriteria": "Transcript anonymized and cleaned for coding.",
+      "failureCondition": "Identifiable information left in transcript.",
+      "reward": "Ethically safe data for analysis.",
+      "recoveryMission": "Remove names and locations only.",
+      "steps": [
+        { "label": "Remove names, locations, and identifiers.", "completed": false },
+        { "label": "Fix formatting issues.", "completed": false },
+        { "label": "Correct transcription errors.", "completed": false },
+        { "label": "Mark unclear sections for review.", "completed": false },
+        { "label": "Save anonymized version.", "completed": false }
+      ],
+      "tags": ["cleaning", "anonymization"],
+      "notes": "Always double-check for hidden identifiers."
+    },
+
+    /* ============================================================
+       CODING
+    ============================================================ */
+
+    {
+      "id": "ra_code_batch",
+      "title": "Code One Transcript Batch",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Coding",
+      "sideTopic": "open coding",
+      "missionType": "Deep Work Mission",
+      "difficulty": "Hard",
+      "xp": 80,
+      "repeatability": "Repeatable",
+      "estimatedTime": 90,
+      "priority": "Critical",
+      "energy": "Deep Focus",
+      "context": "RA",
+      "successCriteria": "Batch coded with consistent application of codebook.",
+      "failureCondition": "Reading without applying codes.",
+      "reward": "Progress toward thematic analysis.",
+      "recoveryMission": "Code 1–2 pages only.",
+      "steps": [
+        { "label": "Open transcript and codebook.", "completed": false },
+        { "label": "Apply codes to first section.", "completed": false },
+        { "label": "Continue coding through batch.", "completed": false },
+        { "label": "Mark ambiguous segments.", "completed": false },
+        { "label": "Save coded version.", "completed": false }
+      ],
+      "tags": ["coding", "analysis"],
+      "notes": "Use consistent code labels and definitions."
+    },
+
+    /* ============================================================
+       MEMOS
+    ============================================================ */
+
+    {
+      "id": "ra_memo_insights",
+      "title": "Write One Analytic Memo",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Memos",
+      "sideTopic": "analytic memos",
+      "missionType": "Standard Mission",
+      "difficulty": "Medium",
+      "xp": 35,
+      "repeatability": "Repeatable",
+      "estimatedTime": 30,
+      "priority": "Important",
+      "energy": "Standard Focus",
+      "context": "Writing",
+      "successCriteria": "Memo capturing patterns, tensions, and questions.",
+      "failureCondition": "Coding without reflection.",
+      "reward": "Deeper understanding of data.",
+      "recoveryMission": "Write 3 bullet insights only.",
+      "steps": [
+        { "label": "Open coded transcript or notes.", "completed": false },
+        { "label": "Write emerging patterns.", "completed": false },
+        { "label": "Note contradictions or surprises.", "completed": false },
+        { "label": "Add questions for further analysis.", "completed": false },
+        { "label": "Save memo in analysis folder.", "completed": false }
+      ],
+      "tags": ["memo", "analysis"],
+      "notes": "Memos are the bridge between coding and themes."
+    },
+
+    /* ============================================================
+       THEMATIC ANALYSIS
+    ============================================================ */
+
+    {
+      "id": "ra_theme_cluster",
+      "title": "Cluster Codes into Themes",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Thematic Analysis",
+      "sideTopic": "clustering",
+      "missionType": "Deep Work Mission",
+      "difficulty": "Hard",
+      "xp": 90,
+      "repeatability": "Repeatable",
+      "estimatedTime": 90,
+      "priority": "Critical",
+      "energy": "Deep Focus",
+      "context": "Writing",
+      "successCriteria": "Codes grouped into coherent theme clusters.",
+      "failureCondition": "Themes remain vague or unstructured.",
+      "reward": "Foundation for final analysis.",
+      "recoveryMission": "Cluster 5–7 codes only.",
+      "steps": [
+        { "label": "List all codes from recent batches.", "completed": false },
+        { "label": "Group similar codes together.", "completed": false },
+        { "label": "Name each cluster with a tentative theme.", "completed": false },
+        { "label": "Write 2–3 sentences describing each cluster.", "completed": false },
+        { "label": "Save theme map.", "completed": false }
+      ],
+      "tags": ["themes", "analysis"],
+      "notes": "Themes should be grounded in data, not imagination."
+    },
+
+    /* ============================================================
+       REPORT WRITING
+    ============================================================ */
+
+    {
+      "id": "ra_report_summary",
+      "title": "Draft One RA Summary Report",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Report Writing",
+      "sideTopic": "summaries",
+      "missionType": "Deep Work Mission",
+      "difficulty": "Hard",
+      "xp": 85,
+      "repeatability": "Repeatable",
+      "estimatedTime": 90,
+      "priority": "Critical",
+      "energy": "Deep Focus",
+      "context": "Writing",
+      "successCriteria": "Report with findings, patterns, and implications.",
+      "failureCondition": "Notes scattered without synthesis.",
+      "reward": "Clear deliverable for PI.",
+      "recoveryMission": "Write a 5-bullet summary only.",
+      "steps": [
+        { "label": "Open memos and coded data.", "completed": false },
+        { "label": "Write key findings.", "completed": false },
+        { "label": "Add supporting quotes or evidence.", "completed": false },
+        { "label": "Write implications or next steps.", "completed": false },
+        { "label": "Save report draft.", "completed": false }
+      ],
+      "tags": ["report", "writing"],
+      "notes": "Use consistent structure for all RA reports."
+    },
+
+    /* ============================================================
+       PI ALIGNMENT
+    ============================================================ */
+
+    {
+      "id": "ra_pi_update",
+      "title": "Prepare PI Alignment Update",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "PI Alignment",
+      "sideTopic": "updates",
+      "missionType": "Standard Mission",
+      "difficulty": "Easy",
+      "xp": 20,
+      "repeatability": "Weekly",
+      "estimatedTime": 15,
+      "priority": "Critical",
+      "energy": "Low Energy",
+      "context": "Admin",
+      "successCriteria": "Short update with progress, blockers, and questions.",
+      "failureCondition": "Meeting PI without structure.",
+      "reward": "Clearer expectations and direction.",
+      "recoveryMission": "Write 3 bullets summarizing progress.",
+      "steps": [
+        { "label": "List completed tasks.", "completed": false },
+        { "label": "List blockers or uncertainties.", "completed": false },
+        { "label": "Write 2–3 questions for PI.", "completed": false },
+        { "label": "Attach relevant files.", "completed": false },
+        { "label": "Save update for meeting.", "completed": false }
+      ],
+      "tags": ["pi", "alignment"],
+      "notes": "Use the same structure weekly for consistency."
+    },
+
+    /* ============================================================
+       ADMIN SUPPORT
+    ============================================================ */
+
+    {
+      "id": "ra_admin_folder_cleanup",
+      "title": "Clean RA Folder Structure",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Admin Support",
+      "sideTopic": "organization",
+      "missionType": "Standard Mission",
+      "difficulty": "Easy",
+      "xp": 20,
+      "repeatability": "Weekly",
+      "estimatedTime": 20,
+      "priority": "Maintenance",
+      "energy": "Low Energy",
+      "context": "Admin",
+      "successCriteria": "Folders organized and files named correctly.",
+      "failureCondition": "Files scattered or mislabeled.",
+      "reward": "Faster workflow and reduced confusion.",
+      "recoveryMission": "Rename 5 files only.",
+      "steps": [
+        { "label": "Open RA folder.", "completed": false },
+        { "label": "Sort files by type (audio, transcripts, memos).", "completed": false },
+        { "label": "Rename files using consistent format.", "completed": false },
+        { "label": "Move files into correct folders.", "completed": false },
+        { "label": "Delete duplicates.", "completed": false }
+      ],
+      "tags": ["admin", "organization"],
+      "notes": "Clean folders = clean mind."
+    },
+
+    /* ============================================================
+       FOLLOW-UP
+    ============================================================ */
+
+    {
+      "id": "ra_followup_participant",
+      "title": "Send Participant Follow-Up Message",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "subject": "Follow-Up",
+      "sideTopic": "participant follow-up",
+      "missionType": "Standard Mission",
+      "difficulty": "Easy",
+      "xp": 20,
+      "repeatability": "Repeatable",
+      "estimatedTime": 10,
+      "priority": "Maintenance",
+      "energy": "Low Energy",
+      "context": "Online",
+      "successCriteria": "Follow-up message sent with next steps.",
+      "failureCondition": "Participants left without closure.",
+      "reward": "Better participant experience.",
+      "recoveryMission": "Send a short thank-you message only.",
+      "steps": [
+        { "label": "Open participant contact info.", "completed": false },
+        { "label": "Write thank-you message.", "completed": false },
+        { "label": "Include next steps or timeline.", "completed": false },
+        { "label": "Send message.", "completed": false },
+        { "label": "Log follow-up in RA tracker.", "completed": false }
+      ],
+      "tags": ["follow-up", "participants"],
+      "notes": "Follow-up builds trust and professionalism."
+    }
+
+  ]
+}
