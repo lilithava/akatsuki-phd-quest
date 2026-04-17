@@ -1,0 +1,340 @@
+{
+  "meta": {
+    "name": "Akatsuki Mission Templates",
+    "version": "1.0.0",
+    "description": "Reusable mission templates for the Task Generator. Each template defines structure, micro-steps, difficulty defaults, and domain/theme mappings."
+  },
+
+  "templates": [
+
+    /* ============================================================
+       PH.D — RESEARCH / WRITING / ANALYSIS
+    ============================================================ */
+
+    {
+      "id": "phd_read_article",
+      "label": "Read & Annotate Article",
+      "domain": "PhD",
+      "theme": "Shadow Research Missions",
+      "defaultDifficulty": "Medium",
+      "missionType": "Standard Mission",
+      "estimatedTime": 40,
+      "microSteps": [
+        "Open the article and scan abstract + conclusion.",
+        "Identify the research question and theoretical frame.",
+        "Highlight 3–5 key arguments or findings.",
+        "Capture 3 synthesis bullets in your notes.",
+        "Save citation + PDF in your source bank."
+      ],
+      "successCriteria": "Article annotated with clear takeaways.",
+      "failureCondition": "Reading without capturing notes.",
+      "tags": ["reading", "annotation", "literature"]
+    },
+
+    {
+      "id": "phd_write_section",
+      "label": "Draft Section (500–700 words)",
+      "domain": "PhD",
+      "theme": "Shadow Research Missions",
+      "defaultDifficulty": "Hard",
+      "missionType": "Deep Work Mission",
+      "estimatedTime": 90,
+      "microSteps": [
+        "Open outline and choose one subsection.",
+        "Gather relevant notes and citations.",
+        "Write topic sentence + argument frame.",
+        "Draft 2–3 evidence paragraphs.",
+        "Write synthesis + transition sentence.",
+        "Save version and log progress."
+      ],
+      "successCriteria": "500+ usable words added to draft.",
+      "failureCondition": "Editing outline without drafting prose.",
+      "tags": ["writing", "drafting", "deep-work"]
+    },
+
+    {
+      "id": "phd_analysis_batch",
+      "label": "Analyze Data Batch",
+      "domain": "PhD",
+      "theme": "Shadow Research Missions",
+      "defaultDifficulty": "Hard",
+      "missionType": "Deep Work Mission",
+      "estimatedTime": 120,
+      "microSteps": [
+        "Open dataset or transcript batch.",
+        "Review coding scheme or analytic frame.",
+        "Apply codes or analytic categories.",
+        "Write memo capturing emerging patterns.",
+        "Save coded batch + memo in analysis folder."
+      ],
+      "successCriteria": "Batch coded + memo written.",
+      "failureCondition": "Reading without coding or memoing.",
+      "tags": ["analysis", "coding", "deep-work"]
+    },
+
+    /* ============================================================
+       SKOOL — COMMUNITY / CONTENT / ENGAGEMENT
+    ============================================================ */
+
+    {
+      "id": "skool_daily_post",
+      "label": "Publish Daily Lesson Post",
+      "domain": "Skool",
+      "theme": "Clan Leadership & Skool Community",
+      "defaultDifficulty": "Medium",
+      "missionType": "Standard Mission",
+      "estimatedTime": 30,
+      "microSteps": [
+        "Choose one concrete teaching point.",
+        "Write hook sentence.",
+        "Add 3 teaching bullets.",
+        "Add one action prompt.",
+        "Publish + reply to first comment."
+      ],
+      "successCriteria": "Post published with clear value.",
+      "failureCondition": "Posting vague or filler content.",
+      "tags": ["content", "community", "engagement"]
+    },
+
+    {
+      "id": "skool_weekly_challenge",
+      "label": "Run Weekly Challenge",
+      "domain": "Skool",
+      "theme": "Clan Leadership & Skool Community",
+      "defaultDifficulty": "Hard",
+      "missionType": "Standard Mission",
+      "estimatedTime": 90,
+      "microSteps": [
+        "Define challenge goal + outcome.",
+        "Write instructions + checkpoints.",
+        "Publish challenge post.",
+        "Engage with participant updates.",
+        "Post end-of-week recap."
+      ],
+      "successCriteria": "Challenge completed with member engagement.",
+      "failureCondition": "Challenge posted without follow-up.",
+      "tags": ["challenge", "community", "leadership"]
+    },
+
+    /* ============================================================
+       CURRICULUM — LESSONS / OUTCOMES / ASSESSMENTS
+    ============================================================ */
+
+    {
+      "id": "curriculum_outcomes",
+      "label": "Write 5 Learning Outcomes",
+      "domain": "Curriculum",
+      "theme": "Village Knowledge Expansion",
+      "defaultDifficulty": "Medium",
+      "missionType": "Standard Mission",
+      "estimatedTime": 40,
+      "microSteps": [
+        "Identify lesson/module goal.",
+        "Choose measurable verbs.",
+        "Draft 5 outcome statements.",
+        "Check alignment with lesson flow.",
+        "Refine wording for clarity."
+      ],
+      "successCriteria": "5 measurable outcomes created.",
+      "failureCondition": "Outcomes remain vague or unmeasurable.",
+      "tags": ["curriculum", "learning-outcomes"]
+    },
+
+    {
+      "id": "curriculum_mastery_check",
+      "label": "Build Mastery Check",
+      "domain": "Curriculum",
+      "theme": "Village Knowledge Expansion",
+      "defaultDifficulty": "Medium",
+      "missionType": "Standard Mission",
+      "estimatedTime": 45,
+      "microSteps": [
+        "Pick target skill.",
+        "Define what success looks like.",
+        "Write task prompt.",
+        "Add submission format.",
+        "Add scoring or rubric note."
+      ],
+      "successCriteria": "One mastery check created.",
+      "failureCondition": "Activity cannot measure mastery.",
+      "tags": ["assessment", "curriculum"]
+    },
+
+    /* ============================================================
+       RA — INTERVIEWS / CODING / ANALYSIS
+    ============================================================ */
+
+    {
+      "id": "ra_interview_prep",
+      "label": "Prepare Interview Kit",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "defaultDifficulty": "Medium",
+      "missionType": "Standard Mission",
+      "estimatedTime": 30,
+      "microSteps": [
+        "Review interview purpose.",
+        "Highlight key probes.",
+        "Confirm logistics + location/link.",
+        "Test recording setup.",
+        "Prepare note template."
+      ],
+      "successCriteria": "Interview kit ready.",
+      "failureCondition": "Interview begins without prep.",
+      "tags": ["interview", "ra"]
+    },
+
+    {
+      "id": "ra_code_transcript",
+      "label": "Code Transcript Segment",
+      "domain": "Research Assistantship",
+      "theme": "Intelligence Gathering",
+      "defaultDifficulty": "Hard",
+      "missionType": "Deep Work Mission",
+      "estimatedTime": 90,
+      "microSteps": [
+        "Open transcript.",
+        "Review codebook.",
+        "Apply codes to segment.",
+        "Mark ambiguities.",
+        "Write memo on patterns."
+      ],
+      "successCriteria": "Segment coded + memo written.",
+      "failureCondition": "Reading without coding.",
+      "tags": ["coding", "analysis", "ra"]
+    },
+
+    /* ============================================================
+       DOCUMENTATION — LOGS / EVIDENCE / ARCHIVES
+    ============================================================ */
+
+    {
+      "id": "docs_daily_log",
+      "label": "Write Daily Log",
+      "domain": "Documentation",
+      "theme": "Eternal Documentation Scrolls",
+      "defaultDifficulty": "Easy",
+      "missionType": "Ritual",
+      "estimatedTime": 10,
+      "microSteps": [
+        "Open log template.",
+        "Record key work completed.",
+        "Record blockers.",
+        "Record next action.",
+        "Save + tag entry."
+      ],
+      "successCriteria": "Daily log saved.",
+      "failureCondition": "Day ends with no written record.",
+      "tags": ["documentation", "ritual"]
+    },
+
+    {
+      "id": "docs_evidence_pack",
+      "label": "Save Evidence Pack",
+      "domain": "Documentation",
+      "theme": "Eternal Documentation Scrolls",
+      "defaultDifficulty": "Easy",
+      "missionType": "Standard Mission",
+      "estimatedTime": 15,
+      "microSteps": [
+        "Identify output to capture.",
+        "Take screenshots or export files.",
+        "Rename files correctly.",
+        "Place in correct folder.",
+        "Link in log or dashboard."
+      ],
+      "successCriteria": "Evidence stored correctly.",
+      "failureCondition": "Work done without proof.",
+      "tags": ["evidence", "documentation"]
+    },
+
+    /* ============================================================
+       RITUALS — STARTUP / SHUTDOWN / RESET
+    ============================================================ */
+
+    {
+      "id": "ritual_startup",
+      "label": "Morning Startup Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "defaultDifficulty": "Easy",
+      "missionType": "Ritual",
+      "estimatedTime": 5,
+      "microSteps": [
+        "Open mission board.",
+        "Review calendar.",
+        "Mark top 3 missions.",
+        "Select one must-win task.",
+        "Start first block."
+      ],
+      "successCriteria": "Day begins with clarity.",
+      "failureCondition": "Starting reactively.",
+      "tags": ["ritual", "startup"]
+    },
+
+    {
+      "id": "ritual_shutdown",
+      "label": "Shutdown Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "defaultDifficulty": "Easy",
+      "missionType": "Ritual",
+      "estimatedTime": 10,
+      "microSteps": [
+        "Review what was finished.",
+        "Capture unfinished items.",
+        "Pick tomorrow’s first task.",
+        "Save open tabs or references.",
+        "Clear workspace."
+      ],
+      "successCriteria": "Day closed cleanly.",
+      "failureCondition": "Stopping without closure.",
+      "tags": ["ritual", "shutdown"]
+    },
+
+    /* ============================================================
+       RECOVERY — BACKLOG / RESET / RE-ENTRY
+    ============================================================ */
+
+    {
+      "id": "recovery_reentry",
+      "label": "Re-Entry Mission",
+      "domain": "Recovery",
+      "theme": "Recovery & Reset Protocols",
+      "defaultDifficulty": "Easy",
+      "missionType": "Recovery Mission",
+      "estimatedTime": 10,
+      "microSteps": [
+        "Pick one stalled mission.",
+        "Define smallest possible next step.",
+        "Do 5 minutes of progress.",
+        "Capture a note of what changed.",
+        "Decide next micro-step."
+      ],
+      "successCriteria": "Momentum restored.",
+      "failureCondition": "Avoiding the mission entirely.",
+      "tags": ["recovery", "reset"]
+    },
+
+    {
+      "id": "recovery_backlog",
+      "label": "Backlog Triage",
+      "domain": "Recovery",
+      "theme": "Recovery & Reset Protocols",
+      "defaultDifficulty": "Medium",
+      "missionType": "Recovery Mission",
+      "estimatedTime": 20,
+      "microSteps": [
+        "List all overdue missions.",
+        "Mark 1–2 that matter most.",
+        "Convert heavy missions into smaller tasks.",
+        "Archive or defer low-value items.",
+        "Commit to one re-entry action."
+      ],
+      "successCriteria": "Backlog reduced + clarity restored.",
+      "failureCondition": "Letting backlog grow unchecked.",
+      "tags": ["recovery", "triage"]
+    }
+
+  ]
+}
