@@ -25,16 +25,18 @@ function updateLevel() {
 
 // Load tasks from JSON ONLY if no saved tasks exist
 function loadTasksFromJSON() {
-  if (tasks.length > 0) {
+  // If tasks already exist in localStorage, DO NOT load JSON again
+  if (localStorage.getItem('tasks')) {
     renderTasks();
     return;
   }
 
+  // First-time load from JSON
   fetch('game-data.json')
     .then(res => res.json())
     .then(data => {
       tasks = data.tasks; // load ALL tasks
-      saveProgress();
+      saveProgress();     // save immediately so they persist
       renderTasks();
     });
 }
