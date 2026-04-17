@@ -1,22 +1,30 @@
-// Wait for data to load, then init app
-window.addEventListener('DOMContentLoaded', async () => {
-    // Wait a bit for data-loader to finish (simple polling)
-    while (!window.AK_DATA || !window.AK_DATA.rules) {
-        await new Promise(r => setTimeout(r, 100));
-    }
-    initApp();
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Poll for data to be loaded (max 5 seconds)
+    let attempts = 0;
+    const waitForData = setInterval(() => {
+        if (window.AK_DATA && window.AK_DATA.rules) {
+            clearInterval(waitForData);
+            initApp();
+        } else if (attempts > 50) { // 5 seconds timeout
+            clearInterval(waitForData);
+            console.warn('Data load timeout, using defaults');
+            initApp();
+        }
+        attempts++;
+    }, 100);
 });
 
 function initApp() {
-    // -------- State ----------
+    // ---------- STATE ----------
     let state = {
         xp: 0,
         coins: 0,
         level: 1,
         streak: 0,
-        lastResetDate: null,
-        activeTasks: [],      // each task: { ...original, steps: [{text,completed}], notes, startedAt, finishedAt? }
-        completedHistory: [],  // { taskId, title, completedAt, xpGained, notes }
+        lastResetDate: new Date().toISOString().slice(0,10),
+        activeTasks: [],
+        completedHistory: [],
         undoStack: [],
         redoStack: []
     };
@@ -28,23 +36,42 @@ function initApp() {
             try {
                 const parsed = JSON.parse(saved);
                 state = { ...state, ...parsed };
-                // Ensure each active task has steps as objects
+                // Ensure steps are proper objects
                 state.activeTasks = state.activeTasks.map(t => ({
                     ...t,
-                    steps: t.steps.map(s => typeof s === 'string' ? { text: s, completed: false } : s)
+                    steps: (t.steps || []).map(s => 
+                        typeof s === 'string' ? { text: s, completed: false } : s
+                    )
                 }));
-            } catch(e) {}
+            } catch(e) { console.error(e); }
         }
-        // Set default lastResetDate if missing
-        if (!state.lastResetDate) state.lastResetDate = getTodayStr();
-        // Check daily/weekly reset
-        checkAndResetRepeatables();
+        // Add sample task if empty
+        if (state.activeTasks.length === 0) {
+            state.activeTasks.push({
+                id: 'sample_' + Date.now(),
+                title: 'Write daily mission log',
+                domain: 'Documentation',
+                difficulty: 'Easy',
+                xp: 15,
+                repeatability: 'Daily',
+                priority: 'Important',
+                steps: [
+                    { text: 'Open log template', completed: false },
+                    { text: 'Write what you did today', completed: false },
+                    { text: 'Save the log', completed: false }
+                ],
+                notes: '',
+                startedAt: new Date().toISOString(),
+                completed: false
+            });
+        }
         updateXPLevel();
+        saveState();
     }
 
     function saveState() {
         localStorage.setItem('akatsuki_state', JSON.stringify(state));
-        // Also push to undo stack (we'll push actions manually)
+        renderAll();
     }
 
     function pushUndo(action) {
@@ -58,20 +85,13 @@ function initApp() {
         const action = state.undoStack.pop();
         if (!action) return;
         state.redoStack.push(action);
-        // Apply inverse of action
+        
         if (action.type === 'toggleStep') {
             const task = state.activeTasks.find(t => t.id === action.taskId);
             if (task && task.steps[action.stepIndex]) {
                 task.steps[action.stepIndex].completed = action.oldState;
-                if (action.oldState === false) {
-                    // Remove any finish time? Keep simple
-                }
                 updateTaskCompletion(task);
             }
-        } else if (action.type === 'addTask') {
-            state.activeTasks = state.activeTasks.filter(t => t.id !== action.taskId);
-            state.xp -= action.xpGain || 0;
-            state.coins -= action.coinsGain || 0;
         } else if (action.type === 'completeTask') {
             const task = state.activeTasks.find(t => t.id === action.taskId);
             if (task) {
@@ -79,30 +99,24 @@ function initApp() {
                 task.finishedAt = null;
                 state.xp -= action.xpGain;
                 state.coins -= action.coinsGain;
-                // remove from completedHistory
                 state.completedHistory = state.completedHistory.filter(h => h.taskId !== action.taskId);
             }
         }
         updateXPLevel();
         saveState();
-        renderAll();
     }
 
     function redo() {
         const action = state.redoStack.pop();
         if (!action) return;
         state.undoStack.push(action);
-        // Re-apply action
+        
         if (action.type === 'toggleStep') {
             const task = state.activeTasks.find(t => t.id === action.taskId);
             if (task && task.steps[action.stepIndex]) {
                 task.steps[action.stepIndex].completed = !action.oldState;
                 updateTaskCompletion(task);
             }
-        } else if (action.type === 'addTask') {
-            state.activeTasks.push(action.task);
-            state.xp += action.xpGain || 0;
-            state.coins += action.coinsGain || 0;
         } else if (action.type === 'completeTask') {
             const task = state.activeTasks.find(t => t.id === action.taskId);
             if (task) {
@@ -121,30 +135,27 @@ function initApp() {
         }
         updateXPLevel();
         saveState();
-        renderAll();
     }
 
     function updateTaskCompletion(task) {
         const allStepsDone = task.steps.every(s => s.completed);
         if (allStepsDone && !task.completed) {
-            // Auto-complete task
             completeTask(task.id);
-        } else if (!allStepsDone && task.completed) {
-            // revert completion (should not happen via steps, but handle)
-            task.completed = false;
-            task.finishedAt = null;
         }
     }
 
     function completeTask(taskId) {
         const task = state.activeTasks.find(t => t.id === taskId);
         if (!task || task.completed) return;
+        
         const xpGain = task.xp || 30;
         const coinGain = Math.floor(xpGain * 0.2);
+        
         task.completed = true;
         task.finishedAt = new Date().toISOString();
         state.xp += xpGain;
         state.coins += coinGain;
+        
         state.completedHistory.push({
             taskId: task.id,
             title: task.title,
@@ -152,34 +163,30 @@ function initApp() {
             xpGained: xpGain,
             notes: task.notes || ''
         });
+        
         pushUndo({ type: 'completeTask', taskId, xpGain, coinGain });
         updateXPLevel();
         saveState();
-        renderAll();
     }
 
     function updateXPLevel() {
-        const xpPerLevel = window.AK_DATA.rules?.xpRules?.xpPerLevel || 500;
+        const xpPerLevel = 500;
         const newLevel = Math.floor(state.xp / xpPerLevel) + 1;
         if (newLevel > state.level) {
-            // level up bonus
-            state.coins += 100;
+            state.coins += 100; // level up bonus
         }
         state.level = newLevel;
-        // update streak based on last reset day? simplified: streak is incremented daily if at least one task completed that day
-        // We'll compute streak based on completedHistory dates
         updateStreak();
     }
 
     function updateStreak() {
-        // Count consecutive days with at least one completion
         const completionsByDate = {};
         state.completedHistory.forEach(h => {
             const date = h.completedAt.slice(0,10);
             completionsByDate[date] = true;
         });
         let streak = 0;
-        let today = getTodayStr();
+        let today = new Date().toISOString().slice(0,10);
         let check = today;
         while (completionsByDate[check]) {
             streak++;
@@ -190,111 +197,38 @@ function initApp() {
         state.streak = streak;
     }
 
-    function getTodayStr() {
-        return new Date().toISOString().slice(0,10);
-    }
-
-    function checkAndResetRepeatables() {
-        const today = getTodayStr();
-        const todayDate = new Date(today);
-        const lastDate = state.lastResetDate ? new Date(state.lastResetDate) : null;
-        if (!lastDate || lastDate >= todayDate) return;
-
-        // Determine if we crossed midnight or a week boundary
-        const dayDiff = Math.floor((todayDate - lastDate) / (1000*3600*24));
-        if (dayDiff >= 1) {
-            // Reset daily tasks
-            state.activeTasks = state.activeTasks.filter(t => {
-                if (t.repeatability === 'Daily') {
-                    // keep but reset steps and completed flag
-                    t.completed = false;
-                    t.finishedAt = null;
-                    t.steps = t.steps.map(s => ({ ...s, completed: false }));
-                    return true;
-                }
-                return true; // keep others
-            });
-            // For weekly reset (Monday)
-            const lastMonday = getMonday(lastDate);
-            const thisMonday = getMonday(todayDate);
-            if (thisMonday > lastMonday) {
-                state.activeTasks = state.activeTasks.filter(t => {
-                    if (t.repeatability === 'Weekly') {
-                        t.completed = false;
-                        t.finishedAt = null;
-                        t.steps = t.steps.map(s => ({ ...s, completed: false }));
-                        return true;
-                    }
-                    return true;
-                });
-            }
-            state.lastResetDate = today;
-            saveState();
-        }
-    }
-
-    function getMonday(date) {
-        const d = new Date(date);
-        d.setHours(0,0,0,0);
-        const day = d.getDay();
-        const diff = (day === 0 ? 6 : day-1);
-        d.setDate(d.getDate() - diff);
-        return d;
-    }
-
-    // -------- Task Generator ----------
-    function generateTasksFromGoal(goal, domain, difficulty, horizon) {
-        // Use mission-templates.json to create steps
-        const templates = window.AK_DATA.templates?.templates || [];
-        const relevant = templates.find(t => t.domain === domain) || templates[0];
-        const steps = (relevant?.microSteps || [
-            "Clarify the scope of this goal",
-            "Break down into 3 sub-tasks",
-            "Execute first sub-task",
-            "Review and adjust",
-            "Complete and document"
-        ]).map(stepText => ({ text: stepText, completed: false }));
-        const newTask = {
-            id: 'gen_' + Date.now() + '_' + Math.random(),
-            title: goal,
-            domain: domain,
-            difficulty: difficulty,
-            xp: (difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : 80),
-            repeatability: horizon === 'today' ? 'Daily' : 'One-time',
-            steps: steps,
-            notes: '',
-            startedAt: new Date().toISOString(),
-            completed: false,
-            priority: 'Important',
-            energy: 'Standard Focus'
-        };
-        return [newTask];
-    }
-
-    // -------- Render functions ----------
+    // ---------- RENDER FUNCTIONS ----------
     function renderAll() {
+        renderHeader();
         renderDashboard();
         renderActiveMissions();
         renderTaskBank();
         renderHistory();
     }
 
-    function renderDashboard() {
+    function renderHeader() {
+        document.getElementById('level').innerText = state.level;
         document.getElementById('xp').innerText = state.xp;
         document.getElementById('coins').innerText = state.coins;
-        document.getElementById('level').innerText = state.level;
         document.getElementById('streak').innerText = state.streak;
+    }
+
+    function renderDashboard() {
         const activeCount = state.activeTasks.filter(t => !t.completed).length;
+        const completedToday = state.completedHistory.filter(h => 
+            h.completedAt.slice(0,10) === new Date().toISOString().slice(0,10)
+        ).length;
+        
         document.getElementById('activeCount').innerText = activeCount;
-        const completedToday = state.completedHistory.filter(h => h.completedAt.slice(0,10) === getTodayStr()).length;
         document.getElementById('completedToday').innerText = completedToday;
         document.getElementById('totalXP').innerText = state.xp;
-        // Win the day: at least one critical/important, one ritual, one documentation
+        
+        // Win the day logic
         const hasImportant = state.activeTasks.some(t => t.completed && (t.priority === 'Critical' || t.priority === 'Important'));
         const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
         const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
-        const win = hasImportant && hasRitual && hasDoc;
-        document.getElementById('winTheDay').innerHTML = win ? '✅' : '❌';
+        
+        document.getElementById('winTheDay').innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅' : '❌';
         document.getElementById('impCount').innerText = hasImportant ? 1 : 0;
         document.getElementById('ritualCount').innerText = hasRitual ? 1 : 0;
         document.getElementById('docCount').innerText = hasDoc ? 1 : 0;
@@ -302,156 +236,232 @@ function initApp() {
 
     function renderActiveMissions() {
         const container = document.getElementById('activeMissionsList');
+        if (!container) return;
         container.innerHTML = '';
-        state.activeTasks.forEach(task => {
+        
+        const activeTasks = state.activeTasks.filter(t => !t.completed);
+        
+        if (activeTasks.length === 0) {
+            container.innerHTML = '<div class="ak-card">No active missions. Add some from the Task Bank!</div>';
+            return;
+        }
+        
+        activeTasks.forEach(task => {
             const div = document.createElement('div');
             div.className = 'mission-item';
             div.innerHTML = `
                 <div class="mission-title">
-                    <span>${task.title}</span>
-                    <small>${task.difficulty} | ${task.domain}</small>
+                    <strong>${escapeHtml(task.title)}</strong>
+                    <small style="color:#aaa">${task.difficulty} | ${task.domain}</small>
                 </div>
-                <div class="mission-meta">Repeat: ${task.repeatability} | Priority: ${task.priority}</div>
-                <ul class="step-list">
+                <div class="mission-meta">Repeat: ${task.repeatability || 'One-time'} | Priority: ${task.priority || 'Normal'}</div>
+                <ul class="step-list" data-task-id="${task.id}">
                     ${task.steps.map((step, idx) => `
-                        <li class="step-item ${step.completed ? 'completed' : ''}" data-task="${task.id}" data-step="${idx}">
+                        <li class="step-item ${step.completed ? 'completed' : ''}" data-step-index="${idx}">
                             <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}>
-                            <label>${step.text}</label>
+                            <label>${escapeHtml(step.text)}</label>
                         </li>
                     `).join('')}
                 </ul>
-                <button class="view-task-details" data-id="${task.id}">Details / Notes</button>
+                <button class="view-task-details" data-task-id="${task.id}">📝 Details / Notes</button>
             `;
             container.appendChild(div);
-            // attach checkbox listeners
-            div.querySelectorAll('.step-checkbox').forEach(cb => {
-                cb.addEventListener('change', (e) => {
-                    e.stopPropagation();
-                    const li = cb.closest('.step-item');
-                    const taskId = li.dataset.task;
-                    const stepIdx = parseInt(li.dataset.step);
-                    const taskObj = state.activeTasks.find(t => t.id === taskId);
-                    if (taskObj) {
-                        const oldState = taskObj.steps[stepIdx].completed;
-                        taskObj.steps[stepIdx].completed = cb.checked;
-                        if (cb.checked) li.classList.add('completed');
-                        else li.classList.remove('completed');
-                        pushUndo({ type: 'toggleStep', taskId, stepIndex: stepIdx, oldState });
-                        updateTaskCompletion(taskObj);
-                        saveState();
-                        renderAll();
-                    }
-                });
-            });
-            div.querySelectorAll('.view-task-details').forEach(btn => {
-                btn.addEventListener('click', () => openTaskModal(task.id));
-            });
+        });
+        
+        // Attach event listeners to checkboxes
+        document.querySelectorAll('.step-checkbox').forEach(cb => {
+            cb.removeEventListener('change', handleStepToggle);
+            cb.addEventListener('change', handleStepToggle);
+        });
+        
+        // Attach details button listeners
+        document.querySelectorAll('.view-task-details').forEach(btn => {
+            btn.removeEventListener('click', handleDetailsClick);
+            btn.addEventListener('click', handleDetailsClick);
         });
     }
-
+    
+    function handleStepToggle(e) {
+        const checkbox = e.target;
+        const li = checkbox.closest('.step-item');
+        const stepIndex = parseInt(li.dataset.stepIndex);
+        const missionDiv = li.closest('.mission-item');
+        const taskId = missionDiv.querySelector('.step-list').dataset.taskId;
+        
+        const task = state.activeTasks.find(t => t.id === taskId);
+        if (task && task.steps[stepIndex]) {
+            const oldState = task.steps[stepIndex].completed;
+            task.steps[stepIndex].completed = checkbox.checked;
+            
+            if (checkbox.checked) {
+                li.classList.add('completed');
+            } else {
+                li.classList.remove('completed');
+            }
+            
+            pushUndo({ type: 'toggleStep', taskId, stepIndex, oldState });
+            updateTaskCompletion(task);
+            saveState();
+        }
+    }
+    
+    function handleDetailsClick(e) {
+        const taskId = e.target.dataset.taskId;
+        openTaskModal(taskId);
+    }
+    
     function openTaskModal(taskId) {
         const task = state.activeTasks.find(t => t.id === taskId);
         if (!task) return;
+        
         const modal = document.getElementById('taskModal');
         document.getElementById('modalTitle').innerText = task.title;
         document.getElementById('modalBody').innerHTML = `
             <p><strong>Domain:</strong> ${task.domain}</p>
             <p><strong>Difficulty:</strong> ${task.difficulty}</p>
-            <p><strong>Repeatability:</strong> ${task.repeatability}</p>
+            <p><strong>Repeatability:</strong> ${task.repeatability || 'One-time'}</p>
             <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
             <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
         `;
         document.getElementById('taskNotes').value = task.notes || '';
-        document.getElementById('saveTaskNotes').onclick = () => {
+        
+        const saveBtn = document.getElementById('saveTaskNotes');
+        const newSaveBtn = saveBtn.cloneNode(true);
+        saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+        newSaveBtn.onclick = () => {
             task.notes = document.getElementById('taskNotes').value;
             saveState();
             modal.style.display = 'none';
         };
+        
         modal.style.display = 'flex';
         document.querySelector('.close').onclick = () => modal.style.display = 'none';
+        window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
     }
-
+    
     function renderTaskBank() {
         const container = document.getElementById('taskBankList');
-        // Combine all banks
-        const banks = ['phd','skool','curriculum','ra','docs','rituals','bosses','recovery','mini'];
+        if (!container) return;
+        
+        // Collect all tasks from loaded banks
         let allTasks = [];
+        const banks = ['phd', 'skool', 'curriculum', 'ra', 'docs', 'rituals'];
         for (let bank of banks) {
             const data = window.AK_DATA[bank];
-            if (data && data.tasks) allTasks.push(...data.tasks);
-            if (data && data.missions) allTasks.push(...data.missions);
-            if (data && data.quests) allTasks.push(...data.quests);
+            if (data && data.tasks) {
+                allTasks.push(...data.tasks);
+            }
         }
-        // Deduplicate by id
-        const unique = new Map();
-        allTasks.forEach(t => { if(t.id) unique.set(t.id, t); });
-        allTasks = Array.from(unique.values());
-        const searchTerm = document.getElementById('bankSearch').value.toLowerCase();
+        
+        const searchTerm = document.getElementById('bankSearch')?.value.toLowerCase() || '';
         const filtered = allTasks.filter(t => t.title?.toLowerCase().includes(searchTerm));
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="ak-card">No tasks found. Check that JSON files loaded correctly.</div>';
+            return;
+        }
+        
         container.innerHTML = filtered.map(t => `
             <div class="mission-item">
-                <div class="mission-title">${t.title}</div>
+                <div class="mission-title"><strong>${escapeHtml(t.title)}</strong></div>
                 <div class="mission-meta">${t.difficulty || 'Medium'} | ${t.domain || 'General'}</div>
-                <button class="add-from-bank" data-id="${t.id}">+ Add to Active</button>
+                <button class="add-from-bank" data-title="${escapeHtml(t.title)}" data-domain="${t.domain || 'General'}" data-difficulty="${t.difficulty || 'Medium'}" data-xp="${t.xp || 30}">+ Add to Active</button>
             </div>
         `).join('');
+        
         document.querySelectorAll('.add-from-bank').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = btn.dataset.id;
-                const original = allTasks.find(t => t.id === id);
-                if (original) {
-                    const newTask = JSON.parse(JSON.stringify(original));
-                    newTask.id = Date.now() + '_' + Math.random();
-                    newTask.startedAt = new Date().toISOString();
-                    newTask.completed = false;
-                    newTask.steps = (newTask.steps || []).map(s => typeof s === 'string' ? { text: s, completed: false } : s);
-                    state.activeTasks.push(newTask);
-                    pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask, xpGain: 0 });
-                    saveState();
-                    renderAll();
-                }
-            });
+            btn.removeEventListener('click', handleAddFromBank);
+            btn.addEventListener('click', handleAddFromBank);
         });
     }
-
+    
+    function handleAddFromBank(e) {
+        const btn = e.target;
+        const newTask = {
+            id: 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+            title: btn.dataset.title,
+            domain: btn.dataset.domain,
+            difficulty: btn.dataset.difficulty,
+            xp: parseInt(btn.dataset.xp),
+            repeatability: 'One-time',
+            priority: 'Normal',
+            steps: [
+                { text: 'Plan this task', completed: false },
+                { text: 'Execute the main work', completed: false },
+                { text: 'Review and document', completed: false }
+            ],
+            notes: '',
+            startedAt: new Date().toISOString(),
+            completed: false
+        };
+        state.activeTasks.push(newTask);
+        pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask, xpGain: 0 });
+        saveState();
+    }
+    
     function renderHistory() {
         const container = document.getElementById('weeklyHistory');
+        if (!container) return;
+        
         const last7Days = [];
         for (let i = 0; i < 7; i++) {
             let d = new Date();
             d.setDate(d.getDate() - i);
             last7Days.push(d.toISOString().slice(0,10));
         }
+        
         let html = '';
         for (let day of last7Days) {
             const dayCompletions = state.completedHistory.filter(h => h.completedAt.slice(0,10) === day);
-            html += `<div class="ak-card"><h3>${day}</h3><ul>${dayCompletions.map(c => `<li>${c.title} (+${c.xpGained} XP)</li>`).join('')}</ul></div>`;
+            html += `<div class="ak-card"><h3>${day}</h3><ul>`;
+            if (dayCompletions.length === 0) {
+                html += '<li>No completions</li>';
+            } else {
+                dayCompletions.forEach(c => html += `<li>${escapeHtml(c.title)} (+${c.xpGained} XP)</li>`);
+            }
+            html += `</ul></div>`;
         }
         container.innerHTML = html;
     }
-
+    
     function generateReport() {
         let report = `AKATSUKI WEEKLY REPORT\n`;
         report += `Generated: ${new Date().toLocaleString()}\n`;
         report += `Level: ${state.level} | XP: ${state.xp} | Coins: ${state.coins} | Streak: ${state.streak}\n`;
         report += `\nCompleted this week:\n`;
-        const last7 = [];
-        for (let i=0;i<7;i++) {
-            let d = new Date(); d.setDate(d.getDate()-i);
-            last7.push(d.toISOString().slice(0,10));
+        
+        const last7Days = [];
+        for (let i = 0; i < 7; i++) {
+            let d = new Date();
+            d.setDate(d.getDate() - i);
+            last7Days.push(d.toISOString().slice(0,10));
         }
-        last7.forEach(day => {
+        
+        last7Days.forEach(day => {
             const dayTasks = state.completedHistory.filter(h => h.completedAt.slice(0,10) === day);
             if (dayTasks.length) {
                 report += `\n${day}:\n`;
                 dayTasks.forEach(t => report += `  - ${t.title} (${t.xpGained} XP)\n`);
             }
         });
-        document.getElementById('reportOutput').innerText = report;
+        
+        const reportOutput = document.getElementById('reportOutput');
+        if (reportOutput) reportOutput.innerText = report;
     }
-
-    // ---- Event listeners & initialization ----
-    function setupTabs() {
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // ---------- SETUP EVENT LISTENERS ----------
+    function setupEventListeners() {
+        // Tab switching
         document.querySelectorAll('.ak-tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const tabId = btn.dataset.tab;
@@ -461,95 +471,114 @@ function initApp() {
                 btn.classList.add('active');
             });
         });
-    }
-
-    function setupGenerator() {
-        const domainSelect = document.getElementById('genDomain');
-        const diffSelect = document.getElementById('genDifficulty');
-        // populate domains from rules
-        if (window.AK_DATA.rules?.domains) {
-            window.AK_DATA.rules.domains.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d.id;
-                opt.innerText = d.label;
-                domainSelect.appendChild(opt);
+        
+        // Undo/Redo
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+        if (undoBtn) undoBtn.addEventListener('click', () => { undo(); renderAll(); });
+        if (redoBtn) redoBtn.addEventListener('click', () => { redo(); renderAll(); });
+        
+        // Settings buttons
+        const forceResetBtn = document.getElementById('forceResetBtn');
+        if (forceResetBtn) {
+            forceResetBtn.addEventListener('click', () => {
+                state.lastResetDate = new Date().toISOString().slice(0,10);
+                saveState();
             });
         }
-        ['Easy','Medium','Hard'].forEach(d => {
-            const opt = document.createElement('option');
-            opt.value = d;
-            opt.innerText = d;
-            diffSelect.appendChild(opt);
-        });
-        document.getElementById('generateBtn').addEventListener('click', () => {
-            const goal = document.getElementById('genGoal').value;
-            const domain = domainSelect.value;
-            const difficulty = diffSelect.value;
-            const horizon = document.getElementById('genHorizon').value;
-            if (!goal) return alert('Enter a goal');
-            const generated = generateTasksFromGoal(goal, domain, difficulty, horizon);
-            const previewDiv = document.getElementById('generatedPreview');
-            previewDiv.innerHTML = `<ul>${generated.map(t => `<li>${t.title} (${t.difficulty})</li>`).join('')}</ul>`;
-            document.getElementById('addGeneratedBtn').style.display = 'inline-block';
-            document.getElementById('addGeneratedBtn').onclick = () => {
-                generated.forEach(t => {
-                    state.activeTasks.push(t);
-                    pushUndo({ type: 'addTask', taskId: t.id, task: t, xpGain: 0 });
-                });
-                saveState();
-                renderAll();
-                document.getElementById('generatedPreview').innerHTML = '';
-                document.getElementById('addGeneratedBtn').style.display = 'none';
-            };
-        });
-    }
-
-    function setupSettings() {
-        document.getElementById('forceResetBtn').addEventListener('click', () => {
-            state.lastResetDate = getTodayStr();
-            checkAndResetRepeatables();
-            renderAll();
-        });
-        document.getElementById('clearAllBtn').addEventListener('click', () => {
-            if (confirm('Wipe all progress? Cannot undo.')) {
-                localStorage.clear();
-                location.reload();
-            }
-        });
-        document.getElementById('exportReportBtn').addEventListener('click', generateReport);
-        document.getElementById('generateReportBtn').addEventListener('click', generateReport);
-        document.getElementById('undoBtn').addEventListener('click', undo);
-        document.getElementById('redoBtn').addEventListener('click', redo);
-        document.getElementById('genQuickBtn').addEventListener('click', () => {
-            document.querySelector('.ak-tab-btn[data-tab="generator"]').click();
-        });
-    }
-
-    function addSampleTasksIfEmpty() {
-        if (state.activeTasks.length === 0) {
-            // add a few example tasks from bank
-            const sample = {
-                id: 'sample1',
-                title: 'Write daily mission log',
-                domain: 'Documentation',
-                difficulty: 'Easy',
-                xp: 15,
-                repeatability: 'Daily',
-                steps: [{ text: 'Open log template', completed: false }, { text: 'Write what you did', completed: false }],
-                notes: '',
-                startedAt: new Date().toISOString(),
-                completed: false,
-                priority: 'Important'
-            };
-            state.activeTasks.push(sample);
-            saveState();
+        
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', () => {
+                if (confirm('Wipe all progress? Cannot undo.')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            });
+        }
+        
+        // Export report
+        const exportBtn = document.getElementById('exportReportBtn');
+        if (exportBtn) exportBtn.addEventListener('click', generateReport);
+        
+        const generateReportBtn = document.getElementById('generateReportBtn');
+        if (generateReportBtn) generateReportBtn.addEventListener('click', generateReport);
+        
+        // Quick generate button
+        const genQuickBtn = document.getElementById('genQuickBtn');
+        if (genQuickBtn) {
+            genQuickBtn.addEventListener('click', () => {
+                const generatorTab = document.querySelector('.ak-tab-btn[data-tab="generator"]');
+                if (generatorTab) generatorTab.click();
+            });
+        }
+        
+        // Task generator
+        const generateBtn = document.getElementById('generateBtn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', () => {
+                const goal = document.getElementById('genGoal')?.value;
+                if (!goal) {
+                    alert('Enter a goal first');
+                    return;
+                }
+                const domain = document.getElementById('genDomain')?.value || 'General';
+                const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
+                
+                const newTask = {
+                    id: 'gen_' + Date.now(),
+                    title: goal,
+                    domain: domain,
+                    difficulty: difficulty,
+                    xp: difficulty === 'Easy' ? 20 : (difficulty === 'Medium' ? 40 : 80),
+                    repeatability: 'One-time',
+                    priority: 'Important',
+                    steps: [
+                        { text: `Clarify scope: ${goal.substring(0,50)}`, completed: false },
+                        { text: 'Break down into 3 sub-tasks', completed: false },
+                        { text: 'Execute first sub-task', completed: false },
+                        { text: 'Review and document results', completed: false }
+                    ],
+                    notes: '',
+                    startedAt: new Date().toISOString(),
+                    completed: false
+                };
+                
+                const previewDiv = document.getElementById('generatedPreview');
+                if (previewDiv) {
+                    previewDiv.innerHTML = `<div class="mission-item"><strong>${escapeHtml(goal)}</strong><br>${difficulty} · ${domain}</div>`;
+                }
+                
+                const addBtn = document.getElementById('addGeneratedBtn');
+                if (addBtn) {
+                    addBtn.style.display = 'inline-block';
+                    const newAddBtn = addBtn.cloneNode(true);
+                    addBtn.parentNode.replaceChild(newAddBtn, addBtn);
+                    newAddBtn.onclick = () => {
+                        state.activeTasks.push(newTask);
+                        pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask, xpGain: 0 });
+                        saveState();
+                        if (previewDiv) previewDiv.innerHTML = '';
+                        newAddBtn.style.display = 'none';
+                        // Switch to active missions tab
+                        const activeTabBtn = document.querySelector('.ak-tab-btn[data-tab="active"]');
+                        if (activeTabBtn) activeTabBtn.click();
+                    };
+                }
+            });
+        }
+        
+        // Bank search
+        const bankSearch = document.getElementById('bankSearch');
+        if (bankSearch) {
+            bankSearch.addEventListener('input', () => renderTaskBank());
         }
     }
-
+    
+    // ---------- INITIALIZE ----------
     loadState();
-    setupTabs();
-    setupGenerator();
-    setupSettings();
-    addSampleTasksIfEmpty();
+    setupEventListeners();
     renderAll();
+    
+    console.log('Akatsuki Quest initialized!', { activeTasks: state.activeTasks.length });
 }
