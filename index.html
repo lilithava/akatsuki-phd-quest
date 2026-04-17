@@ -15,22 +15,24 @@
                 <span class="ak-title">Akatsuki PhD Quest</span>
             </div>
             <div class="ak-header-stats">
-                <div>Level <span id="level">1</span></div>
-                <div>XP <span id="xp">0</span></div>
-                <div>Coins <span id="coins">0</span></div>
-                <div>Streak <span id="streak">0</span>🔥</div>
+                <div class="stat-box">Level <span id="level">1</span></div>
+                <div class="stat-box">XP <span id="xp">0</span></div>
+                <div class="stat-box">💰 Coins <span id="coins">0</span></div>
+                <div class="stat-box">🔥 Streak <span id="streak">0</span></div>
             </div>
         </header>
 
         <!-- Main layout: sidebar + content -->
         <div class="ak-layout">
             <aside class="ak-sidebar">
-                <button class="ak-tab-btn active" data-tab="dashboard">Dashboard</button>
-                <button class="ak-tab-btn" data-tab="active">Active Missions</button>
-                <button class="ak-tab-btn" data-tab="generator">Task Generator</button>
-                <button class="ak-tab-btn" data-tab="bank">Task Bank</button>
-                <button class="ak-tab-btn" data-tab="history">History & Reports</button>
-                <button class="ak-tab-btn" data-tab="settings">Settings</button>
+                <button class="ak-tab-btn active" data-tab="dashboard">📊 Dashboard</button>
+                <button class="ak-tab-btn" data-tab="active">📋 Active Missions</button>
+                <button class="ak-tab-btn" data-tab="generator">⚙️ Task Generator</button>
+                <button class="ak-tab-btn" data-tab="bank">📚 Task Bank</button>
+                <button class="ak-tab-btn" data-tab="avatar">🎭 Avatar</button>
+                <button class="ak-tab-btn" data-tab="shop">🛒 Shop</button>
+                <button class="ak-tab-btn" data-tab="history">📜 History</button>
+                <button class="ak-tab-btn" data-tab="settings">⚙️ Settings</button>
                 <div class="ak-undo-redo">
                     <button id="undoBtn" title="Undo">↩️ Undo</button>
                     <button id="redoBtn" title="Redo">↪️ Redo</button>
@@ -58,7 +60,7 @@
                         <div class="ak-card">
                             <h3>Quick Actions</h3>
                             <button id="genQuickBtn">✨ Quick Generate</button>
-                            <button id="exportReportBtn">📄 Export Weekly Report</button>
+                            <button id="exportReportBtn">📄 Export Report</button>
                         </div>
                     </div>
                 </div>
@@ -76,11 +78,17 @@
                         <label>Goal / Idea:</label>
                         <input type="text" id="genGoal" placeholder="e.g., Write literature review on AI displacement">
                         <div class="ak-form-row">
-                            <label>Domain: <select id="genDomain"></select></label>
-                            <label>Difficulty: <select id="genDifficulty"></select></label>
-                            <label>Horizon: <select id="genHorizon">
-                                <option value="today">Today</option>
-                                <option value="week">This Week</option>
+                            <label>Domain: <select id="genDomain">
+                                <option value="PhD">PhD Research</option>
+                                <option value="Skool">Skool Community</option>
+                                <option value="Curriculum">Curriculum</option>
+                                <option value="Documentation">Documentation</option>
+                                <option value="Rituals">Rituals</option>
+                            </select></label>
+                            <label>Difficulty: <select id="genDifficulty">
+                                <option value="Easy">Easy (20 XP)</option>
+                                <option value="Medium">Medium (40 XP)</option>
+                                <option value="Hard">Hard (80 XP)</option>
                             </select></label>
                         </div>
                         <button id="generateBtn">Generate Mission Chain</button>
@@ -96,19 +104,52 @@
                     <div id="taskBankList" class="ak-mission-list"></div>
                 </div>
 
-                <!-- History & Reports Tab -->
+                <!-- Avatar Tab -->
+                <div id="avatar" class="ak-tab">
+                    <h2>Avatar Customization</h2>
+                    <div class="ak-avatar-container">
+                        <div class="ak-avatar-display">
+                            <svg id="avatarSvg" viewBox="0 0 200 200" width="200" height="200">
+                                <circle cx="100" cy="100" r="80" fill="#1a1a2e" stroke="#d62828" stroke-width="3"/>
+                                <text x="100" y="105" text-anchor="middle" fill="#e6e6e6" font-size="14" id="avatarNameText">Scholar</text>
+                            </svg>
+                        </div>
+                        <div class="ak-avatar-info">
+                            <input type="text" id="avatarName" placeholder="Your name" maxlength="20">
+                            <div class="avatar-stats">
+                                <p>⚔️ XP Multiplier: <span id="xpMult">1.00</span>x</p>
+                                <p>💰 Coin Multiplier: <span id="coinMult">1.00</span>x</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ak-equipped-gear">
+                        <h3>Equipped Gear</h3>
+                        <div id="equippedList" class="gear-list"></div>
+                    </div>
+                </div>
+
+                <!-- Shop Tab -->
+                <div id="shop" class="ak-tab">
+                    <h2>🛒 Forbidden Market</h2>
+                    <p>Your coins: <strong id="shopCoins">0</strong></p>
+                    <div id="shopItemsList" class="ak-shop-grid"></div>
+                </div>
+
+                <!-- History Tab -->
                 <div id="history" class="ak-tab">
-                    <h2>Weekly History & Reports</h2>
+                    <h2>Weekly History</h2>
                     <div id="weeklyHistory"></div>
                     <button id="generateReportBtn">Generate Full Report</button>
-                    <pre id="reportOutput" style="background:#111; padding:1rem; white-space:pre-wrap;"></pre>
+                    <pre id="reportOutput" style="background:#111; padding:1rem; white-space:pre-wrap; margin-top:1rem;"></pre>
                 </div>
 
                 <!-- Settings Tab -->
                 <div id="settings" class="ak-tab">
                     <h2>System Settings</h2>
-                    <button id="forceResetBtn">Force Daily Reset</button>
-                    <button id="clearAllBtn">Wipe All Progress (Danger)</button>
+                    <div class="ak-card">
+                        <button id="forceResetBtn">Force Daily Reset</button>
+                        <button id="clearAllBtn" class="danger">Wipe All Progress (Danger)</button>
+                    </div>
                 </div>
             </main>
         </div>
@@ -126,6 +167,9 @@
             <button id="saveTaskNotes">Save Notes</button>
         </div>
     </div>
+
+    <!-- Reward Toast -->
+    <div id="rewardToast" class="reward-toast"></div>
 
     <script src="data-loader.js"></script>
     <script src="script.js"></script>
