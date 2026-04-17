@@ -1,192 +1,248 @@
 {
   "meta": {
-    "title": "Akatsuki PhD Quest — game-data",
-    "version": "3.1",
-    "generated": "2026-04-17"
+    "name": "Akatsuki PhD Quest – Core Rules",
+    "version": "1.0.0"
   },
-  "settings": {
-    "xpPerLevel": 150,
-    "coinPerXpRatio": 0.5,
-    "levelUpBonusCoins": 10,
-    "defaultSectionOrder": ["bank","phd","skool","doc","daily","weekly","monthly"]
+
+  "xpRules": {
+    "xpPerLevel": 500,
+    "coinRatio": 0.2,
+    "levelUpBonusCoins": 100,
+    "difficultyXpRanges": {
+      "Easy": { "min": 10, "max": 20 },
+      "Medium": { "min": 25, "max": 50 },
+      "Hard": { "min": 60, "max": 120 },
+      "Elite": { "min": 150, "max": 500 }
+    },
+    "bonuses": {
+      "firstCompletion": 10,
+      "streak3Days": 15,
+      "streak7Days": 40,
+      "bossClear": 100,
+      "recoveryMission": 15,
+      "perfectDocumentation": 10
+    }
   },
-  "bank": {
-    "title": "Daily Bank",
-    "description": "A bank of regular, repeatable tasks you can pull into sections. Each bank task has steps — complete steps for partial XP, finish all steps to complete the task.",
-    "items": [
+
+  "streakRules": {
+    "dayCompletedCondition": {
+      "description": "At least one repeatable mission completed in any domain.",
+      "requiresRepeatableTask": true
+    },
+    "resetTime": "local-midnight",
+    "onReset": {
+      "regenerateRepeatableTasks": true,
+      "clearStepStateForRepeatables": true
+    },
+    "streakBreakLogic": {
+      "ifYesterdayCompleted": "increment",
+      "ifYesterdayNotCompleted": "resetToZero"
+    },
+    "winTheDay": {
+      "description": "1 important mission + 1 ritual + 1 documentation action completed.",
+      "requirements": {
+        "importantMissions": 1,
+        "ritualMissions": 1,
+        "documentationMissions": 1
+      }
+    }
+  },
+
+  "missionTypes": [
+    "Mini-Quest",
+    "Standard Mission",
+    "Deep Work Mission",
+    "Boss Battle",
+    "Recovery Mission",
+    "Secret Mission",
+    "Ritual"
+  ],
+
+  "difficulties": [
+    {
+      "id": "Easy",
+      "timeRangeMinutes": { "min": 5, "max": 15 },
+      "cognitiveLoad": "Low",
+      "defaultXp": 15
+    },
+    {
+      "id": "Medium",
+      "timeRangeMinutes": { "min": 20, "max": 60 },
+      "cognitiveLoad": "Moderate",
+      "defaultXp": 35
+    },
+    {
+      "id": "Hard",
+      "timeRangeMinutes": { "min": 60, "max": 180 },
+      "cognitiveLoad": "Deep Work",
+      "defaultXp": 90
+    },
+    {
+      "id": "Elite",
+      "timeRangeMinutes": { "min": 180, "max": 999 },
+      "cognitiveLoad": "High Stakes",
+      "defaultXp": 250
+    }
+  ],
+
+  "repeatabilityOptions": [
+    "One-time",
+    "Repeatable",
+    "Daily",
+    "Weekly",
+    "Monthly",
+    "Quarterly"
+  ],
+
+  "priorityTags": [
+    "Critical",
+    "Important",
+    "Maintenance",
+    "Optional"
+  ],
+
+  "energyTags": [
+    "Low Energy",
+    "Standard Focus",
+    "Deep Focus"
+  ],
+
+  "contextTags": [
+    "Home",
+    "Office",
+    "Library",
+    "Online",
+    "Skool",
+    "RA",
+    "Writing",
+    "Admin"
+  ],
+
+  "domains": [
+    "PhD",
+    "Skool",
+    "Curriculum",
+    "Research Assistantship",
+    "Documentation",
+    "Rituals",
+    "Boss",
+    "Recovery"
+  ],
+
+  "themes": [
+    "Shadow Research Missions",
+    "Village Knowledge Expansion",
+    "Clan Leadership & Skool Community",
+    "Intelligence Gathering",
+    "Eternal Documentation Scrolls",
+    "Discipline & Rituals",
+    "Boss Battles",
+    "Recovery & Reset Protocols"
+  ],
+
+  "resetRules": {
+    "localStorageKeys": {
+      "xp": "ak_xp",
+      "level": "ak_level",
+      "coins": "ak_coins",
+      "streak": "ak_streak",
+      "sections": "ak_sections",
+      "shop": "ak_shop",
+      "avatar": "ak_avatar",
+      "bank": "ak_bank",
+      "undo": "ak_undo",
+      "sidebarHidden": "ak_sidebar_hidden",
+      "lastResetDate": "ak_last_reset_date",
+      "dayCompletedPrefix": "ak_day_completed_",
+      "stepsPrefix": "ak_steps_"
+    },
+    "antiOverwhelmRules": {
+      "maxActiveEliteMissions": 3,
+      "backlogTriageTrigger": {
+        "missedTasksInDomain": 3,
+        "createsMissionType": "Backlog Triage"
+      },
+      "overwhelmResetTrigger": {
+        "brokenStreaksInWeek": 2,
+        "createsMissionType": "Overwhelm Reset Protocol"
+      }
+    }
+  },
+
+  "unlockRules": {
+    "levels": [
       {
-        "id": "bank_morning_routine",
-        "title": "Morning Routine",
-        "xp": 10,
-        "repeatable": true,
-        "steps": [
-          { "id": "m_wake", "title": "Wake & hydrate", "xp": 3 },
-          { "id": "m_movement", "title": "10 min movement", "xp": 3 },
-          { "id": "m_plan", "title": "Plan top 3 tasks", "xp": 4 }
-        ],
-        "notes": "A short set of rituals to start the day."
+        "level": 1,
+        "unlocks": ["Mini-Quests", "Rituals"]
       },
       {
-        "id": "bank_deep_work",
-        "title": "Deep Work Block",
-        "xp": 40,
-        "repeatable": true,
-        "steps": [
-          { "id": "dw_prep", "title": "Prepare environment", "xp": 5 },
-          { "id": "dw_focus", "title": "60 min focused work", "xp": 30 },
-          { "id": "dw_review", "title": "Quick review", "xp": 5 }
-        ],
-        "notes": "One uninterrupted deep work session."
+        "level": 3,
+        "unlocks": ["Standard Missions", "Community Missions"]
       },
       {
-        "id": "bank_evening_reflection",
-        "title": "Evening Reflection",
-        "xp": 10,
-        "repeatable": true,
-        "steps": [
-          { "id": "e_log", "title": "Write short log", "xp": 5 },
-          { "id": "e_plan", "title": "Plan tomorrow", "xp": 5 }
-        ],
-        "notes": "Close the day with a short reflection."
+        "level": 4,
+        "unlocks": ["Documentation Bonuses", "Streak Multipliers"]
       },
       {
-        "id": "bank_weekly_review",
-        "title": "Weekly Review (Bank)",
-        "xp": 20,
-        "repeatable": true,
-        "steps": [
-          { "id": "w_collect", "title": "Collect notes", "xp": 6 },
-          { "id": "w_reflect", "title": "Reflect on wins", "xp": 7 },
-          { "id": "w_plan", "title": "Set next week goals", "xp": 7 }
-        ],
-        "notes": "A compact weekly review template."
+        "level": 5,
+        "unlocks": ["Hard Missions", "First Boss Battles"]
+      },
+      {
+        "level": 7,
+        "unlocks": ["Secret Missions"]
+      },
+      {
+        "level": 10,
+        "unlocks": ["Elite Boss Track"]
+      },
+      {
+        "level": 12,
+        "unlocks": ["Custom Mission Creation"]
+      },
+      {
+        "level": 15,
+        "unlocks": ["Akatsuki Commander Status"]
       }
     ]
   },
-  "sections": {
-    "phd": {
-      "title": "PhD Journey",
-      "description": "Long-term research goals, writing, coursework and skill building.",
-      "items": [
-        { "id": "phd_topic_explore", "title": "Topic Exploration Session", "xp": 20, "repeatable": true, "notes": "Read 2 papers or map a new idea." },
-        { "id": "phd_skill_block", "title": "Research Skill-Building Block", "xp": 25, "repeatable": true, "notes": "Practice a method or tool for 45–60 minutes." },
-        { "id": "phd_writing_session", "title": "Academic Writing Session", "xp": 30, "repeatable": true, "notes": "Draft 300–800 words or revise a section." }
-      ]
-    },
-    "skool": {
-      "title": "Skool Community",
-      "description": "Course creation, community engagement, and content production.",
-      "items": [
-        { "id": "skool_engage", "title": "Community Engagement (Reply + Post)", "xp": 15, "repeatable": true, "notes": "Post or meaningfully reply to community threads." },
-        { "id": "skool_record_prep", "title": "Lesson Recording Prep", "xp": 20, "repeatable": true, "notes": "Outline or rehearse a lesson segment." }
-      ]
-    },
-    "doc": {
-      "title": "Documentary Tracking",
-      "description": "Daily logs, milestones, and documentary-style reflections.",
-      "items": [
-        { "id": "doc_daily_log", "title": "Daily Log Entry", "xp": 10, "repeatable": true, "notes": "Write a short log of progress and obstacles." },
-        { "id": "doc_milestone", "title": "Milestone Capture", "xp": 15, "repeatable": false, "notes": "Record a milestone (chapter draft, submission, presentation)." }
-      ]
-    },
-    "daily": {
-      "title": "Daily Systems",
-      "description": "Rituals and focused daily work blocks.",
-      "items": [
-        { "id": "daily_morning", "title": "Morning Routine Complete", "xp": 10, "repeatable": true, "notes": "Complete morning checklist." },
-        { "id": "daily_deepwork", "title": "Deep Work Block (60 min)", "xp": 40, "repeatable": true, "notes": "One uninterrupted deep work session." }
-      ]
-    },
-    "weekly": {
-      "title": "Weekly Systems",
-      "description": "Weekly reviews and planning.",
-      "items": [
-        { "id": "weekly_review", "title": "Weekly Review", "xp": 20, "repeatable": true, "notes": "Review last week and plan next week." }
-      ]
-    },
-    "monthly": {
-      "title": "Monthly Systems",
-      "description": "Monthly retros and ecosystem checks.",
-      "items": [
-        { "id": "monthly_review", "title": "Monthly Ecosystem Review", "xp": 30, "repeatable": true, "notes": "High-level review of goals and systems." }
-      ]
-    }
+
+  "achievementRefs": {
+    "file": "achievements.json",
+    "ids": [
+      "first_blood",
+      "scroll_keeper",
+      "shadow_scholar",
+      "data_hunter",
+      "clan_builder",
+      "master_architect",
+      "signal_interceptor",
+      "no_loose_ends",
+      "boss_slayer",
+      "resurrection_protocol",
+      "crimson_streak",
+      "akatsuki_commander"
+    ]
   },
-  "shop": [
-    {
-      "id": "cloak",
-      "name": "Akatsuki Cloak",
-      "cost": 100,
-      "emoji": "🧥",
-      "type": "gear",
-      "description": "Cosmetic cloak. Equipping shows a cloak on your avatar and grants a small prestige badge.",
-      "effect": { "appearance": { "outfit": "cloak" }, "bonus": { "prestige": 1 } }
-    },
-    {
-      "id": "ring",
-      "name": "Akatsuki Ring",
-      "cost": 60,
-      "emoji": "💍",
-      "type": "gear",
-      "description": "A ring that appears on your avatar and grants a small streak bonus (visual only).",
-      "effect": { "appearance": { "accessory": "ring" }, "bonus": { "streakBonusPercent": 5 } }
-    },
-    {
-      "id": "mask",
-      "name": "Anbu Mask",
-      "cost": 80,
-      "emoji": "🎭",
-      "type": "gear",
-      "description": "A mysterious mask for your avatar; cosmetic and toggles a mask overlay.",
-      "effect": { "appearance": { "faceMask": "anbu" }, "bonus": {} }
-    },
-    {
-      "id": "summon",
-      "name": "Summon Raven Companion",
-      "cost": 120,
-      "emoji": "🐦",
-      "type": "companion",
-      "description": "A raven companion that appears beside your avatar and triggers a small XP sparkle on task completion.",
-      "effect": { "appearance": { "companion": "raven" }, "bonus": { "xpSparkle": true } }
-    },
-    {
-      "id": "notebook",
-      "name": "Leather Notebook",
-      "cost": 40,
-      "emoji": "📚",
-      "type": "utility",
-      "description": "Cosmetic notebook; unlocks a 'quick note' UI in future updates.",
-      "effect": { "appearance": { "handItem": "notebook" }, "bonus": {} }
-    },
-    {
-      "id": "dagger",
-      "name": "Research Dagger",
-      "cost": 90,
-      "emoji": "🗡️",
-      "type": "gear",
-      "description": "Cosmetic blade; used in avatar portraits and achievement banners.",
-      "effect": { "appearance": { "accessory": "dagger" }, "bonus": {} }
-    }
-  ],
-  "avatarDefaults": {
-    "name": "Rogue Scholar",
-    "title": "Akatsuki Initiate",
-    "emoji": "🕶️",
-    "gear": [],
-    "appearance": {
-      "hair": "short",
-      "skin": "#f2d7c9",
-      "outfit": "default",
-      "accentColor": "#b30000",
-      "accessory": null,
-      "faceMask": null,
-      "companion": null,
-      "handItem": null
-    }
+
+  "shopRules": {
+    "itemsFile": "shop-items.json",
+    "maxEquippedPerType": 1,
+    "bonusTypes": [
+      "xpMultiplier",
+      "coinMultiplier",
+      "streakProtection",
+      "documentationBonus",
+      "bossXpBoost"
+    ]
   },
-  "metaNotes": {
-    "persistence": "Client-side localStorage is authoritative. game-data.json seeds the first run only; saved sections (ak_sections) will not be overwritten.",
-    "bankGuideline": "Bank tasks are templates. Use the UI to add a bank task into any section as a full task (with steps preserved).",
-    "shopEffects": "Shop items include 'effect' objects that the client applies to avatar.appearance and small gameplay bonuses."
+
+  "avatarRules": {
+    "layersFile": "avatar-layers.json",
+    "editableName": true,
+    "defaultName": "Shadow Scholar",
+    "baseStats": {
+      "xpMultiplier": 1.0,
+      "coinMultiplier": 1.0
+    }
   }
 }
