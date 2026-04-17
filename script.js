@@ -104,6 +104,9 @@ const AK = {
     this.ensureDailyReset();
     this.computeLevel();
     this.renderAll();
+    if (window.AK_AvatarRenderer) {
+      window.AK_AvatarRenderer.init(this);
+    }
     this.startResetTimer();
     window.AK = this; // debug handle
       })
