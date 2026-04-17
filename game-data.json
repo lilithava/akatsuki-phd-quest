@@ -1,63 +1,178 @@
 {
+  "meta": {
+    "title": "Akatsuki PhD Quest — game-data",
+    "version": "3.0",
+    "generated": "2026-04-17"
+  },
+  "settings": {
+    "xpPerLevel": 150,
+    "coinPerXpRatio": 0.5,
+    "levelUpBonusCoins": 10,
+    "defaultSectionOrder": ["phd","skool","doc","daily","weekly","monthly"]
+  },
   "sections": {
     "phd": {
       "title": "PhD Journey",
+      "description": "Long-term research goals, writing, coursework and skill building.",
       "items": [
-        { "title": "Topic Exploration Session", "xp": 20 },
-        { "title": "Research Skill-Building Block", "xp": 25 },
-        { "title": "Coursework & Reading Sprint", "xp": 15 },
-        { "title": "Academic Writing Session", "xp": 30 }
+        { "id": "phd_topic_explore", "title": "Topic Exploration Session", "xp": 20, "repeatable": true, "notes": "Read 2 papers or map a new idea." },
+        { "id": "phd_skill_block", "title": "Research Skill-Building Block", "xp": 25, "repeatable": true, "notes": "Practice a method or tool for 45–60 minutes." },
+        { "id": "phd_coursework_sprint", "title": "Coursework & Reading Sprint", "xp": 15, "repeatable": true, "notes": "Focused reading or assignment work." },
+        { "id": "phd_writing_session", "title": "Academic Writing Session", "xp": 30, "repeatable": true, "notes": "Draft 300–800 words or revise a section." },
+        { "id": "phd_lit_review", "title": "Literature Review Update", "xp": 18, "repeatable": true, "notes": "Add 3 citations or summarize 2 papers." },
+        { "id": "phd_data_work", "title": "Data Analysis Block", "xp": 35, "repeatable": true, "notes": "Run experiments, clean data, or analyze results." }
       ]
     },
     "skool": {
       "title": "Skool Community",
+      "description": "Course creation, community engagement, and content production.",
       "items": [
-        { "title": "Community Engagement (Reply + Post)", "xp": 15 },
-        { "title": "Lesson Recording Prep", "xp": 20 },
-        { "title": "Curriculum Development Block", "xp": 25 }
+        { "id": "skool_engage", "title": "Community Engagement (Reply + Post)", "xp": 15, "repeatable": true, "notes": "Post or meaningfully reply to community threads." },
+        { "id": "skool_record_prep", "title": "Lesson Recording Prep", "xp": 20, "repeatable": true, "notes": "Outline or rehearse a lesson segment." },
+        { "id": "skool_curriculum", "title": "Curriculum Development Block", "xp": 25, "repeatable": true, "notes": "Design a lesson or module." },
+        { "id": "skool_edit", "title": "Lesson Editing Session", "xp": 18, "repeatable": true, "notes": "Edit recorded lesson or create assets." }
       ]
     },
     "doc": {
       "title": "Documentary Tracking",
+      "description": "Daily logs, milestones, and documentary-style reflections.",
       "items": [
-        { "title": "Daily Log Entry", "xp": 10 },
-        { "title": "Milestone Capture", "xp": 15 },
-        { "title": "Monthly Reflection Draft", "xp": 20 }
+        { "id": "doc_daily_log", "title": "Daily Log Entry", "xp": 10, "repeatable": true, "notes": "Write a short log of progress and obstacles." },
+        { "id": "doc_milestone", "title": "Milestone Capture", "xp": 15, "repeatable": false, "notes": "Record a milestone (chapter draft, submission, presentation)." },
+        { "id": "doc_monthly_reflect", "title": "Monthly Reflection Draft", "xp": 20, "repeatable": true, "notes": "Summarize wins, blockers, and next steps." },
+        { "id": "doc_media", "title": "Lesson Recording / Documentary Clip", "xp": 22, "repeatable": true, "notes": "Record a short clip for documentary or course." }
       ]
     },
     "daily": {
       "title": "Daily Systems",
+      "description": "Rituals and focused daily work blocks.",
       "items": [
-        { "title": "Morning Routine Complete", "xp": 10 },
-        { "title": "Deep Work Block (60 min)", "xp": 40 },
-        { "title": "Evening Reflection", "xp": 10 }
+        { "id": "daily_morning", "title": "Morning Routine Complete", "xp": 10, "repeatable": true, "notes": "Complete morning checklist." },
+        { "id": "daily_deepwork", "title": "Deep Work Block (60 min)", "xp": 40, "repeatable": true, "notes": "One uninterrupted deep work session." },
+        { "id": "daily_evening", "title": "Evening Reflection", "xp": 10, "repeatable": true, "notes": "Short reflection and plan for tomorrow." },
+        { "id": "daily_microtask", "title": "Microtask Sprint (25 min)", "xp": 8, "repeatable": true, "notes": "Pomodoro-style microtask." }
       ]
     },
     "weekly": {
       "title": "Weekly Systems",
+      "description": "Weekly reviews and planning.",
       "items": [
-        { "title": "Weekly Review", "xp": 20 },
-        { "title": "Academic Progress Check", "xp": 25 }
+        { "id": "weekly_review", "title": "Weekly Review", "xp": 20, "repeatable": true, "notes": "Review last week and plan next week." },
+        { "id": "weekly_progress", "title": "Academic Progress Check", "xp": 25, "repeatable": true, "notes": "Check milestones, experiments, and deadlines." },
+        { "id": "weekly_build", "title": "Weekly Build Session", "xp": 30, "repeatable": true, "notes": "Longer build or recording session." }
       ]
     },
     "monthly": {
       "title": "Monthly Systems",
+      "description": "Monthly retros and ecosystem checks.",
       "items": [
-        { "title": "Monthly Ecosystem Review", "xp": 30 },
-        { "title": "PhD Direction Check-in", "xp": 30 }
+        { "id": "monthly_review", "title": "Monthly Ecosystem Review", "xp": 30, "repeatable": true, "notes": "High-level review of goals and systems." },
+        { "id": "monthly_direction", "title": "PhD Direction Check-in", "xp": 30, "repeatable": true, "notes": "Reassess research direction and priorities." },
+        { "id": "monthly_goal", "title": "Set Monthly Goals", "xp": 18, "repeatable": true, "notes": "Define 3 measurable goals for the month." }
       ]
     }
   },
   "shop": [
-    { "id": "cloak", "name": "Akatsuki Cloak", "cost": 100, "emoji": "🧥", "type": "gear" },
-    { "id": "ring", "name": "Akatsuki Ring", "cost": 60, "emoji": "💍", "type": "gear" },
-    { "id": "mask", "name": "Anbu Mask", "cost": 80, "emoji": "🎭", "type": "gear" },
-    { "id": "summon", "name": "Summon Raven Companion", "cost": 120, "emoji": "🐦", "type": "companion" }
+    {
+      "id": "cloak",
+      "name": "Akatsuki Cloak",
+      "cost": 100,
+      "emoji": "🧥",
+      "type": "gear",
+      "description": "A signature cloak that changes your avatar's look and grants a small prestige badge."
+    },
+    {
+      "id": "ring",
+      "name": "Akatsuki Ring",
+      "cost": 60,
+      "emoji": "💍",
+      "type": "gear",
+      "description": "A ring that appears on your avatar and increases daily streak XP bonus by 5% (visual only)."
+    },
+    {
+      "id": "mask",
+      "name": "Anbu Mask",
+      "cost": 80,
+      "emoji": "🎭",
+      "type": "gear",
+      "description": "A mysterious mask for your avatar; purely cosmetic."
+    },
+    {
+      "id": "summon",
+      "name": "Summon Raven Companion",
+      "cost": 120,
+      "emoji": "🐦",
+      "type": "companion",
+      "description": "A raven companion that appears beside your avatar and grants a small XP animation on task completion."
+    },
+    {
+      "id": "notebook",
+      "name": "Leather Notebook",
+      "cost": 40,
+      "emoji": "📚",
+      "type": "utility",
+      "description": "Cosmetic notebook; unlocks a 'quick note' UI in future updates."
+    },
+    {
+      "id": "dagger",
+      "name": "Research Dagger",
+      "cost": 90,
+      "emoji": "🗡️",
+      "type": "gear",
+      "description": "Cosmetic blade; used in avatar portraits and achievement banners."
+    }
   ],
   "avatarDefaults": {
     "name": "Rogue Scholar",
     "title": "Akatsuki Initiate",
+    "emoji": "🕶️",
     "gear": [],
-    "emoji": "🕶️"
+    "appearance": {
+      "hair": "default",
+      "outfit": "default",
+      "accentColor": "#b30000"
+    }
+  },
+  "quests": [
+    {
+      "id": "quest_thesis_chapter",
+      "title": "Chapter One: Draft Complete",
+      "description": "Complete the first full draft of chapter one.",
+      "reward": { "xp": 200, "coins": 100 },
+      "requirements": { "type": "milestone", "section": "phd", "taskId": "phd_writing_session" },
+      "repeatable": false
+    },
+    {
+      "id": "quest_publish_post",
+      "title": "Publish a Lesson",
+      "description": "Record and publish one lesson to the Skool community.",
+      "reward": { "xp": 120, "coins": 60 },
+      "requirements": { "type": "sectionCount", "section": "skool", "count": 1 },
+      "repeatable": true
+    }
+  ],
+  "achievements": [
+    { "id": "achv_first_task", "title": "First Task", "description": "Complete your first task.", "reward": { "xp": 10, "coins": 5 } },
+    { "id": "achv_10_tasks", "title": "Momentum", "description": "Complete 10 tasks.", "reward": { "xp": 50, "coins": 25 } },
+    { "id": "achv_level_5", "title": "Rising Scholar", "description": "Reach level 5.", "reward": { "xp": 0, "coins": 100 } }
+  ],
+  "classes": [
+    {
+      "id": "research_assassin",
+      "name": "Research Assassin",
+      "description": "Focused, high-impact sessions. Cosmetic title and future skill perks.",
+      "startingEmoji": "🗡️"
+    },
+    {
+      "id": "curriculum_sage",
+      "name": "Curriculum Sage",
+      "description": "Course-building oriented. Cosmetic title and future perks.",
+      "startingEmoji": "📚"
+    }
+  ],
+  "metaNotes": {
+    "persistence": "Client-side localStorage is authoritative. game-data.json seeds the first run only; saved sections (ak_sections) will not be overwritten.",
+    "customTaskGuideline": "IDs for custom tasks are generated client-side; keep titles concise.",
+    "extensibility": "This JSON includes shop, quests, achievements and avatar defaults to support the full RPG dashboard."
   }
 }
