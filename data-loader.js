@@ -1,58 +1,43 @@
-"use strict";
+// Loads all JSON files and stores them in window.AK_DATA
+window.AK_DATA = {};
 
-/* ============================================================
-   AKATSUKI PH.D QUEST – DATA LOADER MODULE
-   Loads all JSON files safely and exposes them to AK.data
-============================================================ */
+async function loadJSON(path) {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error(`Failed to load ${path}`);
+    return res.json();
+}
 
-window.AK_DataLoader = {
-  async loadAll(AK) {
-    const files = AK.config.dataFiles;
-
-    const load = (path) => this.fetchJson(path);
-
-    const promises = [
-      load(files.gameData),
-      load(files.templates),
-      ...files.banks.map((f) => load(f)),
-      load(files.bossBattles),
-      load(files.recoveryMissions),
-      load(files.miniQuests),
-      load(files.achievements),
-      load(files.shopItems),
-      load(files.avatarLayers)
-    ];
-
-    const results = await Promise.all(promises);
-
-    // Assign results back into AK.data
-    let index = 0;
-    AK.data.rules = results[index++] || {};
-    AK.data.templates = results[index++] || [];
-
-    // Banks
-    AK.data.banks = results.slice(index, index + files.banks.length).filter(Boolean);
-    index += files.banks.length;
-
-    // Remaining
-    AK.data.bossBattles = results[index++] || [];
-    AK.data.recoveryMissions = results[index++] || [];
-    AK.data.miniQuests = results[index++] || [];
-    AK.data.achievements = results[index++] || [];
-    AK.data.shopItems = results[index++] || [];
-    AK.data.avatarLayers = results[index++] || [];
-
-    return true;
-  },
-
-  async fetchJson(path) {
-    try {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error(`Failed to load ${path}`);
-      return await res.json();
-    } catch (err) {
-      console.warn("JSON load error:", path, err);
-      return null;
+async function loadAllData() {
+    const files = {
+        rules: 'game-data.json',
+        templates: 'mission-templates.json',
+        phd: 'task-bank-phd.json',
+        skool: 'task-bank-skool.json',
+        curriculum: 'task-bank-curriculum.json',
+        ra: 'task-bank-ra.json',
+        docs: 'task-bank-docs.json',
+        rituals: 'task-bank-rituals.json',
+        bosses: 'boss-battles.json',
+        recovery: 'recovery-missions.json',
+        mini: 'mini-quests.json',
+        achievements: 'achievements.json',
+        shop: 'shop-items.json',
+        avatar: 'avatar-layers.json'
+    };
+    const entries = await Promise.all(Object.entries(files).map(async ([key, path]) => {
+        try {
+            const data = await loadJSON(path);
+            return [key, data];
+        } catch(e) {
+            console.warn(`Could not load ${path}`, e);
+            return [key, null];
+        }
+    }));
+    for (let [key, data] of entries) {
+        window.AK_DATA[key] = data;
     }
-  }
-};
+    console.log('All data loaded', window.AK_DATA);
+}
+
+// Start loading immediately
+loadAllData();
