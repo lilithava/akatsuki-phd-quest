@@ -1,0 +1,353 @@
+{
+  "meta": {
+    "name": "Akatsuki Rituals Task Bank – Discipline & Rituals",
+    "version": "1.0.0",
+    "domain": "Rituals",
+    "theme": "Discipline & Rituals",
+    "description": "Complete mission bank for daily discipline, startup/shutdown rituals, weekly resets, monthly resets, energy rituals, focus rituals, environment setup, and emergency recovery rituals."
+  },
+
+  "subjects": [
+    "Daily Rituals",
+    "Startup Rituals",
+    "Shutdown Rituals",
+    "Weekly Reset",
+    "Monthly Reset",
+    "Energy Rituals",
+    "Focus Rituals",
+    "Environment Setup",
+    "Emergency Recovery Rituals"
+  ],
+
+  "tasks": [
+
+    /* ============================================================
+       DAILY RITUALS
+    ============================================================ */
+
+    {
+      "id": "ritual_daily_alignment",
+      "title": "Daily Alignment Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Daily Rituals",
+      "sideTopic": "alignment",
+      "missionType": "Ritual",
+      "difficulty": "Easy",
+      "xp": 15,
+      "repeatability": "Daily",
+      "estimatedTime": 5,
+      "priority": "Important",
+      "energy": "Low Energy",
+      "context": "Home",
+      "successCriteria": "You know your top mission and your first action.",
+      "failureCondition": "Starting the day without direction.",
+      "reward": "Streak progress + clarity.",
+      "recoveryMission": "Pick ONE must‑win task only.",
+      "steps": [
+        { "label": "Open mission board.", "completed": false },
+        { "label": "Review today's commitments.", "completed": false },
+        { "label": "Pick your must‑win mission.", "completed": false },
+        { "label": "Define the first micro‑step.", "completed": false },
+        { "label": "Begin immediately.", "completed": false }
+      ],
+      "tags": ["ritual", "daily", "alignment"],
+      "notes": "This ritual prevents reactive days."
+    },
+
+    {
+      "id": "ritual_daily_checkin",
+      "title": "Midday Check‑In Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Daily Rituals",
+      "sideTopic": "midday reset",
+      "missionType": "Ritual",
+      "difficulty": "Easy",
+      "xp": 10,
+      "repeatability": "Daily",
+      "estimatedTime": 3,
+      "priority": "Maintenance",
+      "energy": "Low Energy",
+      "context": "Anywhere",
+      "successCriteria": "You realign with your must‑win mission.",
+      "failureCondition": "Losing track of the day.",
+      "reward": "Momentum restored.",
+      "recoveryMission": "Re-read your must‑win mission only.",
+      "steps": [
+        { "label": "Pause for 10 seconds.", "completed": false },
+        { "label": "Check progress on must‑win mission.", "completed": false },
+        { "label": "Adjust next micro‑step.", "completed": false }
+      ],
+      "tags": ["ritual", "check-in"],
+      "notes": "Short but powerful."
+    },
+
+    /* ============================================================
+       STARTUP RITUALS
+    ============================================================ */
+
+    {
+      "id": "ritual_startup",
+      "title": "Morning Startup Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Startup Rituals",
+      "sideTopic": "morning",
+      "missionType": "Ritual",
+      "difficulty": "Easy",
+      "xp": 20,
+      "repeatability": "Daily",
+      "estimatedTime": 5,
+      "priority": "Critical",
+      "energy": "Low Energy",
+      "context": "Home",
+      "successCriteria": "Day begins with clarity and intention.",
+      "failureCondition": "Starting reactively.",
+      "reward": "Streak + clarity bonus.",
+      "recoveryMission": "Pick one mission and start.",
+      "steps": [
+        { "label": "Open mission board.", "completed": false },
+        { "label": "Review calendar + deadlines.", "completed": false },
+        { "label": "Mark top 3 missions.", "completed": false },
+        { "label": "Choose must‑win mission.", "completed": false },
+        { "label": "Start first micro‑step.", "completed": false }
+      ],
+      "tags": ["ritual", "startup"],
+      "notes": "This ritual sets the tone for the entire day."
+    },
+
+    /* ============================================================
+       SHUTDOWN RITUALS
+    ============================================================ */
+
+    {
+      "id": "ritual_shutdown",
+      "title": "Evening Shutdown Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Shutdown Rituals",
+      "sideTopic": "evening",
+      "missionType": "Ritual",
+      "difficulty": "Easy",
+      "xp": 20,
+      "repeatability": "Daily",
+      "estimatedTime": 10,
+      "priority": "Important",
+      "energy": "Low Energy",
+      "context": "Home",
+      "successCriteria": "Day closed cleanly with no loose ends.",
+      "failureCondition": "Ending the day in chaos.",
+      "reward": "Mental clarity + reduced stress.",
+      "recoveryMission": "Write tomorrow’s first task only.",
+      "steps": [
+        { "label": "Review what was finished.", "completed": false },
+        { "label": "Capture unfinished items.", "completed": false },
+        { "label": "Pick tomorrow’s first task.", "completed": false },
+        { "label": "Save open tabs or references.", "completed": false },
+        { "label": "Clear workspace.", "completed": false }
+      ],
+      "tags": ["ritual", "shutdown"],
+      "notes": "Shutdown rituals protect your mental health."
+    },
+
+    /* ============================================================
+       WEEKLY RESET
+    ============================================================ */
+
+    {
+      "id": "ritual_weekly_reset",
+      "title": "Weekly Reset Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Weekly Reset",
+      "sideTopic": "reset",
+      "missionType": "Standard Mission",
+      "difficulty": "Medium",
+      "xp": 45,
+      "repeatability": "Weekly",
+      "estimatedTime": 40,
+      "priority": "Critical",
+      "energy": "Standard Focus",
+      "context": "Home",
+      "successCriteria": "Week reviewed, next week planned, backlog triaged.",
+      "failureCondition": "Entering new week without clarity.",
+      "reward": "Momentum + reduced overwhelm.",
+      "recoveryMission": "Pick 3 priorities for next week.",
+      "steps": [
+        { "label": "Review last week’s missions.", "completed": false },
+        { "label": "Identify wins + completed tasks.", "completed": false },
+        { "label": "Triage backlog.", "completed": false },
+        { "label": "Set next week’s top 3 missions.", "completed": false },
+        { "label": "Prepare Monday’s must‑win mission.", "completed": false }
+      ],
+      "tags": ["weekly", "reset"],
+      "notes": "Weekly resets prevent drift."
+    },
+
+    /* ============================================================
+       MONTHLY RESET
+    ============================================================ */
+
+    {
+      "id": "ritual_monthly_reset",
+      "title": "Monthly Reset Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Monthly Reset",
+      "sideTopic": "reflection",
+      "missionType": "Standard Mission",
+      "difficulty": "Medium",
+      "xp": 60,
+      "repeatability": "Monthly",
+      "estimatedTime": 60,
+      "priority": "Important",
+      "energy": "Standard Focus",
+      "context": "Home",
+      "successCriteria": "Month summarized, goals updated, direction clarified.",
+      "failureCondition": "Month passes without reflection.",
+      "reward": "Long‑term clarity.",
+      "recoveryMission": "Write 5‑bullet monthly recap.",
+      "steps": [
+        { "label": "Review weekly resets.", "completed": false },
+        { "label": "List major milestones.", "completed": false },
+        { "label": "Capture insights + lessons.", "completed": false },
+        { "label": "Update long‑term goals.", "completed": false },
+        { "label": "Set next month’s top missions.", "completed": false }
+      ],
+      "tags": ["monthly", "reset"],
+      "notes": "Monthly resets keep your arc aligned."
+    },
+
+    /* ============================================================
+       ENERGY RITUALS
+    ============================================================ */
+
+    {
+      "id": "ritual_energy_boost",
+      "title": "Energy Boost Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Energy Rituals",
+      "sideTopic": "energy",
+      "missionType": "Mini-Quest",
+      "difficulty": "Easy",
+      "xp": 10,
+      "repeatability": "Repeatable",
+      "estimatedTime": 3,
+      "priority": "Maintenance",
+      "energy": "Low Energy",
+      "context": "Anywhere",
+      "successCriteria": "Energy level increased enough to continue.",
+      "failureCondition": "Pushing through exhaustion.",
+      "reward": "Stamina restored.",
+      "recoveryMission": "Take 5 deep breaths.",
+      "steps": [
+        { "label": "Stand up and stretch.", "completed": false },
+        { "label": "Drink water.", "completed": false },
+        { "label": "Take 5 deep breaths.", "completed": false }
+      ],
+      "tags": ["energy", "ritual"],
+      "notes": "Use this when you feel drained."
+    },
+
+    /* ============================================================
+       FOCUS RITUALS
+    ============================================================ */
+
+    {
+      "id": "ritual_focus_block",
+      "title": "Start a Focus Block Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Focus Rituals",
+      "sideTopic": "focus",
+      "missionType": "Ritual",
+      "difficulty": "Easy",
+      "xp": 20,
+      "repeatability": "Repeatable",
+      "estimatedTime": 5,
+      "priority": "Critical",
+      "energy": "Standard Focus",
+      "context": "Home",
+      "successCriteria": "Focus block started with clear intention.",
+      "failureCondition": "Starting work without clarity.",
+      "reward": "Higher productivity.",
+      "recoveryMission": "Define one micro‑step only.",
+      "steps": [
+        { "label": "Choose mission to focus on.", "completed": false },
+        { "label": "Define micro‑step.", "completed": false },
+        { "label": "Set timer.", "completed": false },
+        { "label": "Begin immediately.", "completed": false }
+      ],
+      "tags": ["focus", "ritual"],
+      "notes": "Use before every deep work session."
+    },
+
+    /* ============================================================
+       ENVIRONMENT SETUP
+    ============================================================ */
+
+    {
+      "id": "ritual_environment_setup",
+      "title": "Environment Setup Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Environment Setup",
+      "sideTopic": "workspace",
+      "missionType": "Ritual",
+      "difficulty": "Easy",
+      "xp": 15,
+      "repeatability": "Daily",
+      "estimatedTime": 5,
+      "priority": "Maintenance",
+      "energy": "Low Energy",
+      "context": "Home",
+      "successCriteria": "Workspace ready for focused work.",
+      "failureCondition": "Working in clutter or distraction.",
+      "reward": "Better focus.",
+      "recoveryMission": "Clear one small area only.",
+      "steps": [
+        { "label": "Clear desk surface.", "completed": false },
+        { "label": "Close unrelated tabs.", "completed": false },
+        { "label": "Prepare tools needed for mission.", "completed": false },
+        { "label": "Set environment (lighting, sound).", "completed": false }
+      ],
+      "tags": ["environment", "setup"],
+      "notes": "Environment shapes performance."
+    },
+
+    /* ============================================================
+       EMERGENCY RECOVERY RITUALS
+    ============================================================ */
+
+    {
+      "id": "ritual_emergency_reentry",
+      "title": "Emergency Re‑Entry Ritual",
+      "domain": "Rituals",
+      "theme": "Discipline & Rituals",
+      "subject": "Emergency Recovery Rituals",
+      "sideTopic": "re-entry",
+      "missionType": "Recovery Mission",
+      "difficulty": "Easy",
+      "xp": 15,
+      "repeatability": "Repeatable",
+      "estimatedTime": 5,
+      "priority": "Critical",
+      "energy": "Low Energy",
+      "context": "Anywhere",
+      "successCriteria": "You re-enter work with minimal friction.",
+      "failureCondition": "Avoiding work entirely.",
+      "reward": "Momentum restored.",
+      "recoveryMission": "Do 2 minutes of progress.",
+      "steps": [
+        { "label": "Pick one stalled mission.", "completed": false },
+        { "label": "Define smallest possible next step.", "completed": false },
+        { "label": "Do 2–5 minutes of progress.", "completed": false }
+      ],
+      "tags": ["recovery", "ritual"],
+      "notes": "Use this after burnout, overwhelm, or long breaks."
+    }
+
+  ]
+}
