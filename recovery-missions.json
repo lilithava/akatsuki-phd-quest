@@ -1,0 +1,392 @@
+{
+  "meta": {
+    "name": "Akatsuki Recovery Missions – Momentum Restoration Protocols",
+    "version": "1.0.0",
+    "domain": "Recovery",
+    "theme": "Momentum Restoration",
+    "description": "Low-energy, low-friction missions designed to restore momentum after burnout, overwhelm, avoidance, or long breaks. Each mission includes micro-steps, success criteria, failure conditions, and XP rewards."
+  },
+
+  "categories": [
+    "Re-Entry",
+    "Overwhelm Reduction",
+    "Burnout Stabilization",
+    "Micro-Progress",
+    "Emotional Reset",
+    "Clarity Restoration",
+    "Environment Reset",
+    "Task Unblocking"
+  ],
+
+  "missions": [
+
+    /* ============================================================
+       RE-ENTRY MISSIONS
+    ============================================================ */
+
+    {
+      "id": "recovery_reentry_2min",
+      "title": "2-Minute Re-Entry",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Re-Entry",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "You do ANY progress for 2 minutes.",
+      "failureCondition": "Avoiding the task entirely.",
+      "reward": "Momentum restored.",
+      "steps": [
+        "Open the stalled task.",
+        "Do 2 minutes of progress.",
+        "Stop immediately when timer ends."
+      ],
+      "notes": "This is the smallest possible restart ritual."
+    },
+
+    {
+      "id": "recovery_reentry_open_only",
+      "title": "Open the Task Only",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Re-Entry",
+      "difficulty": "Very Easy",
+      "xp": 5,
+      "estimatedTime": 1,
+      "energy": "Very Low",
+      "successCriteria": "You open the file, tab, or document.",
+      "failureCondition": "Not opening anything.",
+      "reward": "Activation spark.",
+      "steps": [
+        "Open the task.",
+        "Look at it for 10 seconds.",
+        "Close or continue — both count."
+      ],
+      "notes": "This mission breaks avoidance loops."
+    },
+
+    /* ============================================================
+       OVERWHELM REDUCTION
+    ============================================================ */
+
+    {
+      "id": "recovery_overwhelm_3items",
+      "title": "List 3 Things Only",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Overwhelm Reduction",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You list exactly 3 items.",
+      "failureCondition": "Trying to plan everything.",
+      "reward": "Mental clarity.",
+      "steps": [
+        "Write 3 things on your mind.",
+        "Circle the easiest one.",
+        "Do NOT add more items."
+      ],
+      "notes": "Overwhelm shrinks when lists shrink."
+    },
+
+    {
+      "id": "recovery_overwhelm_sort",
+      "title": "Sort Into Keep / Drop / Delay",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Overwhelm Reduction",
+      "difficulty": "Easy",
+      "xp": 15,
+      "estimatedTime": 5,
+      "energy": "Low",
+      "successCriteria": "You sort tasks into 3 buckets.",
+      "failureCondition": "Keeping everything.",
+      "reward": "Reduced cognitive load.",
+      "steps": [
+        "List 5–7 tasks.",
+        "Mark each as Keep, Drop, or Delay.",
+        "Delete or archive the Drop items."
+      ],
+      "notes": "This reduces mental clutter fast."
+    },
+
+    /* ============================================================
+       BURNOUT STABILIZATION
+    ============================================================ */
+
+    {
+      "id": "recovery_burnout_grounding",
+      "title": "Grounding Ritual",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Burnout Stabilization",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You complete the grounding steps.",
+      "failureCondition": "Ignoring your physical state.",
+      "reward": "Stabilized energy.",
+      "steps": [
+        "Sit still for 10 seconds.",
+        "Take 5 slow breaths.",
+        "Relax shoulders and jaw."
+      ],
+      "notes": "Burnout requires physical reset first."
+    },
+
+    {
+      "id": "recovery_burnout_microtask",
+      "title": "Microtask Restart",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Burnout Stabilization",
+      "difficulty": "Easy",
+      "xp": 15,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You complete ONE microtask.",
+      "failureCondition": "Trying to do too much.",
+      "reward": "Momentum restored.",
+      "steps": [
+        "Pick the smallest possible step.",
+        "Do it slowly.",
+        "Stop immediately after."
+      ],
+      "notes": "Burnout hates pressure; microtasks bypass it."
+    },
+
+    /* ============================================================
+       MICRO-PROGRESS MISSIONS
+    ============================================================ */
+
+    {
+      "id": "recovery_micro_5percent",
+      "title": "Do 5% of the Task",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Micro-Progress",
+      "difficulty": "Easy",
+      "xp": 20,
+      "estimatedTime": 5,
+      "energy": "Low",
+      "successCriteria": "You complete 5% of the task.",
+      "failureCondition": "Trying to finish everything.",
+      "reward": "Progress without pressure.",
+      "steps": [
+        "Estimate the whole task.",
+        "Pick a 5% slice.",
+        "Complete only that slice."
+      ],
+      "notes": "5% is enough to restart momentum."
+    },
+
+    {
+      "id": "recovery_micro_timer",
+      "title": "3-Minute Timer Mission",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Micro-Progress",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You work for 3 minutes.",
+      "failureCondition": "Not starting.",
+      "reward": "Activation energy.",
+      "steps": [
+        "Set a 3-minute timer.",
+        "Work gently.",
+        "Stop when timer ends."
+      ],
+      "notes": "Short timers reduce resistance."
+    },
+
+    /* ============================================================
+       EMOTIONAL RESET
+    ============================================================ */
+
+    {
+      "id": "recovery_emotion_3sentences",
+      "title": "Write 3-Sentence Emotional Reset",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Emotional Reset",
+      "difficulty": "Easy",
+      "xp": 15,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You write exactly 3 sentences.",
+      "failureCondition": "Overthinking.",
+      "reward": "Emotional clarity.",
+      "steps": [
+        "Sentence 1: What I feel.",
+        "Sentence 2: Why I feel it.",
+        "Sentence 3: What I need next."
+      ],
+      "notes": "This resets emotional overload quickly."
+    },
+
+    {
+      "id": "recovery_emotion_reframe",
+      "title": "Reframe the Thought",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Emotional Reset",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "You rewrite one negative thought.",
+      "failureCondition": "Letting the thought spiral.",
+      "reward": "Reduced emotional friction.",
+      "steps": [
+        "Write the negative thought.",
+        "Rewrite it in neutral language.",
+        "Rewrite it again in supportive language."
+      ],
+      "notes": "Reframing reduces emotional resistance."
+    },
+
+    /* ============================================================
+       CLARITY RESTORATION
+    ============================================================ */
+
+    {
+      "id": "recovery_clarity_1question",
+      "title": "Answer One Clarifying Question",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Clarity Restoration",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "You answer the question honestly.",
+      "failureCondition": "Avoiding clarity.",
+      "reward": "Direction restored.",
+      "steps": [
+        "Ask: What is the next action?",
+        "Write the answer.",
+        "Do NOT add more questions."
+      ],
+      "notes": "Clarity is often one question away."
+    },
+
+    {
+      "id": "recovery_clarity_outline",
+      "title": "Write a 3-Step Outline",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Clarity Restoration",
+      "difficulty": "Easy",
+      "xp": 15,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You write exactly 3 steps.",
+      "failureCondition": "Overplanning.",
+      "reward": "Immediate direction.",
+      "steps": [
+        "Write Step 1.",
+        "Write Step 2.",
+        "Write Step 3."
+      ],
+      "notes": "Three steps is enough to restart."
+    },
+
+    /* ============================================================
+       ENVIRONMENT RESET
+    ============================================================ */
+
+    {
+      "id": "recovery_env_clear1",
+      "title": "Clear One Small Area",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Environment Reset",
+      "difficulty": "Very Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "One area cleared.",
+      "failureCondition": "Trying to clean everything.",
+      "reward": "Reduced friction.",
+      "steps": [
+        "Pick one tiny area (desk corner, tab group, folder).",
+        "Clear it.",
+        "Stop immediately after."
+      ],
+      "notes": "Environment resets reduce cognitive load."
+    },
+
+    {
+      "id": "recovery_env_tabs",
+      "title": "Close 3 Tabs",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Environment Reset",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "Exactly 3 tabs closed.",
+      "failureCondition": "Closing none.",
+      "reward": "Mental clarity.",
+      "steps": [
+        "Pick 3 tabs.",
+        "Close them.",
+        "Do not close more."
+      ],
+      "notes": "Tab clutter = mental clutter."
+    },
+
+    /* ============================================================
+       TASK UNBLOCKING
+    ============================================================ */
+
+    {
+      "id": "recovery_unblock_question",
+      "title": "Write the Blocker Question",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Task Unblocking",
+      "difficulty": "Easy",
+      "xp": 10,
+      "estimatedTime": 2,
+      "energy": "Very Low",
+      "successCriteria": "You write the question that is blocking you.",
+      "failureCondition": "Pretending you're not stuck.",
+      "reward": "Unblocked thinking.",
+      "steps": [
+        "Write: What exactly is blocking me?",
+        "Answer in one sentence.",
+        "Write the smallest next step."
+      ],
+      "notes": "Most blocks are unclear questions."
+    },
+
+    {
+      "id": "recovery_unblock_ask",
+      "title": "Ask for Clarification",
+      "domain": "Recovery",
+      "theme": "Momentum Restoration",
+      "category": "Task Unblocking",
+      "difficulty": "Easy",
+      "xp": 15,
+      "estimatedTime": 3,
+      "energy": "Very Low",
+      "successCriteria": "You ask for help or clarification.",
+      "failureCondition": "Staying stuck silently.",
+      "reward": "Progress unlocked.",
+      "steps": [
+        "Identify who can answer.",
+        "Write a short message.",
+        "Send it."
+      ],
+      "notes": "Asking is a valid productivity strategy."
+    }
+
+  ]
+}
