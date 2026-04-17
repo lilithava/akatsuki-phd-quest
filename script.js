@@ -1160,23 +1160,3 @@ const AK = {
 };
 
 document.addEventListener("DOMContentLoaded", () => AK.init());
-function initModals() {
-  const modal = document.getElementById("generic-modal");
-  const closeBtn = modal?.querySelector(".modal-close");
-
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      modal.classList.add("hidden");
-    });
-  }
-}
-
-// if you have a main init:
-document.addEventListener("DOMContentLoaded", () => {
-  initModals();
-  // ...rest of your init
-});
-function openGenericModal() {
-  const modal = document.getElementById("generic-modal");
-  if (modal) modal.classList.remove("hidden");
-}
