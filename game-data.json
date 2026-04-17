@@ -3,44 +3,61 @@
     "phd": {
       "title": "PhD Journey",
       "items": [
-        {"title": "Topic Exploration", "xp": 20},
-        {"title": "Research Skill-Building", "xp": 25},
-        {"title": "Coursework & Reading", "xp": 15},
-        {"title": "Academic Writing", "xp": 30}
+        { "title": "Topic Exploration Session", "xp": 20 },
+        { "title": "Research Skill-Building Block", "xp": 25 },
+        { "title": "Coursework & Reading Sprint", "xp": 15 },
+        { "title": "Academic Writing Session", "xp": 30 }
       ]
     },
     "skool": {
       "title": "Skool Community",
       "items": [
-        {"title": "Lesson Recording", "xp": 20},
-        {"title": "Community Engagement", "xp": 15},
-        {"title": "Curriculum Development", "xp": 25}
+        { "title": "Community Engagement (Reply + Post)", "xp": 15 },
+        { "title": "Lesson Recording Prep", "xp": 20 },
+        { "title": "Curriculum Development Block", "xp": 25 }
       ]
     },
     "doc": {
       "title": "Documentary Tracking",
       "items": [
-        {"title": "Daily Logs", "xp": 10},
-        {"title": "Monthly Reflection", "xp": 20}
+        { "title": "Daily Log Entry", "xp": 10 },
+        { "title": "Milestone Capture", "xp": 15 },
+        { "title": "Monthly Reflection Draft", "xp": 20 }
       ]
     },
     "daily": {
       "title": "Daily Systems",
       "items": [
-        {"title": "Morning Routine", "xp": 10},
-        {"title": "Deep Work Block", "xp": 40},
-        {"title": "Evening Reflection", "xp": 10}
+        { "title": "Morning Routine Complete", "xp": 10 },
+        { "title": "Deep Work Block (60 min)", "xp": 40 },
+        { "title": "Evening Reflection", "xp": 10 }
       ]
     },
     "weekly": {
       "title": "Weekly Systems",
       "items": [
-        {"title": "Weekly Review", "xp": 20},
-        {"title": "Academic Progress Check", "xp": 25}
+        { "title": "Weekly Review", "xp": 20 },
+        { "title": "Academic Progress Check", "xp": 25 }
       ]
     },
     "monthly": {
       "title": "Monthly Systems",
       "items": [
-        {"title": "Monthly Reflection", "xp": 30},
-        {"title": "Ecos
+        { "title": "Monthly Ecosystem Review", "xp": 30 },
+        { "title": "PhD Direction Check-in", "xp": 30 }
+      ]
+    }
+  },
+  "shop": [
+    { "id": "cloak", "name": "Akatsuki Cloak", "cost": 100, "emoji": "🧥", "type": "gear" },
+    { "id": "ring", "name": "Akatsuki Ring", "cost": 60, "emoji": "💍", "type": "gear" },
+    { "id": "mask", "name": "Anbu Mask", "cost": 80, "emoji": "🎭", "type": "gear" },
+    { "id": "summon", "name": "Summon Raven Companion", "cost": 120, "emoji": "🐦", "type": "companion" }
+  ],
+  "avatarDefaults": {
+    "name": "Rogue Scholar",
+    "title": "Akatsuki Initiate",
+    "gear": [],
+    "emoji": "🕶️"
+  }
+}
