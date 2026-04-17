@@ -2,26 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Akatsuki PhD Quest</title>
+  <title>Akatsuki PhD Quest Console+</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>🩸 Akatsuki PhD Quest</h1>
-    <p id="level-display">Level: 1 | XP: 0</p>
+    <h1>🩸 Akatsuki PhD Quest Console+</h1>
+    <p id="level-display">Level: 1 | XP: 0 | 🔥 Streak: 0 days</p>
+    <div id="xp-bar"><div id="xp-fill"></div></div>
   </header>
 
-  <main>
-    <section id="task-section">
-      <h2>Today's Missions</h2>
-      <ul id="task-list"></ul>
-      <button id="add-task-btn">Add Custom Task</button>
-    </section>
+  <nav id="sidebar">
+    <button class="tab-btn" data-target="phd">PhD Journey</button>
+    <button class="tab-btn" data-target="skool">Skool Community</button>
+    <button class="tab-btn" data-target="doc">Documentary Tracking</button>
+    <button class="tab-btn" data-target="daily">Daily Systems</button>
+    <button class="tab-btn" data-target="weekly">Weekly Systems</button>
+    <button class="tab-btn" data-target="monthly">Monthly Systems</button>
+  </nav>
 
-    <section id="inventory-section">
-      <h2>Inventory & Achievements</h2>
-      <div id="inventory"></div>
-    </section>
+  <main id="content">
+    <section id="phd" class="tab-content"></section>
+    <section id="skool" class="tab-content"></section>
+    <section id="doc" class="tab-content"></section>
+    <section id="daily" class="tab-content"></section>
+    <section id="weekly" class="tab-content"></section>
+    <section id="monthly" class="tab-content"></section>
   </main>
 
   <footer>
