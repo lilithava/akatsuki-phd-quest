@@ -1176,3 +1176,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initModals();
   // ...rest of your init
 });
+function openGenericModal() {
+  const modal = document.getElementById("generic-modal");
+  if (modal) modal.classList.remove("hidden");
+}
