@@ -1,97 +1,71 @@
 let xp = 0;
 let level = 1;
+let streak = 0;
 const xpPerLevel = 150;
-let tasks = [];
+let tasks = {};
+const sections = ["phd","skool","doc","daily","weekly","monthly"];
 
-// Load saved progress
-function loadProgress() {
-  xp = parseInt(localStorage.getItem('xp')) || 0;
-  level = parseInt(localStorage.getItem('level')) || 1;
-  tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  updateLevel();
+function updateUI() {
+  document.getElementById('level-display').textContent = 
+    `Level: ${level} | XP: ${xp} | 🔥 Streak: ${streak} days`;
+  document.getElementById('xp-fill').style.width = `${(xp % xpPerLevel) / xpPerLevel * 100}%`;
 }
 
-// Save progress
+function loadTasks() {
+  fetch('game-data.json')
+    .then(res => res.json())
+    .then(data => {
+      tasks = data.sections;
+      renderSections();
+    });
+}
+
+function renderSections() {
+  sections.forEach(sec => {
+    const container = document.getElementById(sec);
+    container.innerHTML = `<h2>${tasks[sec].title}</h2>`;
+    tasks[sec].items.forEach((task, i) => {
+      const div = document.createElement('div');
+      div.className = 'task';
+      div.innerHTML = `
+        <span>${task.title} (${task.xp} XP)</span>
+        <button onclick="completeTask('${sec}',${i})">✅</button>
+      `;
+      container.appendChild(div);
+    });
+  });
+}
+
+function completeTask(section, index) {
+  xp += tasks[section].items[index].xp;
+  level = Math.floor(xp / xpPerLevel) + 1;
+  tasks[section].items.splice(index, 1);
+  saveProgress();
+  updateUI();
+  renderSections();
+}
+
 function saveProgress() {
   localStorage.setItem('xp', xp);
   localStorage.setItem('level', level);
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-// Update level display
-function updateLevel() {
-  document.getElementById('level-display').textContent = `Level: ${level} | XP: ${xp}`;
+function loadProgress() {
+  xp = parseInt(localStorage.getItem('xp')) || 0;
+  level = parseInt(localStorage.getItem('level')) || 1;
+  tasks = JSON.parse(localStorage.getItem('tasks')) || {};
+  updateUI();
 }
 
-// Load tasks from JSON ONLY if no saved tasks exist
-function loadTasksFromJSON() {
-  // If tasks already exist in localStorage, DO NOT load JSON again
-  if (localStorage.getItem('tasks')) {
-    renderTasks();
-    return;
-  }
-
-  // First-time load from JSON
-  fetch('game-data.json')
-    .then(res => res.json())
-    .then(data => {
-      tasks = data.tasks; // load ALL tasks
-      saveProgress();     // save immediately so they persist
-      renderTasks();
-    });
-}
-
-// Render tasks
-function renderTasks() {
-  const list = document.getElementById('task-list');
-  list.innerHTML = '';
-
-  tasks.forEach((task, index) => {
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <span>${task.title} (${task.xp} XP)</span>
-      <button onclick="completeTask(${index})">✅</button>
-      <button onclick="deleteTask(${index})">🗑️</button>
-    `;
-    list.appendChild(li);
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-content').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(btn.dataset.target).classList.add('active');
   });
-}
+});
 
-// Complete task
-function completeTask(index) {
-  xp += tasks[index].xp;
-  level = Math.floor(xp / xpPerLevel) + 1;
-
-  tasks.splice(index, 1);
-
-  saveProgress();
-  updateLevel();
-  renderTasks();
-}
-
-// Delete task
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  saveProgress();
-  renderTasks();
-}
-
-// Add custom task
-function addCustomTask() {
-  const title = prompt("Enter your custom task:");
-  if (!title) return;
-
-  const newTask = { title, xp: 10 };
-  tasks.push(newTask);
-
-  saveProgress();
-  renderTasks();
-}
-
-document.getElementById('add-task-btn').addEventListener('click', addCustomTask);
-
-// Initialize
 window.onload = () => {
   loadProgress();
-  loadTasksFromJSON();
+  loadTasks();
 };
