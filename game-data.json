@@ -1,19 +1,22 @@
 {
   "meta": {
     "name": "Akatsuki PhD Quest – Core Rules",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "description": "Global rules, XP logic, streak logic, mission types, difficulty definitions, unlocks, reset rules, and tag enums for the Akatsuki PhD Quest RPG."
   },
 
   "xpRules": {
     "xpPerLevel": 500,
-    "coinRatio": 0.2,
+    "coinRatio": 0.20,
     "levelUpBonusCoins": 100,
+
     "difficultyXpRanges": {
       "Easy": { "min": 10, "max": 20 },
       "Medium": { "min": 25, "max": 50 },
       "Hard": { "min": 60, "max": 120 },
       "Elite": { "min": 150, "max": 500 }
     },
+
     "bonuses": {
       "firstCompletion": 10,
       "streak3Days": 15,
@@ -26,20 +29,24 @@
 
   "streakRules": {
     "dayCompletedCondition": {
-      "description": "At least one repeatable mission completed in any domain.",
+      "description": "A day counts as completed when at least one repeatable mission is finished.",
       "requiresRepeatableTask": true
     },
+
     "resetTime": "local-midnight",
+
     "onReset": {
       "regenerateRepeatableTasks": true,
       "clearStepStateForRepeatables": true
     },
+
     "streakBreakLogic": {
       "ifYesterdayCompleted": "increment",
       "ifYesterdayNotCompleted": "resetToZero"
     },
+
     "winTheDay": {
-      "description": "1 important mission + 1 ritual + 1 documentation action completed.",
+      "description": "1 important mission + 1 ritual + 1 documentation action.",
       "requirements": {
         "importantMissions": 1,
         "ritualMissions": 1,
@@ -156,12 +163,15 @@
       "dayCompletedPrefix": "ak_day_completed_",
       "stepsPrefix": "ak_steps_"
     },
+
     "antiOverwhelmRules": {
       "maxActiveEliteMissions": 3,
+
       "backlogTriageTrigger": {
         "missedTasksInDomain": 3,
         "createsMissionType": "Backlog Triage"
       },
+
       "overwhelmResetTrigger": {
         "brokenStreaksInWeek": 2,
         "createsMissionType": "Overwhelm Reset Protocol"
@@ -171,38 +181,14 @@
 
   "unlockRules": {
     "levels": [
-      {
-        "level": 1,
-        "unlocks": ["Mini-Quests", "Rituals"]
-      },
-      {
-        "level": 3,
-        "unlocks": ["Standard Missions", "Community Missions"]
-      },
-      {
-        "level": 4,
-        "unlocks": ["Documentation Bonuses", "Streak Multipliers"]
-      },
-      {
-        "level": 5,
-        "unlocks": ["Hard Missions", "First Boss Battles"]
-      },
-      {
-        "level": 7,
-        "unlocks": ["Secret Missions"]
-      },
-      {
-        "level": 10,
-        "unlocks": ["Elite Boss Track"]
-      },
-      {
-        "level": 12,
-        "unlocks": ["Custom Mission Creation"]
-      },
-      {
-        "level": 15,
-        "unlocks": ["Akatsuki Commander Status"]
-      }
+      { "level": 1, "unlocks": ["Mini-Quests", "Rituals"] },
+      { "level": 3, "unlocks": ["Standard Missions", "Community Missions"] },
+      { "level": 4, "unlocks": ["Documentation Bonuses", "Streak Multipliers"] },
+      { "level": 5, "unlocks": ["Hard Missions", "First Boss Battles"] },
+      { "level": 7, "unlocks": ["Secret Missions"] },
+      { "level": 10, "unlocks": ["Elite Boss Track"] },
+      { "level": 12, "unlocks": ["Custom Mission Creation"] },
+      { "level": 15, "unlocks": ["Akatsuki Commander Status"] }
     ]
   },
 
