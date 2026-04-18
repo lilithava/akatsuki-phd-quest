@@ -1,355 +1,341 @@
 {
   "meta": {
-    "name": "Akatsuki Mini-Quests – Swift Missions of the Hidden Village",
-    "version": "1.0.0",
-    "domain": "Mini-Quests",
-    "theme": "Swift Missions",
-    "description": "Short, low-friction missions designed for quick wins, momentum boosts, and micro-progress across all domains."
+    "name": "Akatsuki Mini-Quests",
+    "version": "2.0.0",
+    "description": "Swift, low-friction missions designed for quick wins, momentum boosts, and micro-progress across all domains.",
+    "lastUpdated": "2026-04-18",
+    "designPhilosophy": "Every mini-quest should take 2-10 minutes and give immediate satisfaction"
   },
 
-  "categories": [
-    "Momentum",
-    "Clarity",
-    "Organization",
-    "Learning",
-    "Reflection",
-    "Maintenance",
-    "Social",
-    "Energy"
+  "questCategories": [
+    { "id": "momentum", "name": "Momentum Builders", "icon": "⚡", "description": "Get started when stuck" },
+    { "id": "clarity", "name": "Clarity Quests", "icon": "🔍", "description": "Reduce uncertainty" },
+    { "id": "organization", "name": "Organization", "icon": "📁", "description": "Clean and structure" },
+    { "id": "reflection", "name": "Reflection", "icon": "💭", "description": "Process and learn" },
+    { "id": "social", "name": "Social", "icon": "👥", "description": "Connect and engage" },
+    { "id": "energy", "name": "Energy Boosts", "icon": "⚡", "description": "Physical/mental reset" }
   ],
 
-  "quests": [
-
-    /* ============================================================
-       MOMENTUM MINI-QUESTS
-    ============================================================ */
-
+  "dailyQuests": [
     {
       "id": "mq_start_30sec",
       "title": "Start for 30 Seconds",
-      "category": "Momentum",
+      "category": "momentum",
+      "icon": "⏱️",
       "difficulty": "Very Easy",
       "xp": 5,
       "estimatedTime": 1,
       "energy": "Very Low",
-      "successCriteria": "You work for 30 seconds.",
-      "failureCondition": "Not starting at all.",
-      "reward": "Momentum spark.",
+      "repeatability": "Daily",
+      
+      "successCriteria": "Work for 30 seconds",
+      "failureCondition": "Not starting at all",
+      "reward": "Momentum spark + 5 XP",
+      
       "steps": [
-        "Open the task.",
-        "Work for 30 seconds.",
-        "Stop or continue — both count."
+        "Open the task or document you've been avoiding",
+        "Set a 30-second timer",
+        "Work without pressure",
+        "Stop when timer ends — you win"
       ],
-      "notes": "This is the smallest possible activation ritual."
+      
+      "notes": "This is the smallest possible activation ritual. 30 seconds is enough to break inertia."
     },
 
     {
       "id": "mq_progress_1line",
       "title": "Write One Line",
-      "category": "Momentum",
+      "category": "momentum",
+      "icon": "✍️",
       "difficulty": "Very Easy",
       "xp": 5,
       "estimatedTime": 1,
       "energy": "Very Low",
-      "successCriteria": "You write exactly one line.",
-      "failureCondition": "Trying to write too much.",
-      "reward": "Micro-progress.",
+      "repeatability": "Daily",
+      
+      "successCriteria": "Exactly one line written",
+      "failureCondition": "Trying to write too much",
+      "reward": "Micro-progress + 5 XP",
+      
       "steps": [
-        "Open the document.",
-        "Write one line.",
-        "Save and close."
+        "Open the document",
+        "Write one complete sentence",
+        "Save and close immediately",
+        "Celebrate the win"
       ],
-      "notes": "One line is enough to break resistance."
+      
+      "notes": "One line is enough to break writer's block. You can always write more later."
     },
-
-    /* ============================================================
-       CLARITY MINI-QUESTS
-    ============================================================ */
 
     {
       "id": "mq_clarity_1question",
       "title": "Answer One Clarifying Question",
-      "category": "Clarity",
-      "difficulty": "Easy",
-      "xp": 10,
-      "estimatedTime": 2,
-      "energy": "Very Low",
-      "successCriteria": "You answer the question honestly.",
-      "failureCondition": "Avoiding clarity.",
-      "reward": "Direction restored.",
-      "steps": [
-        "Ask: What is the next action?",
-        "Write the answer.",
-        "Do NOT add more questions."
-      ],
-      "notes": "Clarity is often one question away."
-    },
-
-    {
-      "id": "mq_clarity_outline3",
-      "title": "Write a 3-Step Outline",
-      "category": "Clarity",
-      "difficulty": "Easy",
-      "xp": 10,
-      "estimatedTime": 3,
-      "energy": "Very Low",
-      "successCriteria": "You write exactly 3 steps.",
-      "failureCondition": "Overplanning.",
-      "reward": "Immediate direction.",
-      "steps": [
-        "Write Step 1.",
-        "Write Step 2.",
-        "Write Step 3."
-      ],
-      "notes": "Three steps is enough to restart."
-    },
-
-    /* ============================================================
-       ORGANIZATION MINI-QUESTS
-    ============================================================ */
-
-    {
-      "id": "mq_org_clear1",
-      "title": "Clear One Small Area",
-      "category": "Organization",
+      "category": "clarity",
+      "icon": "❓",
       "difficulty": "Very Easy",
-      "xp": 5,
+      "xp": 10,
       "estimatedTime": 2,
       "energy": "Very Low",
-      "successCriteria": "One area cleared.",
-      "failureCondition": "Trying to clean everything.",
-      "reward": "Reduced friction.",
+      "repeatability": "Daily",
+      
+      "successCriteria": "Question answered honestly",
+      "failureCondition": "Overthinking the question",
+      "reward": "Direction restored + 10 XP",
+      
       "steps": [
-        "Pick one tiny area (desk corner, tab group, folder).",
-        "Clear it.",
-        "Stop immediately after."
+        "Ask: 'What is the one thing that would make today a win?'",
+        "Write the answer in one sentence",
+        "Do NOT add more questions",
+        "Put the answer where you can see it"
       ],
-      "notes": "Environment resets reduce cognitive load."
+      
+      "notes": "Clarity is often one question away. Trust your first answer."
     },
 
     {
-      "id": "mq_org_rename3",
-      "title": "Rename 3 Files",
-      "category": "Organization",
-      "difficulty": "Easy",
+      "id": "mq_org_clear_desktop",
+      "title": "Clear Desktop Clutter",
+      "category": "organization",
+      "icon": "🖥️",
+      "difficulty": "Very Easy",
       "xp": 10,
       "estimatedTime": 3,
-      "energy": "Very Low",
-      "successCriteria": "Exactly 3 files renamed.",
-      "failureCondition": "Renaming none.",
-      "reward": "Cleaner structure.",
+      "energy": "Low",
+      "repeatability": "Daily",
+      
+      "successCriteria": "Desktop cleared of clutter",
+      "failureCondition": "Moving clutter to folders without organizing",
+      "reward": "Clean workspace + 10 XP",
+      
       "steps": [
-        "Pick 3 files.",
-        "Rename using YYYY-MM-DD + descriptor.",
-        "Move to correct folder if needed."
+        "Look at your computer desktop",
+        "Delete 3 files you don't need",
+        "Move 3 files to appropriate folders",
+        "Close 3 unnecessary browser tabs",
+        "Admire the clean desktop"
       ],
-      "notes": "Small organization tasks compound over time."
+      
+      "notes": "Digital clutter = mental clutter. A clean desktop is a clean mind."
     },
 
-    /* ============================================================
-       LEARNING MINI-QUESTS
-    ============================================================ */
-
     {
-      "id": "mq_learn_1concept",
-      "title": "Learn One Concept",
-      "category": "Learning",
+      "id": "mq_org_rename_5",
+      "title": "Rename 5 Files Correctly",
+      "category": "organization",
+      "icon": "📝",
       "difficulty": "Easy",
       "xp": 10,
       "estimatedTime": 3,
       "energy": "Low",
-      "successCriteria": "You understand one concept.",
-      "failureCondition": "Trying to study too much.",
-      "reward": "Knowledge gain.",
+      "repeatability": "Daily",
+      
+      "successCriteria": "5 files renamed with consistent format",
+      "failureCondition": "Inconsistent naming",
+      "reward": "Cleaner structure + 10 XP",
+      
       "steps": [
-        "Pick one concept.",
-        "Read a short explanation.",
-        "Write a 1-sentence summary."
+        "Open any folder with unorganized files",
+        "Pick 5 files to rename",
+        "Use format: YYYY-MM-DD_Description",
+        "Apply to all 5 files",
+        "Stop — don't do more"
       ],
-      "notes": "Small learning beats big avoidance."
+      
+      "notes": "Small organization tasks compound over time. 5 files a day = 150 files a month."
     },
-
-    {
-      "id": "mq_learn_flash3",
-      "title": "Review 3 Flashcards",
-      "category": "Learning",
-      "difficulty": "Very Easy",
-      "xp": 5,
-      "estimatedTime": 1,
-      "energy": "Very Low",
-      "successCriteria": "You review exactly 3 cards.",
-      "failureCondition": "Skipping review.",
-      "reward": "Memory reinforcement.",
-      "steps": [
-        "Open flashcards.",
-        "Review 3 cards.",
-        "Stop immediately after."
-      ],
-      "notes": "Micro-learning keeps knowledge alive."
-    },
-
-    /* ============================================================
-       REFLECTION MINI-QUESTS
-    ============================================================ */
 
     {
       "id": "mq_reflect_3sentences",
-      "title": "Write a 3-Sentence Reflection",
-      "category": "Reflection",
-      "difficulty": "Easy",
+      "title": "Write 3-Sentence Reflection",
+      "category": "reflection",
+      "icon": "📝",
+      "difficulty": "Very Easy",
       "xp": 10,
       "estimatedTime": 3,
       "energy": "Very Low",
-      "successCriteria": "You write exactly 3 sentences.",
-      "failureCondition": "Overthinking.",
-      "reward": "Emotional clarity.",
+      "repeatability": "Daily",
+      
+      "successCriteria": "Exactly 3 sentences written",
+      "failureCondition": "Writing a novel",
+      "reward": "Emotional clarity + 10 XP",
+      
       "steps": [
-        "Sentence 1: What happened.",
-        "Sentence 2: How I feel.",
-        "Sentence 3: What I need next."
+        "Sentence 1: What happened today?",
+        "Sentence 2: How do I feel about it?",
+        "Sentence 3: What do I need tomorrow?",
+        "Stop — exactly 3 sentences"
       ],
-      "notes": "Short reflections prevent emotional buildup."
+      
+      "notes": "Short reflections prevent emotional buildup. Three sentences is the magic number."
     },
 
     {
-      "id": "mq_reflect_win",
+      "id": "mq_reflect_one_win",
       "title": "Record One Win",
-      "category": "Reflection",
+      "category": "reflection",
+      "icon": "🏆",
       "difficulty": "Very Easy",
       "xp": 5,
       "estimatedTime": 1,
       "energy": "Very Low",
-      "successCriteria": "You record one win.",
-      "failureCondition": "Ignoring progress.",
-      "reward": "Confidence boost.",
+      "repeatability": "Daily",
+      
+      "successCriteria": "One win recorded",
+      "failureCondition": "Focusing only on what went wrong",
+      "reward": "Confidence boost + 5 XP",
+      
       "steps": [
-        "Write one thing you did well.",
-        "Save it in your log."
+        "Think: What went well today?",
+        "Write down one specific win",
+        "It can be tiny (I opened the file)",
+        "Save it in your log"
       ],
-      "notes": "Wins fuel motivation."
-    },
-
-    /* ============================================================
-       MAINTENANCE MINI-QUESTS
-    ============================================================ */
-
-    {
-      "id": "mq_maint_update_tracker",
-      "title": "Update One Tracker",
-      "category": "Maintenance",
-      "difficulty": "Easy",
-      "xp": 10,
-      "estimatedTime": 2,
-      "energy": "Very Low",
-      "successCriteria": "One tracker updated.",
-      "failureCondition": "Letting trackers fall behind.",
-      "reward": "System stability.",
-      "steps": [
-        "Open tracker.",
-        "Update one metric.",
-        "Save."
-      ],
-      "notes": "Small updates keep systems alive."
+      
+      "notes": "Wins fuel motivation. Train your brain to notice them."
     },
 
     {
-      "id": "mq_maint_backup",
-      "title": "Backup One File",
-      "category": "Maintenance",
-      "difficulty": "Very Easy",
-      "xp": 5,
-      "estimatedTime": 1,
-      "energy": "Very Low",
-      "successCriteria": "One file backed up.",
-      "failureCondition": "Skipping backups.",
-      "reward": "Safety.",
-      "steps": [
-        "Pick one important file.",
-        "Copy to backup folder."
-      ],
-      "notes": "Backups prevent disasters."
-    },
-
-    /* ============================================================
-       SOCIAL MINI-QUESTS
-    ============================================================ */
-
-    {
-      "id": "mq_social_reply1",
+      "id": "mq_social_reply_one",
       "title": "Reply to One Message",
-      "category": "Social",
-      "difficulty": "Easy",
+      "category": "social",
+      "icon": "💬",
+      "difficulty": "Very Easy",
       "xp": 10,
       "estimatedTime": 2,
       "energy": "Low",
-      "successCriteria": "You reply to one message.",
-      "failureCondition": "Avoiding communication.",
-      "reward": "Reduced social backlog.",
+      "repeatability": "Daily",
+      
+      "successCriteria": "One message replied to",
+      "failureCondition": "Reading without responding",
+      "reward": "Reduced social backlog + 10 XP",
+      
       "steps": [
-        "Pick one message.",
-        "Write a short reply.",
-        "Send it."
+        "Open your messaging app",
+        "Pick one unanswered message",
+        "Write a short reply (2-3 sentences)",
+        "Send it",
+        "Close the app"
       ],
-      "notes": "Small replies prevent communication overwhelm."
+      
+      "notes": "Small replies prevent communication overwhelm. One message at a time."
     },
 
     {
-      "id": "mq_social_thank",
-      "title": "Send One Thank-You",
-      "category": "Social",
-      "difficulty": "Very Easy",
-      "xp": 5,
-      "estimatedTime": 1,
-      "energy": "Very Low",
-      "successCriteria": "You send one thank-you.",
-      "failureCondition": "Skipping appreciation.",
-      "reward": "Positive social energy.",
-      "steps": [
-        "Pick someone.",
-        "Send a short thank-you message."
-      ],
-      "notes": "Gratitude strengthens connections."
-    },
-
-    /* ============================================================
-       ENERGY MINI-QUESTS
-    ============================================================ */
-
-    {
-      "id": "mq_energy_water",
+      "id": "mq_energy_hydrate",
       "title": "Drink Water",
-      "category": "Energy",
+      "category": "energy",
+      "icon": "💧",
       "difficulty": "Very Easy",
       "xp": 5,
       "estimatedTime": 1,
       "energy": "Very Low",
-      "successCriteria": "You drink water.",
-      "failureCondition": "Skipping hydration.",
-      "reward": "Energy boost.",
+      "repeatability": "Hourly",
+      
+      "successCriteria": "Water consumed",
+      "failureCondition": "Skipping hydration",
+      "reward": "Energy boost + 5 XP",
+      
       "steps": [
-        "Drink water.",
-        "Take 3 deep breaths."
+        "Stand up",
+        "Get a glass of water",
+        "Drink the whole glass",
+        "Take 3 deep breaths",
+        "Sit back down"
       ],
-      "notes": "Hydration improves focus."
+      
+      "notes": "Dehydration is the #1 cause of afternoon fatigue."
     },
 
     {
       "id": "mq_energy_stretch",
-      "title": "Do a 10-Second Stretch",
-      "category": "Energy",
+      "title": "10-Second Stretch",
+      "category": "energy",
+      "icon": "🧘",
       "difficulty": "Very Easy",
       "xp": 5,
       "estimatedTime": 1,
       "energy": "Very Low",
-      "successCriteria": "You stretch for 10 seconds.",
-      "failureCondition": "Staying tense.",
-      "reward": "Physical reset.",
+      "repeatability": "Hourly",
+      
+      "successCriteria": "Stretched for 10 seconds",
+      "failureCondition": "Staying tense",
+      "reward": "Physical reset + 5 XP",
+      
       "steps": [
-        "Stand up.",
-        "Stretch arms or back for 10 seconds."
+        "Stand up from your chair",
+        "Raise arms above head",
+        "Lean left, then right",
+        "Roll shoulders back",
+        "Sit back down"
       ],
-      "notes": "Micro-stretches reduce fatigue."
+      
+      "notes": "Micro-stretches reduce fatigue and improve focus."
     }
+  ],
 
-  ]
+  "weeklyQuests": [
+    {
+      "id": "mq_weekly_cleanup",
+      "title": "Weekly Digital Cleanup",
+      "category": "organization",
+      "icon": "🧹",
+      "difficulty": "Easy",
+      "xp": 25,
+      "estimatedTime": 10,
+      "energy": "Low",
+      "repeatability": "Weekly",
+      
+      "successCriteria": "Downloads folder cleaned",
+      "failureCondition": "Files left to accumulate",
+      "reward": "Clean system + 25 XP",
+      
+      "steps": [
+        "Open Downloads folder",
+        "Sort by date modified",
+        "Delete files older than 30 days",
+        "Move keepers to proper folders",
+        "Empty trash"
+      ],
+      
+      "notes": "A clean Downloads folder is a clean mind."
+    },
+
+    {
+      "id": "mq_weekly_inbox_zero",
+      "title": "Inbox Zero",
+      "category": "organization",
+      "icon": "📧",
+      "difficulty": "Medium",
+      "xp": 30,
+      "estimatedTime": 15,
+      "energy": "Standard Focus",
+      "repeatability": "Weekly",
+      
+      "successCriteria": "Email inbox at zero",
+      "failureCondition": "Leaving unread emails",
+      "reward": "Email peace + 30 XP",
+      
+      "steps": [
+        "Open email inbox",
+        "Delete obvious spam/newsletters",
+        "Archive what doesn't need action",
+        "Reply to messages under 2 minutes",
+        "Move longer replies to task list"
+      ],
+      
+      "notes": "Inbox zero is achievable. One pass per week is enough."
+    }
+  ],
+
+  "randomQuestRules": {
+    "enabled": true,
+    "selectionAlgorithm": "weighted_random",
+    "dailyLimit": 5,
+    "streakBonus": {
+      "consecutiveDays": 3,
+      "bonusXp": 15
+    },
+    "rerollCost": 5,
+    "rerollCurrency": "coins"
+  }
 }
