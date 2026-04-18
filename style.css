@@ -75,7 +75,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* XP Bar */
+/* XP Bar - FIXED */
 .ak-xp-container {
     background: var(--card);
     padding: 0.5rem 2rem;
@@ -250,6 +250,8 @@ h3 {
     justify-content: space-between;
     align-items: start;
     margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .mission-title {
@@ -260,6 +262,7 @@ h3 {
 .mission-badge {
     display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .badge {
@@ -271,6 +274,7 @@ h3 {
 
 .badge.critical { background: var(--red); color: white; }
 .badge.important { background: #ff8c00; color: black; }
+.badge.maintenance { background: #4a9eff; }
 .badge.easy { background: #2d6a4f; }
 .badge.medium { background: #e9c46a; color: black; }
 .badge.hard { background: #e76f51; }
@@ -297,6 +301,12 @@ h3 {
     gap: 0.5rem;
     padding: 0.3rem 0;
     cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.1s;
+}
+
+.step-item:hover {
+    background: #1a1a1e;
 }
 
 .step-checkbox {
@@ -309,6 +319,7 @@ h3 {
 .step-label {
     flex: 1;
     font-size: 0.9rem;
+    cursor: pointer;
 }
 
 .step-item.completed .step-label {
@@ -316,7 +327,7 @@ h3 {
     color: var(--text-dim);
 }
 
-.edit-step-btn, .add-step-btn {
+.step-edit-btn, .step-add-btn {
     background: none;
     border: none;
     color: var(--text-dim);
@@ -324,9 +335,16 @@ h3 {
     font-size: 0.7rem;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
 }
 
-.edit-step-btn:hover, .add-step-btn:hover {
+.step-item:hover .step-edit-btn,
+.mission-item:hover .step-add-btn {
+    opacity: 1;
+}
+
+.step-edit-btn:hover, .step-add-btn:hover {
     background: var(--card-hover);
     color: var(--red);
 }
@@ -342,6 +360,13 @@ h3 {
     border: 1px solid var(--border);
     padding: 0.3rem 0.8rem;
     font-size: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.mission-actions button:hover {
+    background: var(--red);
+    border-color: var(--red);
 }
 
 /* Filters */
@@ -378,6 +403,12 @@ h3 {
 .ak-form-row label {
     flex: 1;
     min-width: 150px;
+}
+
+.ak-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
 textarea, select, input {
@@ -460,6 +491,7 @@ button.danger:hover {
 .buy-btn:disabled {
     background: #444;
     cursor: not-allowed;
+    transform: none;
 }
 
 /* Avatar */
@@ -470,6 +502,7 @@ button.danger:hover {
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .ak-avatar-display {
@@ -481,6 +514,7 @@ button.danger:hover {
 
 .ak-avatar-info {
     flex: 1;
+    min-width: 200px;
 }
 
 .ak-avatar-info input {
@@ -519,13 +553,19 @@ button.danger:hover {
     gap: 0.5rem;
 }
 
-.unequip-btn {
+.unequip-btn, .equip-btn {
     background: none;
     border: none;
     color: var(--red);
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0;
+    margin: 0;
+}
+
+.unequip-btn:hover, .equip-btn:hover {
+    transform: none;
+    color: var(--red-dark);
 }
 
 /* Achievements */
@@ -540,6 +580,7 @@ button.danger:hover {
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 1rem;
+    transition: transform 0.2s;
 }
 
 .achievement-item.locked {
@@ -549,6 +590,11 @@ button.danger:hover {
 .achievement-item.unlocked {
     border-color: var(--gold);
     background: linear-gradient(135deg, var(--card), #1a1a2e);
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 /* Win Condition */
@@ -642,10 +688,20 @@ button.danger:hover {
     white-space: pre-wrap;
     margin-top: 1rem;
     display: none;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 #reportOutput:not(:empty) {
     display: block;
+}
+
+/* Generated Preview */
+.generated-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #1a1a1e;
+    border-radius: 8px;
 }
 
 /* Responsive */
@@ -663,5 +719,11 @@ button.danger:hover {
     }
     .ak-dashboard-grid {
         grid-template-columns: 1fr;
+    }
+    .ak-form-row {
+        flex-direction: column;
+    }
+    .ak-form-row label {
+        min-width: auto;
     }
 }
