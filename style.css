@@ -727,3 +727,96 @@ button.danger:hover {
         min-width: auto;
     }
 }
+/* Enhanced Task Generator */
+.generator-enhanced {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.generator-input-section {
+  margin-bottom: 1.5rem;
+}
+
+.generator-input-section textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.generator-fields {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 150px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 0.25rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: #1a1a1e;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.step-editor-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.step-editor-input {
+  flex: 1;
+  background: #1a1a1e;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4rem;
+  border-radius: 4px;
+}
+
+.step-editor-row button {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+}
+
+.step-editor-row button:hover {
+  color: var(--red);
+}
+
+.generator-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.generator-actions .primary {
+  background: var(--red);
+}
+
+.generator-actions .primary:hover {
+  background: var(--red-dark);
+}
