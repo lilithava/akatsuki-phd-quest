@@ -1,12 +1,14 @@
 /**
- * Akatsuki PhD Quest - Fixed Main Script
- * Version: 2.1.1
+ * Akatsuki PhD Quest - Clean Working Version
  */
 
-// ============================================================
-// GLOBAL STATE & INITIALIZATION
-// ============================================================
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM ready, initializing Akatsuki Quest...');
+    initApp();
+});
 
+// Global state
 let state = {
     xp: 0,
     coins: 150,
@@ -26,10 +28,9 @@ let state = {
     }
 };
 
-// Track currently open task for modal
 let currentModalTaskId = null;
 
-// Daily recurring task templates
+// Daily recurring tasks
 const DAILY_TASKS = [
     { 
         title: "Morning Startup Ritual", 
@@ -131,10 +132,9 @@ function getMultipliers() {
 function saveState() {
     try {
         localStorage.setItem('akatsuki_state', JSON.stringify(state));
-        console.log('✅ State saved successfully');
+        console.log('State saved');
     } catch(e) {
-        console.error('❌ Failed to save state:', e);
-        showToast('Warning: Could not save progress');
+        console.error('Failed to save state:', e);
     }
 }
 
@@ -175,7 +175,7 @@ function undo() {
     updateXPLevel();
     saveState();
     renderAll();
-    showToast('↩️ Undo successful');
+    showToast('Undo successful');
 }
 
 function redo() {
@@ -215,7 +215,7 @@ function redo() {
     updateXPLevel();
     saveState();
     renderAll();
-    showToast('↪️ Redo successful');
+    showToast('Redo successful');
 }
 
 function loadState() {
@@ -224,14 +224,12 @@ function loadState() {
         if (saved) {
             const parsed = JSON.parse(saved);
             state = { ...state, ...parsed };
-            console.log('✅ State loaded successfully');
+            console.log('State loaded');
         }
     } catch(e) {
-        console.error('❌ Failed to load state:', e);
-        showToast('Warning: Could not load saved progress');
+        console.error('Failed to load state:', e);
     }
     
-    // Initialize missing fields
     state.activeTasks = state.activeTasks || [];
     state.completedHistory = state.completedHistory || [];
     state.unlockedAchievements = state.unlockedAchievements || [];
@@ -242,7 +240,6 @@ function loadState() {
     if (!state.lastResetDate) state.lastResetDate = getTodayStr();
     if (!state.lastWeeklyResetDate) state.lastWeeklyResetDate = getLastMonday();
     
-    // Add daily tasks if none exist
     if (state.activeTasks.length === 0) {
         DAILY_TASKS.forEach(taskTemplate => {
             state.activeTasks.push({
@@ -276,7 +273,7 @@ function updateXPLevel() {
     
     if (newLevel > state.level) {
         state.coins += 100;
-        showToast(`✨ Level Up! You reached level ${newLevel}! +100 coins`);
+        showToast(`Level Up! You reached level ${newLevel}! +100 coins`);
     }
     
     state.level = newLevel;
@@ -290,9 +287,7 @@ function updateXPBar() {
     const progress = ((state.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
     
     const xpFill = document.getElementById('xpFill');
-    if (xpFill) {
-        xpFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
-    }
+    if (xpFill) xpFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
     
     const xpCurrent = document.getElementById('xpCurrent');
     const xpNext = document.getElementById('xpNext');
@@ -337,15 +332,14 @@ function completeTask(taskId) {
     });
     
     pushUndo({ type: 'completeTask', taskId, xpGain, coinGain });
-    showToast(`✅ Completed: ${task.title} (+${xpGain} XP, +${coinGain} coins)`);
+    showToast(`Completed: ${task.title} (+${xpGain} XP, +${coinGain} coins)`);
     updateXPLevel();
     saveState();
-    renderAll(); // Critical: updates history and report
+    renderAll();
 }
 
 function deleteTask(taskId) {
     if (!confirm('Delete this task?')) return;
-    
     state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
     saveState();
     renderAll();
@@ -365,7 +359,6 @@ function renderAll() {
     renderAvatar();
     renderShop();
     renderAchievements();
-    populateTaskGeneratorDropdowns();
 }
 
 function renderHeader() {
@@ -396,7 +389,6 @@ function renderDashboard() {
     if (totalXPEl) totalXPEl.textContent = state.xp;
     if (streakDisplayEl) streakDisplayEl.textContent = state.streak;
     
-    // Win the day checks
     const hasImportant = state.activeTasks.some(t => 
         t.completed && (t.priority === 'Critical' || t.priority === 'Important')
     );
@@ -429,7 +421,7 @@ function renderActiveMissions() {
     const activeTasks = state.activeTasks.filter(t => !t.completed);
     
     if (activeTasks.length === 0) {
-        container.innerHTML = '<div class="ak-card">✨ No active missions. Generate or add tasks from the Task Bank!</div>';
+        container.innerHTML = '<div class="ak-card">✨ No active missions. Add some from the Task Bank!</div>';
         return;
     }
     
@@ -468,48 +460,10 @@ function renderTaskBank() {
     if (!container) return;
     
     const sampleTasks = [
-        { 
-            title: "Write 500 Words for Literature Review", 
-            domain: "PhD", 
-            difficulty: "Hard", 
-            xp: 90, 
-            steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] 
-        },
-        { 
-            title: "Create Weekly Skool Post", 
-            domain: "Skool", 
-            difficulty: "Medium", 
-            xp: 35, 
-            steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] 
-        },
-        { 
-            title: "Design Lesson Plan", 
-            domain: "Curriculum", 
-            difficulty: "Medium", 
-            xp: 40, 
-            steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] 
-        },
-        { 
-            title: "Code Interview Transcript", 
-            domain: "Research Assistantship", 
-            difficulty: "Hard", 
-            xp: 80, 
-            steps: ["Open transcript", "Apply codes", "Write memo", "Save"] 
-        },
-        {
-            title: "Morning Startup Ritual",
-            domain: "Rituals",
-            difficulty: "Easy",
-            xp: 15,
-            steps: ["Open mission board", "Review calendar", "Pick top 3", "Start first block"]
-        },
-        {
-            title: "Save Daily Evidence Pack",
-            domain: "Documentation",
-            difficulty: "Easy",
-            xp: 20,
-            steps: ["Take screenshots", "Export files", "Rename with date", "Store in folder"]
-        }
+        { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
+        { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
+        { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
+        { title: "Code Interview Transcript", domain: "Research Assistantship", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] }
     ];
     
     container.innerHTML = sampleTasks.map(t => `
@@ -542,9 +496,12 @@ function renderAvatar() {
     const nameInput = document.getElementById('avatarName');
     if (nameInput) {
         nameInput.value = state.avatar.name;
+        nameInput.onchange = (e) => {
+            state.avatar.name = e.target.value;
+            saveState();
+        };
     }
     
-    // Update multipliers display
     const { xpMult, coinMult } = getMultipliers();
     const xpMultEl = document.getElementById('xpMult');
     const coinMultEl = document.getElementById('coinMult');
@@ -556,11 +513,9 @@ function renderAvatar() {
     
     const totalXPEarnedEl = document.getElementById('totalXPEarned');
     const missionsCompletedEl = document.getElementById('missionsCompleted');
-    
     if (totalXPEarnedEl) totalXPEarnedEl.textContent = totalXPEarned;
     if (missionsCompletedEl) missionsCompletedEl.textContent = missionsCompleted;
     
-    // Render equipped gear
     const equippedContainer = document.getElementById('equippedList');
     if (equippedContainer) {
         if (!state.avatar.equipped || state.avatar.equipped.length === 0) {
@@ -575,12 +530,9 @@ function renderAvatar() {
         }
     }
     
-    // Render inventory
     const inventoryContainer = document.getElementById('inventoryList');
     if (inventoryContainer) {
-        const ownedNotEquipped = (state.avatar.inventory || []).filter(
-            id => !(state.avatar.equipped || []).includes(id)
-        );
+        const ownedNotEquipped = (state.avatar.inventory || []).filter(id => !(state.avatar.equipped || []).includes(id));
         if (ownedNotEquipped.length === 0) {
             inventoryContainer.innerHTML = '<div class="gear-item">No items in inventory. Buy from Shop!</div>';
         } else {
@@ -597,7 +549,6 @@ function renderAvatar() {
 function renderShop() {
     const container = document.getElementById('shopItemsList');
     const coinsSpan = document.getElementById('shopCoins');
-    
     if (coinsSpan) coinsSpan.textContent = state.coins;
     if (!container) return;
     
@@ -615,7 +566,7 @@ function renderShop() {
                 <p class="effect"><strong>${effectText.join(', ') || 'Cosmetic'}</strong></p>
                 ${owned 
                     ? `<button class="buy-btn" disabled>✓ Owned</button>` 
-                    : `<button class="buy-btn" data-id="${item.id}" data-cost="${item.cost}" data-name="${item.name}">Purchase (${item.cost}💰)</button>`
+                    : `<button class="buy-btn" data-id="${item.id}" data-cost="${item.cost}" data-name="${item.name}">Purchase</button>`
                 }
             </div>
         `;
@@ -663,8 +614,7 @@ function renderAchievements() {
         { id: 'first_blood', name: 'First Blood', icon: '🩸', description: 'Complete your first mission', unlocked: state.completedHistory.length > 0 },
         { id: 'streak_3', name: 'Spark Ignited', icon: '⚡', description: '3-day streak', unlocked: state.streak >= 3 },
         { id: 'streak_7', name: 'Week of Discipline', icon: '📅', description: '7-day streak', unlocked: state.streak >= 7 },
-        { id: 'level_10', name: 'Commander', icon: '⭐', description: 'Reach level 10', unlocked: state.level >= 10 },
-        { id: 'shadow_scholar', name: 'Shadow Scholar', icon: '📚', description: 'Complete 10 literature tasks', unlocked: false }
+        { id: 'level_10', name: 'Commander', icon: '⭐', description: 'Reach level 10', unlocked: state.level >= 10 }
     ];
     
     container.innerHTML = achievements.map(a => `
@@ -681,36 +631,16 @@ function renderAchievements() {
 // TASK GENERATOR
 // ============================================================
 
-function populateTaskGeneratorDropdowns() {
-    const themeSelect = document.getElementById('genTheme');
-    if (!themeSelect) return;
-    
-    const themes = [
-        { id: 'phd', name: '🎓 Shadow Research Missions' },
-        { id: 'skool', name: '👥 Clan Leadership & Skool' },
-        { id: 'curriculum', name: '📖 Village Knowledge Expansion' },
-        { id: 'ra', name: '🔬 Intelligence Gathering' },
-        { id: 'docs', name: '📝 Eternal Documentation' },
-        { id: 'rituals', name: '🌙 Discipline & Rituals' }
-    ];
-    
-    themeSelect.innerHTML = themes.map(t => 
-        `<option value="${t.id}">${t.name}</option>`
-    ).join('');
-}
-
 function generateSingleTask() {
     const goal = document.getElementById('genGoal');
     if (!goal || !goal.value.trim()) {
-        showToast('⚠️ Enter a goal first');
+        showToast('Enter a goal first');
         return;
     }
     
     const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
     const priority = document.getElementById('genPriority')?.value || 'Important';
-    const domain = document.getElementById('genTheme')?.selectedOptions[0]?.textContent || 'General';
     const repeatability = document.getElementById('genRepeatability')?.value || 'One-time';
-    const energy = document.getElementById('genEnergy')?.value || 'Standard Focus';
     
     const xpMap = { 'Easy': 20, 'Medium': 40, 'Hard': 80, 'Elite': 250 };
     const xpValue = xpMap[difficulty] || 40;
@@ -718,12 +648,11 @@ function generateSingleTask() {
     const newTask = {
         id: generateUniqueId(),
         title: goal.value.trim(),
-        domain: domain,
+        domain: 'General',
         difficulty: difficulty,
         xp: xpValue,
         repeatability: repeatability,
         priority: priority,
-        energy: energy,
         steps: [
             { text: `Define scope: ${goal.value.substring(0, 50)}`, completed: false },
             { text: 'Break down into sub-tasks', completed: false },
@@ -735,7 +664,6 @@ function generateSingleTask() {
         completed: false
     };
     
-    // Show preview
     const previewDiv = document.getElementById('generatedPreview');
     if (previewDiv) {
         previewDiv.innerHTML = `
@@ -756,7 +684,6 @@ function generateSingleTask() {
         `;
     }
     
-    // Show add button
     const addBtn = document.getElementById('addGeneratedBtn');
     if (addBtn) {
         addBtn.style.display = 'inline-block';
@@ -765,7 +692,7 @@ function generateSingleTask() {
             pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask });
             saveState();
             renderAll();
-            showToast(`✅ Generated: ${newTask.title}`);
+            showToast(`Generated: ${newTask.title}`);
             if (previewDiv) previewDiv.innerHTML = '';
             addBtn.style.display = 'none';
             goal.value = '';
@@ -779,12 +706,8 @@ function generateSingleTask() {
 
 function setupGlobalEventDelegation() {
     const mainContent = document.querySelector('.ak-content');
-    if (!mainContent) {
-        console.warn('⚠️ Main content not found');
-        return;
-    }
+    if (!mainContent) return;
     
-    // Handle checkbox changes
     mainContent.addEventListener('change', function(e) {
         if (e.target && e.target.classList.contains('step-checkbox')) {
             const checkbox = e.target;
@@ -811,11 +734,9 @@ function setupGlobalEventDelegation() {
         }
     });
     
-    // Handle button clicks
     mainContent.addEventListener('click', function(e) {
         const target = e.target;
         
-        // Add from bank
         if (target.classList.contains('add-from-bank')) {
             const stepsArray = JSON.parse(target.dataset.steps);
             const newTask = {
@@ -826,7 +747,6 @@ function setupGlobalEventDelegation() {
                 xp: parseInt(target.dataset.xp),
                 repeatability: 'One-time',
                 priority: 'Important',
-                energy: 'Standard Focus',
                 steps: stepsArray.map(text => ({ text, completed: false })),
                 notes: '',
                 startedAt: new Date().toISOString(),
@@ -836,22 +756,18 @@ function setupGlobalEventDelegation() {
             pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask });
             saveState();
             renderAll();
-            showToast(`✅ Added: ${newTask.title}`);
+            showToast(`Added: ${newTask.title}`);
         }
         
-        // View task details
         if (target.classList.contains('view-task-details')) {
             const taskId = target.dataset.taskId;
             openTaskModal(taskId);
         }
         
-        // Delete task
         if (target.classList.contains('delete-task-btn')) {
-            const taskId = target.dataset.taskId;
-            deleteTask(taskId);
+            deleteTask(target.dataset.taskId);
         }
         
-        // Buy from shop
         if (target.classList.contains('buy-btn') && target.dataset.id) {
             const itemId = target.dataset.id;
             const cost = parseInt(target.dataset.cost);
@@ -861,34 +777,32 @@ function setupGlobalEventDelegation() {
                 state.coins -= cost;
                 if (!state.avatar.inventory) state.avatar.inventory = [];
                 state.avatar.inventory.push(itemId);
-                showToast(`✅ Purchased: ${name}`);
+                showToast(`Purchased: ${name}`);
                 saveState();
                 renderShop();
                 renderAvatar();
                 renderHeader();
             } else {
-                showToast(`❌ Not enough coins! Need ${cost - state.coins} more`);
+                showToast(`Not enough coins! Need ${cost - state.coins} more`);
             }
         }
         
-        // Equip item
         if (target.classList.contains('equip-btn')) {
             const itemId = target.dataset.item;
             if (!state.avatar.equipped.includes(itemId)) {
                 state.avatar.equipped.push(itemId);
                 saveState();
                 renderAvatar();
-                showToast(`⚔️ Equipped ${SHOP_ITEMS.find(i => i.id === itemId)?.name || itemId}`);
+                showToast(`Equipped item`);
             }
         }
         
-        // Unequip item
         if (target.classList.contains('unequip-btn')) {
             const itemId = target.dataset.item;
             state.avatar.equipped = state.avatar.equipped.filter(i => i !== itemId);
             saveState();
             renderAvatar();
-            showToast('✖️ Item unequipped');
+            showToast('Item unequipped');
         }
     });
 }
@@ -898,7 +812,6 @@ function openTaskModal(taskId) {
     if (!task) return;
     
     currentModalTaskId = taskId;
-    
     const modal = document.getElementById('taskModal');
     if (!modal) return;
     
@@ -907,7 +820,6 @@ function openTaskModal(taskId) {
         <p><strong>Domain:</strong> ${task.domain}</p>
         <p><strong>Difficulty:</strong> ${task.difficulty}</p>
         <p><strong>XP Reward:</strong> ${task.xp}</p>
-        <p><strong>Repeatability:</strong> ${task.repeatability}</p>
         <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
         <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
     `;
@@ -916,15 +828,9 @@ function openTaskModal(taskId) {
     if (notesArea) notesArea.value = task.notes || '';
     
     modal.style.display = 'flex';
-    
-    // Close handlers
     const closeBtn = modal.querySelector('.close');
-    if (closeBtn) {
-        closeBtn.onclick = () => modal.style.display = 'none';
-    }
-    window.onclick = (e) => {
-        if (e.target === modal) modal.style.display = 'none';
-    };
+    if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
 }
 
 // ============================================================
@@ -932,9 +838,6 @@ function openTaskModal(taskId) {
 // ============================================================
 
 function setupEventListeners() {
-    console.log('🎯 Setting up event listeners...');
-    
-    // Tab switching
     document.querySelectorAll('.ak-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const tabId = btn.dataset.tab;
@@ -946,105 +849,20 @@ function setupEventListeners() {
         });
     });
     
-    // Undo/Redo buttons
     const undoBtn = document.getElementById('undoBtn');
     const redoBtn = document.getElementById('redoBtn');
     if (undoBtn) undoBtn.addEventListener('click', undo);
     if (redoBtn) redoBtn.addEventListener('click', redo);
     
-    // Avatar name change
-    const avatarNameInput = document.getElementById('avatarName');
-    if (avatarNameInput) {
-        avatarNameInput.addEventListener('change', (e) => {
-            state.avatar.name = e.target.value;
-            saveState();
-            showToast('✅ Avatar name updated');
-        });
-    }
-    
-    // Task generator
     const genSingleBtn = document.getElementById('generateSingleBtn');
-    if (genSingleBtn) {
-        genSingleBtn.addEventListener('click', generateSingleTask);
-    }
+    if (genSingleBtn) genSingleBtn.addEventListener('click', generateSingleTask);
     
-    // Generate chain (simplified - creates 3 tasks)
-    const genChainBtn = document.getElementById('generateChainBtn');
-    if (genChainBtn) {
-        genChainBtn.addEventListener('click', () => {
-            const goal = document.getElementById('genGoal');
-            if (!goal || !goal.value.trim()) {
-                showToast('⚠️ Enter a goal first');
-                return;
-            }
-            
-            const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
-            const domain = document.getElementById('genTheme')?.selectedOptions[0]?.textContent || 'General';
-            const xpMap = { 'Easy': 20, 'Medium': 40, 'Hard': 80, 'Elite': 250 };
-            const xpValue = xpMap[difficulty] || 40;
-            
-            const tasks = [];
-            for (let i = 1; i <= 3; i++) {
-                tasks.push({
-                    id: generateUniqueId(),
-                    title: i === 1 ? goal.value.trim() : `${goal.value.trim()} (Part ${i} of 3)`,
-                    domain: domain,
-                    difficulty: difficulty,
-                    xp: xpValue,
-                    repeatability: 'One-time',
-                    priority: i === 1 ? 'Critical' : 'Important',
-                    energy: 'Standard Focus',
-                    steps: [
-                        { text: `Step 1 for this task`, completed: false },
-                        { text: `Step 2 for this task`, completed: false },
-                        { text: `Step 3 for this task`, completed: false }
-                    ],
-                    notes: '',
-                    startedAt: new Date().toISOString(),
-                    completed: false
-                });
-            }
-            
-            const previewDiv = document.getElementById('generatedPreview');
-            if (previewDiv) {
-                previewDiv.innerHTML = `
-                    <div class="mission-item">
-                        <div class="mission-header">
-                            <strong>🔗 Chain: ${escapeHtml(goal.value)}</strong>
-                            <div class="mission-badge"><span class="badge">3 tasks</span></div>
-                        </div>
-                        <div class="mission-meta"><span>⭐ Total XP: ${xpValue * 3}</span></div>
-                        <ul>${tasks.map(t => `<li>${escapeHtml(t.title)}</li>`).join('')}</ul>
-                    </div>
-                `;
-            }
-            
-            const addBtn = document.getElementById('addGeneratedBtn');
-            if (addBtn) {
-                addBtn.style.display = 'inline-block';
-                addBtn.onclick = () => {
-                    tasks.forEach(task => {
-                        state.activeTasks.push(task);
-                        pushUndo({ type: 'addTask', taskId: task.id, task: task });
-                    });
-                    saveState();
-                    renderAll();
-                    showToast(`✅ Added chain: ${goal.value} (3 tasks)`);
-                    if (previewDiv) previewDiv.innerHTML = '';
-                    addBtn.style.display = 'none';
-                    goal.value = '';
-                };
-            }
-        });
-    }
-    
-    // Batch import
     const batchImportBtn = document.getElementById('batchImportExecute');
     if (batchImportBtn) {
         batchImportBtn.addEventListener('click', () => {
             const textarea = document.getElementById('batchImport');
             if (!textarea || !textarea.value.trim()) {
-                showToast('⚠️ Paste tasks to import');
+                showToast('Paste tasks to import');
                 return;
             }
             
@@ -1055,10 +873,8 @@ function setupEventListeners() {
                 if (!line.trim()) continue;
                 const parts = line.split('|').map(p => p.trim());
                 if (parts.length >= 2) {
-                    const steps = (parts[4] || 'Plan,Execute,Review').split(',').map(s => 
-                        ({ text: s.trim(), completed: false })
-                    );
-                    const newTask = {
+                    const steps = (parts[4] || 'Plan,Execute,Review').split(',').map(s => ({ text: s.trim(), completed: false }));
+                    state.activeTasks.push({
                         id: generateUniqueId(),
                         title: parts[0],
                         domain: parts[1] || 'General',
@@ -1066,14 +882,11 @@ function setupEventListeners() {
                         xp: parseInt(parts[3]) || 30,
                         repeatability: 'One-time',
                         priority: 'Important',
-                        energy: 'Standard Focus',
                         steps: steps,
                         notes: '',
                         startedAt: new Date().toISOString(),
                         completed: false
-                    };
-                    state.activeTasks.push(newTask);
-                    pushUndo({ type: 'addTask', taskId: newTask.id, task: newTask });
+                    });
                     imported++;
                 }
             }
@@ -1081,52 +894,38 @@ function setupEventListeners() {
             if (imported > 0) {
                 saveState();
                 renderAll();
-                showToast(`✅ Imported ${imported} tasks!`);
+                showToast(`Imported ${imported} tasks!`);
                 textarea.value = '';
             } else {
-                showToast('❌ No valid tasks found');
+                showToast('No valid tasks found');
             }
         });
     }
     
-    // Reset buttons
     const forceResetBtn = document.getElementById('forceResetBtn');
     if (forceResetBtn) {
         forceResetBtn.addEventListener('click', () => {
             state.lastResetDate = getTodayStr();
             saveState();
             renderAll();
-            showToast('✅ Daily reset completed!');
-        });
-    }
-    
-    const forceWeeklyResetBtn = document.getElementById('forceWeeklyResetBtn');
-    if (forceWeeklyResetBtn) {
-        forceWeeklyResetBtn.addEventListener('click', () => {
-            state.lastWeeklyResetDate = getLastMonday();
-            saveState();
-            renderAll();
-            showToast('✅ Weekly reset completed!');
+            showToast('Daily reset completed!');
         });
     }
     
     const clearAllBtn = document.getElementById('clearAllBtn');
     if (clearAllBtn) {
         clearAllBtn.addEventListener('click', () => {
-            if (confirm('⚠️ WIPE ALL PROGRESS? This cannot be undone.')) {
+            if (confirm('WIPE ALL PROGRESS? This cannot be undone.')) {
                 localStorage.clear();
                 location.reload();
             }
         });
     }
     
-    // Report buttons
     const exportReportBtn = document.getElementById('exportReportBtn');
     const generateReportBtn = document.getElementById('generateReportBtn');
     
     const generateReport = () => {
-        const totalXPEarned = state.completedHistory.reduce((sum, h) => sum + (h.xpGained || 0), 0);
-        
         let report = `═══════════════════════════════════════════\n`;
         report += `              🌙 AKATSUKI MISSION REPORT\n`;
         report += `═══════════════════════════════════════════\n\n`;
@@ -1135,17 +934,11 @@ function setupEventListeners() {
         report += `🏆 LEVEL: ${state.level} | XP: ${state.xp} | STREAK: ${state.streak} days\n`;
         report += `💰 COINS: ${state.coins}\n\n`;
         report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        report += `📊 LIFETIME STATISTICS\n`;
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        report += `Total Missions Completed: ${state.completedHistory.length}\n`;
-        report += `Total XP Earned: ${totalXPEarned}\n`;
-        report += `Current Streak: ${state.streak} days\n\n`;
-        report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
         report += `📜 COMPLETED MISSIONS\n`;
         report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
         
         if (state.completedHistory.length === 0) {
-            report += `No missions completed yet.\n\n`;
+            report += `No missions completed yet.\n`;
         } else {
             state.completedHistory.forEach((c, idx) => {
                 report += `${idx + 1}. ${c.title}\n`;
@@ -1160,89 +953,34 @@ function setupEventListeners() {
         if (reportOutput) {
             reportOutput.textContent = report;
             reportOutput.style.display = 'block';
-            
             const blob = new Blob([report], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `akatsuki_report_${new Date().toISOString().slice(0, 10)}.txt`;
+            a.download = `akatsuki_report_${getTodayStr()}.txt`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('📄 Report generated and downloaded');
         }
     };
     
     if (exportReportBtn) exportReportBtn.addEventListener('click', generateReport);
     if (generateReportBtn) generateReportBtn.addEventListener('click', generateReport);
     
-    // Quick generate button
-    const genQuickBtn = document.getElementById('genQuickBtn');
-    if (genQuickBtn) {
-        genQuickBtn.addEventListener('click', () => {
-            document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
-        });
-    }
-    
-    // Batch import button (opens generator tab)
-    const batchImportBtnTab = document.getElementById('batchImportBtn');
-    if (batchImportBtnTab) {
-        batchImportBtnTab.addEventListener('click', () => {
-            document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
-        });
-    }
-    
-    // Export data
     const exportDataBtn = document.getElementById('exportDataBtn');
     if (exportDataBtn) {
         exportDataBtn.addEventListener('click', () => {
-            const exportData = {
-                version: '2.1.1',
-                exportDate: new Date().toISOString(),
-                state: state
-            };
-            
+            const exportData = { version: '2.0', exportDate: new Date().toISOString(), state: state };
             const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `akatsuki_save_${new Date().toISOString().slice(0, 10)}.json`;
+            a.download = `akatsuki_save_${getTodayStr()}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('✅ Data exported!');
+            showToast('Data exported!');
         });
     }
     
-    // Import data
-    const importDataBtn = document.getElementById('importDataBtn');
-    const importDataInput = document.getElementById('importDataInput');
-    if (importDataBtn && importDataInput) {
-        importDataBtn.addEventListener('click', () => importDataInput.click());
-        importDataInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const imported = JSON.parse(event.target.result);
-                    if (imported.state) {
-                        state = { ...state, ...imported.state };
-                        saveState();
-                        renderAll();
-                        showToast('✅ Data imported successfully!');
-                    } else {
-                        showToast('❌ Invalid save file format');
-                    }
-                } catch(err) {
-                    showToast('❌ Error importing data');
-                }
-            };
-            reader.readAsText(file);
-            importDataInput.value = '';
-        });
-    }
-    
-    // Modal save notes
     const saveNotesBtn = document.getElementById('saveTaskNotes');
     if (saveNotesBtn) {
         saveNotesBtn.addEventListener('click', () => {
@@ -1252,35 +990,13 @@ function setupEventListeners() {
                     const notesArea = document.getElementById('taskNotes');
                     task.notes = notesArea?.value || '';
                     saveState();
-                    showToast('✅ Notes saved!');
+                    showToast('Notes saved!');
                 }
             }
             const modal = document.getElementById('taskModal');
             if (modal) modal.style.display = 'none';
         });
     }
-    
-    // Filter listeners
-    const filterDomain = document.getElementById('filterDomain');
-    const filterDifficulty = document.getElementById('filterDifficulty');
-    const filterPriority = document.getElementById('filterPriority');
-    const filterStatus = document.getElementById('filterStatus');
-    
-    if (filterDomain) filterDomain.addEventListener('change', () => renderActiveMissions());
-    if (filterDifficulty) filterDifficulty.addEventListener('change', () => renderActiveMissions());
-    if (filterPriority) filterPriority.addEventListener('change', () => renderActiveMissions());
-    if (filterStatus) filterStatus.addEventListener('change', () => renderActiveMissions());
-    
-    // Bank filters
-    const bankSearch = document.getElementById('bankSearch');
-    const bankDomainFilter = document.getElementById('bankDomainFilter');
-    const bankDifficultyFilter = document.getElementById('bankDifficultyFilter');
-    
-    if (bankSearch) bankSearch.addEventListener('input', () => renderTaskBank());
-    if (bankDomainFilter) bankDomainFilter.addEventListener('change', () => renderTaskBank());
-    if (bankDifficultyFilter) bankDifficultyFilter.addEventListener('change', () => renderTaskBank());
-    
-    console.log('✅ Event listeners setup complete');
 }
 
 // ============================================================
@@ -1288,28 +1004,14 @@ function setupEventListeners() {
 // ============================================================
 
 function initApp() {
-    console.log('🌙 Initializing Akatsuki Quest...');
-    
-    try {
-        loadState();
-        setupEventListeners();
-        setupGlobalEventDelegation();
-        renderAll();
-        
-        console.log('✅ Akatsuki Quest Ready!', {
-            tasks: state.activeTasks.filter(t => !t.completed).length,
-            coins: state.coins,
-            level: state.level
-        });
-    } catch (error) {
-        console.error('❌ Initialization failed:', error);
-        showToast('⚠️ Error initializing app. Check console.');
-    }
+    console.log('Initializing Akatsuki Quest...');
+    loadState();
+    setupEventListeners();
+    setupGlobalEventDelegation();
+    renderAll();
+    console.log('Akatsuki Quest Ready!');
 }
 
-// Start when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-} else {
-    initApp();
-}
+// Make functions available globally for debugging
+window.state = state;
+window.renderAll = renderAll;
