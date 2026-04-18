@@ -1,243 +1,252 @@
 {
   "meta": {
-    "name": "Akatsuki Shop Items – Forbidden Market",
-    "version": "1.0.0",
-    "domain": "Shop",
-    "theme": "Cosmetics & Buffs",
-    "description": "Cosmetic and functional items for the Akatsuki PhD Quest shop. Includes cloaks, masks, companions, accessories, buffs, and rare artifacts."
+    "name": "Akatsuki Forbidden Market",
+    "version": "2.0.0",
+    "description": "Shop items with equippable properties, stat bonuses, and unlock conditions",
+    "lastUpdated": "2026-04-18"
   },
 
-  "categories": [
-    "Cloaks",
-    "Masks",
-    "Accessories",
-    "Companions",
-    "Auras",
-    "Artifacts",
-    "Consumables"
+  "shopCategories": [
+    { "id": "cloaks", "name": "Cloaks", "icon": "🧥", "slot": "cloak" },
+    { "id": "masks", "name": "Masks", "icon": "🎭", "slot": "mask" },
+    { "id": "weapons", "name": "Weapons", "icon": "⚔️", "slot": "accessory_right" },
+    { "id": "accessories", "name": "Accessories", "icon": "💍", "slot": "accessory_left" },
+    { "id": "companions", "name": "Companions", "icon": "🐺", "slot": "companion" },
+    { "id": "auras", "name": "Auras", "icon": "✨", "slot": "aura" },
+    { "id": "consumables", "name": "Consumables", "icon": "🧪", "slot": null }
   ],
 
   "items": [
-
-    /* ============================================================
-       CLOAKS
-    ============================================================ */
-
     {
-      "id": "cloak_akatsuki_standard",
+      "id": "cloak_akatsuki",
       "name": "Akatsuki Cloak",
-      "category": "Cloaks",
+      "category": "cloaks",
+      "slot": "cloak",
+      "cost": 150,
       "rarity": "Rare",
-      "cost": 250,
-      "cosmeticEffect": "Adds the classic black cloak with red clouds.",
-      "functionalEffect": "+5% XP on all missions for 24 hours after purchase.",
-      "description": "The signature cloak of the rogue scholars.",
-      "tags": ["cloak", "xp-boost"]
+      "icon": "🧥",
+      "svgPath": "assets/cloaks/akatsuki.svg",
+      "description": "The signature black cloak with red clouds of the Akatsuki.",
+      "effect": {
+        "xpMultiplier": 1.05,
+        "coinMultiplier": 1.0,
+        "description": "+5% XP from all missions"
+      },
+      "requirements": { "level": 1 },
+      "tags": ["xp_boost", "cosmetic"]
     },
-
     {
-      "id": "cloak_akatsuki_elite",
+      "id": "cloak_elite",
       "name": "Elite Akatsuki Cloak",
-      "category": "Cloaks",
-      "rarity": "Legendary",
-      "cost": 600,
-      "cosmeticEffect": "Enhanced cloak with glowing crimson clouds.",
-      "functionalEffect": "+10% XP for 48 hours.",
-      "description": "Reserved for those who walk the path of mastery.",
-      "tags": ["cloak", "legendary", "xp-boost"]
-    },
-
-    {
-      "id": "cloak_shadow_scholar",
-      "name": "Shadow Scholar Cloak",
-      "category": "Cloaks",
-      "rarity": "Epic",
+      "category": "cloaks",
+      "slot": "cloak",
       "cost": 400,
-      "cosmeticEffect": "Dark gradient cloak with subtle runes.",
-      "functionalEffect": "+5% Focus Block duration.",
-      "description": "Worn by those who study in silence.",
-      "tags": ["cloak", "focus"]
+      "rarity": "Legendary",
+      "icon": "👘",
+      "svgPath": "assets/cloaks/elite.svg",
+      "description": "Enhanced cloak with glowing crimson clouds.",
+      "effect": {
+        "xpMultiplier": 1.12,
+        "coinMultiplier": 1.08,
+        "description": "+12% XP, +8% Coins"
+      },
+      "requirements": { "level": 10, "prerequisiteItem": "cloak_akatsuki" },
+      "tags": ["xp_boost", "coin_boost", "legendary"]
     },
-
-    /* ============================================================
-       MASKS
-    ============================================================ */
-
     {
       "id": "mask_anbu",
       "name": "ANBU Mask",
-      "category": "Masks",
-      "rarity": "Rare",
-      "cost": 200,
-      "cosmeticEffect": "Adds a white ANBU-style mask.",
-      "functionalEffect": "+5% success chance on Deep Work missions.",
-      "description": "A mask worn by elite operatives.",
-      "tags": ["mask", "deep-work"]
+      "category": "masks",
+      "slot": "mask",
+      "cost": 100,
+      "rarity": "Uncommon",
+      "icon": "🎭",
+      "svgPath": "assets/masks/anbu.svg",
+      "description": "White ANBU-style mask worn by elite operatives.",
+      "effect": {
+        "xpMultiplier": 1.03,
+        "description": "+3% XP on Deep Work missions"
+      },
+      "requirements": { "level": 3 },
+      "tags": ["xp_boost", "deep_work"]
     },
-
     {
       "id": "mask_oni",
       "name": "Oni Mask",
-      "category": "Masks",
+      "category": "masks",
+      "slot": "mask",
+      "cost": 250,
       "rarity": "Epic",
-      "cost": 350,
-      "cosmeticEffect": "Adds a red demon mask with horns.",
-      "functionalEffect": "+10% XP on Boss Battles.",
-      "description": "A mask symbolizing inner strength.",
-      "tags": ["mask", "boss"]
+      "icon": "👹",
+      "svgPath": "assets/masks/oni.svg",
+      "description": "Red demon mask with horns, symbolizing inner strength.",
+      "effect": {
+        "xpMultiplier": 1.08,
+        "description": "+8% XP on Boss Battles"
+      },
+      "requirements": { "level": 7, "achievement": "boss_slayer" },
+      "tags": ["xp_boost", "boss"]
     },
-
-    /* ============================================================
-       ACCESSORIES
-    ============================================================ */
-
     {
-      "id": "acc_akatsuki_ring",
-      "name": "Akatsuki Ring",
-      "category": "Accessories",
-      "rarity": "Uncommon",
-      "cost": 120,
-      "cosmeticEffect": "Adds a glowing ring to the avatar’s hand.",
-      "functionalEffect": "+3% XP on all missions.",
-      "description": "Each ring holds a secret meaning.",
-      "tags": ["ring", "xp"]
+      "id": "weapon_kunai",
+      "name": "Shadow Kunai",
+      "category": "weapons",
+      "slot": "accessory_right",
+      "cost": 80,
+      "rarity": "Common",
+      "icon": "🗡️",
+      "svgPath": "assets/weapons/kunai.svg",
+      "description": "A standard-issue kunai for shadow missions.",
+      "effect": {
+        "xpMultiplier": 1.02,
+        "description": "+2% XP on Research missions"
+      },
+      "requirements": { "level": 2 },
+      "tags": ["xp_boost", "research"]
     },
-
     {
-      "id": "acc_scroll_satchel",
-      "name": "Scroll Satchel",
-      "category": "Accessories",
-      "rarity": "Uncommon",
-      "cost": 150,
-      "cosmeticEffect": "Adds a scroll bag to the avatar’s side.",
-      "functionalEffect": "+5% XP on Documentation missions.",
-      "description": "A satchel filled with ancient scrolls.",
-      "tags": ["documentation", "xp"]
-    },
-
-    {
-      "id": "acc_focus_charm",
-      "name": "Focus Charm",
-      "category": "Accessories",
-      "rarity": "Rare",
-      "cost": 220,
-      "cosmeticEffect": "Adds a glowing charm around the neck.",
-      "functionalEffect": "+5% Focus Block efficiency.",
-      "description": "A charm that sharpens the mind.",
-      "tags": ["focus", "accessory"]
-    },
-
-    /* ============================================================
-       COMPANIONS
-    ============================================================ */
-
-    {
-      "id": "comp_raven",
-      "name": "Summon Raven Companion",
-      "category": "Companions",
-      "rarity": "Epic",
-      "cost": 300,
-      "cosmeticEffect": "A raven perches on your avatar’s shoulder.",
-      "functionalEffect": "+5% XP on Research missions.",
-      "description": "A loyal messenger of the shadows.",
-      "tags": ["companion", "research"]
-    },
-
-    {
-      "id": "comp_shadow_wolf",
-      "name": "Shadow Wolf",
-      "category": "Companions",
+      "id": "weapon_lightsaber",
+      "name": "Plasma Blade",
+      "category": "weapons",
+      "slot": "accessory_right",
+      "cost": 500,
       "rarity": "Legendary",
-      "cost": 700,
-      "cosmeticEffect": "A spectral wolf follows your avatar.",
-      "functionalEffect": "+10% XP on all missions for 24 hours.",
-      "description": "A guardian spirit forged from moonlight.",
-      "tags": ["companion", "legendary", "xp"]
+      "icon": "⚡",
+      "svgPath": "assets/weapons/plasma_blade.svg",
+      "description": "A crackling blade of pure energy.",
+      "effect": {
+        "xpMultiplier": 1.15,
+        "coinMultiplier": 1.1,
+        "description": "+15% XP, +10% Coins on all missions"
+      },
+      "requirements": { "level": 15, "achievement": "akatsuki_commander" },
+      "tags": ["xp_boost", "coin_boost", "legendary"]
     },
-
-    /* ============================================================
-       AURAS
-    ============================================================ */
-
+    {
+      "id": "companion_raven",
+      "name": "Summon Raven",
+      "category": "companions",
+      "slot": "companion",
+      "cost": 200,
+      "rarity": "Epic",
+      "icon": "🐦‍⬛",
+      "svgPath": "assets/companions/raven.svg",
+      "description": "A loyal raven that perches on your shoulder.",
+      "effect": {
+        "xpMultiplier": 1.1,
+        "description": "+10% XP on Documentation missions"
+      },
+      "requirements": { "level": 5 },
+      "tags": ["xp_boost", "documentation"]
+    },
+    {
+      "id": "companion_wolf",
+      "name": "Shadow Wolf",
+      "category": "companions",
+      "slot": "companion",
+      "cost": 350,
+      "rarity": "Legendary",
+      "icon": "🐺",
+      "svgPath": "assets/companions/wolf.svg",
+      "description": "A spectral wolf guardian that follows you.",
+      "effect": {
+        "xpMultiplier": 1.15,
+        "coinMultiplier": 1.05,
+        "description": "+15% XP, +5% Coins on all missions"
+      },
+      "requirements": { "level": 10 },
+      "tags": ["xp_boost", "coin_boost", "legendary"]
+    },
     {
       "id": "aura_crimson",
       "name": "Crimson Aura",
-      "category": "Auras",
+      "category": "auras",
+      "slot": "aura",
+      "cost": 120,
       "rarity": "Epic",
-      "cost": 350,
-      "cosmeticEffect": "Red energy aura around the avatar.",
-      "functionalEffect": "+5% XP on Boss Battles.",
-      "description": "A burning aura of ambition.",
-      "tags": ["aura", "boss"]
+      "icon": "🔥",
+      "svgPath": "assets/auras/crimson.svg",
+      "description": "Burning red energy aura that surrounds you.",
+      "effect": {
+        "xpMultiplier": 1.0,
+        "coinMultiplier": 1.1,
+        "description": "+10% Coins from all missions"
+      },
+      "requirements": { "level": 8 },
+      "tags": ["coin_boost", "cosmetic"]
     },
-
-    {
-      "id": "aura_midnight",
-      "name": "Midnight Aura",
-      "category": "Auras",
-      "rarity": "Rare",
-      "cost": 250,
-      "cosmeticEffect": "Dark blue aura with drifting particles.",
-      "functionalEffect": "+5% XP on Night Missions.",
-      "description": "A calm aura for late-night scholars.",
-      "tags": ["aura", "night"]
-    },
-
-    /* ============================================================
-       ARTIFACTS
-    ============================================================ */
-
-    {
-      "id": "artifact_hydra_fang",
-      "name": "Hydra Fang",
-      "category": "Artifacts",
-      "rarity": "Epic",
-      "cost": 500,
-      "cosmeticEffect": "Adds a glowing fang to your inventory display.",
-      "functionalEffect": "+10% XP on Literature missions.",
-      "description": "A relic from the defeated Literature Hydra.",
-      "tags": ["artifact", "literature"]
-    },
-
-    {
-      "id": "artifact_golem_core",
-      "name": "Golem Core",
-      "category": "Artifacts",
-      "rarity": "Epic",
-      "cost": 500,
-      "cosmeticEffect": "Adds a floating stone core behind the avatar.",
-      "functionalEffect": "+10% XP on Methodology missions.",
-      "description": "A core fragment from the Methodology Golem.",
-      "tags": ["artifact", "methodology"]
-    },
-
-    /* ============================================================
-       CONSUMABLES
-    ============================================================ */
-
-    {
-      "id": "consumable_focus_potion",
-      "name": "Focus Potion",
-      "category": "Consumables",
-      "rarity": "Common",
-      "cost": 50,
-      "cosmeticEffect": "None.",
-      "functionalEffect": "Instant +10 Focus for one session.",
-      "description": "A small boost for tough days.",
-      "tags": ["consumable", "focus"]
-    },
-
     {
       "id": "consumable_xp_scroll",
       "name": "XP Scroll",
-      "category": "Consumables",
-      "rarity": "Uncommon",
-      "cost": 120,
-      "cosmeticEffect": "None.",
-      "functionalEffect": "+10% XP for the next mission only.",
-      "description": "A scroll infused with ancient knowledge.",
-      "tags": ["consumable", "xp"]
+      "category": "consumables",
+      "slot": null,
+      "cost": 50,
+      "rarity": "Common",
+      "icon": "📜",
+      "svgPath": null,
+      "description": "A scroll that grants bonus XP on next mission.",
+      "effect": {
+        "type": "temporary",
+        "xpMultiplier": 1.25,
+        "duration": "1 mission",
+        "description": "+25% XP on next mission"
+      },
+      "requirements": {},
+      "consumable": true,
+      "maxStack": 99,
+      "tags": ["consumable", "xp_boost"]
+    },
+    {
+      "id": "consumable_streak_freeze",
+      "name": "Streak Freeze",
+      "category": "consumables",
+      "slot": null,
+      "cost": 75,
+      "rarity": "Rare",
+      "icon": "❄️",
+      "svgPath": null,
+      "description": "Protects your streak for one missed day.",
+      "effect": {
+        "type": "streak_protection",
+        "duration": "1 day",
+        "description": "Streak won't reset if you miss a day"
+      },
+      "requirements": { "level": 5 },
+      "consumable": true,
+      "maxStack": 10,
+      "tags": ["consumable", "streak"]
     }
+  ],
 
+  "shopRules": {
+    "currency": "coins",
+    "refundPolicy": "no_refunds",
+    "dailyDeals": {
+      "enabled": true,
+      "discount": 25,
+      "refreshHour": 0
+    },
+    "limitedTimeItems": {
+      "enabled": true,
+      "duration": 7,
+      "rotation": "weekly"
+    }
+  },
+
+  "lootBoxes": [
+    {
+      "id": "crimson_chest",
+      "name": "Crimson Chest",
+      "cost": 100,
+      "icon": "🎁",
+      "description": "Contains a random item from the shop",
+      "guaranteedItem": null,
+      "dropTable": [
+        { "itemId": "consumable_xp_scroll", "weight": 30, "minCount": 1, "maxCount": 3 },
+        { "itemId": "mask_anbu", "weight": 10, "minCount": 1, "maxCount": 1 },
+        { "itemId": "weapon_kunai", "weight": 15, "minCount": 1, "maxCount": 1 },
+        { "itemId": "cloak_akatsuki", "weight": 5, "minCount": 1, "maxCount": 1 }
+      ]
+    }
   ]
 }
