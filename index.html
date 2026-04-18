@@ -3,374 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akatsuki PhD Quest</title>
+    <title>Akatsuki PhD Quest - Shadow Missions</title>
     <style>
+        /* ============================================================
+           AKATSUKI PH.D QUEST - COMPLETE STYLES
+        ============================================================ */
+        :root {
+            --bg: #0a0a0c;
+            --card: #111113;
+            --card-hover: #1a1a1e;
+            --border: #2a2a2d;
+            --border-light: #3a3a3d;
+            --red: #d62828;
+            --red-dark: #a11f1f;
+            --red-glow: rgba(214,40,40,0.3);
+            --text: #e6e6e6;
+            --text-dim: #888;
+            --gold: #ffd700;
+            --success: #00cc66;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            background: #0a0a0c;
-            color: #e6e6e6;
-            font-family: 'Segoe UI', system-ui;
-            padding: 20px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', 'Inter', system-ui;
+            line-height: 1.5;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+
+        .ak-app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        
-        .header {
-            background: #111113;
-            padding: 15px 20px;
-            border-bottom: 1px solid #2a2a2d;
+
+        /* Header */
+        .ak-header {
+            background: var(--card);
+            padding: 0.8rem 2rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        
-        .stats {
+
+        .ak-logo {
             display: flex;
-            gap: 20px;
+            align-items: center;
+            gap: 0.8rem;
         }
-        
-        .stat {
-            background: #1a1a1e;
-            padding: 5px 12px;
-            border-radius: 20px;
-        }
-        
-        .xp-bar {
-            background: #1a1a1e;
-            height: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        
-        .xp-fill {
-            background: #d62828;
-            width: 0%;
-            height: 100%;
-            transition: width 0.3s;
-        }
-        
-        .xp-text {
-            text-align: right;
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 20px;
-        }
-        
-        .layout {
+
+        .ak-logo-icon { font-size: 1.8rem; }
+        .ak-title { font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; color: var(--red); }
+
+        .ak-header-stats { display: flex; gap: 1.5rem; }
+        .stat-box { background: #1a1a1e; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
+
+        /* XP Bar */
+        .ak-xp-container { background: var(--card); padding: 0.5rem 2rem; border-bottom: 1px solid var(--border); }
+        .ak-xp-bar { height: 8px; background: #1a1a1e; border-radius: 4px; overflow: hidden; }
+        .ak-xp-fill { height: 100%; background: linear-gradient(90deg, var(--red), #ff4444); width: 0%; transition: width 0.3s ease; }
+        .ak-xp-text { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.3rem; text-align: right; }
+
+        /* Layout */
+        .ak-layout { display: flex; flex: 1; }
+
+        /* Sidebar */
+        .ak-sidebar {
+            width: 260px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            padding: 1rem;
+            gap: 0.3rem;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
         }
-        
-        .sidebar {
-            width: 200px;
-            background: #111113;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        
-        .sidebar button {
-            display: block;
-            width: 100%;
+
+        .ak-tab-btn {
             background: none;
             border: none;
-            color: #e6e6e6;
-            padding: 10px;
+            color: var(--text);
+            padding: 0.7rem 1rem;
             text-align: left;
-            cursor: pointer;
-            border-radius: 6px;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar button:hover {
-            background: #1a1a1e;
-        }
-        
-        .sidebar button.active {
-            background: #d62828;
-        }
-        
-        .content {
-            flex: 1;
-            background: #111113;
-            border-radius: 10px;
-            padding: 20px;
-            min-height: 500px;
-        }
-        
-        .tab {
-            display: none;
-        }
-        
-        .tab.active {
-            display: block;
-        }
-        
-        .card {
-            background: #1a1a1e;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .mission-item {
-            background: #1a1a1e;
-            border-left: 3px solid #d62828;
-            padding: 12px;
-            margin-bottom: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
             border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        
-        .mission-header {
+        .ak-tab-btn:hover { background: var(--card-hover); }
+        .ak-tab-btn.active { background: var(--red); color: white; box-shadow: 0 0 10px var(--red-glow); }
+
+        .ak-undo-redo {
+            margin-top: auto;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
         }
-        
-        .badge {
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+        .ak-undo-redo button { flex: 1; background: #1a1a1e; border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 6px; cursor: pointer; }
+
+        /* Content */
+        .ak-content { flex: 1; padding: 1.5rem; overflow-y: auto; }
+        .ak-tab { display: none; }
+        .ak-tab.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--red); border-left: 4px solid var(--red); padding-left: 1rem; }
+        h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--text); }
+
+        /* Cards */
+        .ak-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.2rem; }
+        .ak-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem; }
+
+        /* Mission Items */
+        .ak-mission-list { display: flex; flex-direction: column; gap: 1rem; }
+        .mission-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--red);
+            border-radius: 10px;
+            padding: 1rem;
+            transition: transform 0.2s;
         }
-        
+        .mission-item:hover { transform: translateX(4px); }
+
+        .mission-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
+        .mission-title { font-weight: 700; font-size: 1rem; }
+        .mission-badge { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        .badge { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 12px; background: #1a1a1e; }
+        .badge.critical { background: var(--red); color: white; }
+        .badge.important { background: #ff8c00; color: black; }
+        .badge.maintenance { background: #4a9eff; }
         .badge.easy { background: #2d6a4f; }
         .badge.medium { background: #e9c46a; color: black; }
         .badge.hard { background: #e76f51; }
-        
-        .step-list {
-            list-style: none;
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-        
-        .step-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 0;
-        }
-        
-        .step-item.completed label {
-            text-decoration: line-through;
-            color: #888;
-        }
-        
-        .step-checkbox {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        
-        button {
-            background: #d62828;
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-        
-        button:hover {
-            background: #a11f1f;
-        }
-        
-        textarea, select, input {
-            background: #1a1a1e;
-            border: 1px solid #2a2a2d;
-            color: white;
-            padding: 8px;
-            border-radius: 6px;
-            width: 100%;
-            margin: 8px 0;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .shop-item {
-            background: #1a1a1e;
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #d62828;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transform: translateX(400px);
-            transition: transform 0.3s;
-        }
-        
-        .toast.show {
-            transform: translateX(0);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background: #111113;
-            padding: 20px;
-            border-radius: 10px;
-            width: 400px;
-            max-width: 90%;
-        }
-        
-        .close {
-            float: right;
-            cursor: pointer;
-            font-size: 20px;
+        .badge.elite { background: var(--red); }
+
+        .mission-meta { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.8rem; display: flex; flex-wrap: wrap; gap: 1rem; }
+
+        .step-list { list-style: none; margin: 0.8rem 0; padding-left: 0; }
+        .step-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; cursor: pointer; border-radius: 6px; }
+        .step-item:hover { background: #1a1a1e; }
+        .step-checkbox { width: 18px; height: 18px; accent-color: var(--red); cursor: pointer; }
+        .step-item.completed label { text-decoration: line-through; color: var(--text-dim); }
+
+        .mission-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .mission-actions button { background: #1a1a1e; border: 1px solid var(--border); padding: 0.3rem 0.8rem; font-size: 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text); }
+        .mission-actions button:hover { background: var(--red); border-color: var(--red); }
+
+        /* Filters */
+        .ak-filters { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.2rem; }
+        .ak-filters select, .ak-search { background: #1a1a1e; border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+        .ak-search { width: 100%; margin-bottom: 1rem; }
+
+        /* Form */
+        .ak-form-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+        .ak-form-row label { flex: 1; min-width: 150px; }
+        textarea, select, input { background: #1a1a1e; border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 6px; width: 100%; margin-top: 0.3rem; }
+        button { background: var(--red); border: none; color: white; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        button:hover { background: var(--red-dark); transform: translateY(-1px); }
+        button.danger { background: #8b0000; }
+        .ak-form-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+
+        /* Shop */
+        .ak-shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .shop-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; text-align: center; transition: all 0.2s; }
+        .shop-item:hover { transform: translateY(-3px); border-color: var(--red); }
+        .shop-item .price { color: var(--gold); font-weight: bold; margin: 0.5rem 0; }
+        .shop-item .effect { font-size: 0.75rem; color: var(--text-dim); margin: 0.5rem 0; }
+        .buy-btn { width: 100%; margin-top: 0.5rem; }
+        .buy-btn:disabled { background: #444; cursor: not-allowed; transform: none; }
+
+        /* Avatar */
+        .ak-avatar-container { display: flex; gap: 2rem; background: var(--card); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .ak-avatar-display { background: #0a0a0c; border-radius: 50%; padding: 0.5rem; border: 2px solid var(--red); }
+        .ak-avatar-info { flex: 1; min-width: 200px; }
+        .avatar-stats { background: #1a1a1e; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+        .gear-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .gear-item { background: #1a1a1e; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+        .equip-btn, .unequip-btn { background: none; border: none; color: var(--red); cursor: pointer; padding: 0; margin: 0; }
+
+        /* Achievements */
+        .ak-achievements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .achievement-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+        .achievement-item.locked { opacity: 0.5; }
+        .achievement-item.unlocked { border-color: var(--gold); background: linear-gradient(135deg, var(--card), #1a1a2e); }
+        .achievement-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+        /* Win Condition */
+        .win-condition { display: flex; flex-direction: column; gap: 0.5rem; }
+        .win-item { display: flex; align-items: center; gap: 0.5rem; }
+        .win-check { font-size: 1.2rem; }
+        .win-result { margin-top: 0.8rem; padding: 0.5rem; background: #1a1a1e; border-radius: 6px; text-align: center; font-weight: bold; }
+
+        /* Modal */
+        .ak-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 1000; }
+        .ak-modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 500px; max-width: 90%; padding: 1.5rem; }
+        .ak-modal-content .close { float: right; font-size: 1.5rem; cursor: pointer; color: var(--text-dim); }
+        .modal-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+
+        /* Toast */
+        .reward-toast { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, var(--red), #8b0000); color: white; padding: 0.8rem 1.5rem; border-radius: 8px; transform: translateX(400px); transition: transform 0.3s; z-index: 2000; font-weight: bold; }
+        .reward-toast.show { transform: translateX(0); }
+
+        /* Report */
+        #reportOutput { background: #0a0a0c; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; margin-top: 1rem; display: none; max-height: 500px; overflow-y: auto; }
+        .generated-preview { margin-top: 1rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ak-sidebar { width: 200px; }
+            .ak-header-stats { gap: 0.5rem; font-size: 0.7rem; }
+            .ak-avatar-container { flex-direction: column; align-items: center; }
+            .ak-dashboard-grid { grid-template-columns: 1fr; }
+            .ak-form-row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="ak-app">
         <!-- Header -->
-        <div class="header">
-            <div>🌙 AKATSUKI PH.D QUEST</div>
-            <div class="stats">
-                <div class="stat">LVL <span id="level">1</span></div>
-                <div class="stat">⭐ <span id="xp">0</span> XP</div>
-                <div class="stat">💰 <span id="coins">150</span></div>
-                <div class="stat">🔥 <span id="streak">0</span></div>
+        <header class="ak-header">
+            <div class="ak-logo">
+                <span class="ak-logo-icon">🌙</span>
+                <span class="ak-title">AKATSUKI PH.D QUEST</span>
             </div>
-        </div>
-        
+            <div class="ak-header-stats">
+                <div class="stat-box">LVL <span id="level">1</span></div>
+                <div class="stat-box">⭐ <span id="xp">0</span> XP</div>
+                <div class="stat-box">💰 <span id="coins">150</span></div>
+                <div class="stat-box">🔥 <span id="streak">0</span></div>
+            </div>
+        </header>
+
         <!-- XP Bar -->
-        <div class="xp-bar">
-            <div class="xp-fill" id="xpFill"></div>
+        <div class="ak-xp-container">
+            <div class="ak-xp-bar">
+                <div class="ak-xp-fill" id="xpFill" style="width: 0%"></div>
+            </div>
+            <div class="ak-xp-text">
+                <span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span>
+            </div>
         </div>
-        <div class="xp-text"><span id="xpCurrent">0</span> / 500 XP to Level 2</div>
-        
-        <!-- Layout -->
-        <div class="layout">
+
+        <div class="ak-layout">
             <!-- Sidebar -->
-            <div class="sidebar">
-                <button class="tab-btn active" data-tab="dashboard">📊 DASHBOARD</button>
-                <button class="tab-btn" data-tab="active">📋 ACTIVE MISSIONS</button>
-                <button class="tab-btn" data-tab="bank">📚 TASK BANK</button>
-                <button class="tab-btn" data-tab="shop">🛒 SHOP</button>
-                <button class="tab-btn" data-tab="history">📜 HISTORY</button>
-            </div>
-            
-            <!-- Content -->
-            <div class="content">
-                <!-- Dashboard Tab -->
-                <div id="dashboard" class="tab active">
-                    <h2>Dashboard</h2>
-                    <div class="card">
-                        <p>Active Missions: <strong id="activeCount">0</strong></p>
-                        <p>Completed Today: <strong id="completedToday">0</strong></p>
-                        <p>Total XP: <strong id="totalXP">0</strong></p>
+            <aside class="ak-sidebar">
+                <button class="ak-tab-btn active" data-tab="dashboard">📊 DASHBOARD</button>
+                <button class="ak-tab-btn" data-tab="active">📋 ACTIVE MISSIONS</button>
+                <button class="ak-tab-btn" data-tab="generator">⚙️ TASK GENERATOR</button>
+                <button class="ak-tab-btn" data-tab="bank">📚 TASK BANK</button>
+                <button class="ak-tab-btn" data-tab="bosses">👹 BOSS BATTLES</button>
+                <button class="ak-tab-btn" data-tab="miniquests">⚡ MINI-QUESTS</button>
+                <button class="ak-tab-btn" data-tab="recovery">🔄 RECOVERY</button>
+                <button class="ak-tab-btn" data-tab="avatar">🎭 AVATAR</button>
+                <button class="ak-tab-btn" data-tab="shop">🛒 SHOP</button>
+                <button class="ak-tab-btn" data-tab="history">📜 HISTORY</button>
+                <button class="ak-tab-btn" data-tab="achievements">🏆 ACHIEVEMENTS</button>
+                <button class="ak-tab-btn" data-tab="settings">⚙️ SETTINGS</button>
+                <div class="ak-undo-redo">
+                    <button id="undoBtn">↩️ UNDO</button>
+                    <button id="redoBtn">↪️ REDO</button>
+                </div>
+            </aside>
+
+            <main class="ak-content">
+                <!-- DASHBOARD TAB -->
+                <div id="dashboard" class="ak-tab active">
+                    <h2>⚡ SHADOW DASHBOARD</h2>
+                    <div class="ak-dashboard-grid">
+                        <div class="ak-card">
+                            <h3>🎯 WIN THE DAY</h3>
+                            <div class="win-condition">
+                                <div class="win-item"><span class="win-check" id="winImportant">⬜</span> Critical/Important Mission</div>
+                                <div class="win-item"><span class="win-check" id="winRitual">⬜</span> Ritual Mission</div>
+                                <div class="win-item"><span class="win-check" id="winDoc">⬜</span> Documentation Mission</div>
+                                <div class="win-result" id="winResult">❌ NOT ACHIEVED</div>
+                            </div>
+                        </div>
+                        <div class="ak-card">
+                            <h3>📊 PROGRESS</h3>
+                            <p>Active Missions: <span id="activeCount">0</span></p>
+                            <p>Completed Today: <span id="completedToday">0</span></p>
+                            <p>Total XP Earned: <span id="totalXP">0</span></p>
+                            <p>Current Streak: <span id="streakDisplay">0</span> days</p>
+                        </div>
+                        <div class="ak-card">
+                            <h3>⚡ QUICK ACTIONS</h3>
+                            <button id="genQuickBtn">✨ Quick Generate</button>
+                            <button id="batchImportBtn">📦 Batch Import</button>
+                            <button id="exportReportBtn">📄 Export Report</button>
+                        </div>
                     </div>
-                    <div class="card">
-                        <button id="quickGenBtn">✨ Quick Generate Task</button>
+                </div>
+
+                <!-- ACTIVE MISSIONS TAB -->
+                <div id="active" class="ak-tab">
+                    <h2>📋 ACTIVE MISSIONS</h2>
+                    <div class="ak-filters">
+                        <select id="filterDomain"><option value="">All Domains</option><option value="PhD">PhD</option><option value="Skool">Skool</option><option value="Curriculum">Curriculum</option><option value="Rituals">Rituals</option><option value="Documentation">Documentation</option></select>
+                        <select id="filterDifficulty"><option value="">All Difficulties</option><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option><option value="Elite">Elite</option></select>
+                        <select id="filterPriority"><option value="">All Priorities</option><option value="Critical">Critical</option><option value="Important">Important</option><option value="Maintenance">Maintenance</option></select>
+                        <select id="filterStatus"><option value="active">Active Only</option><option value="all">All Tasks</option></select>
+                    </div>
+                    <div id="activeMissionsList" class="ak-mission-list"></div>
+                </div>
+
+                <!-- TASK GENERATOR TAB -->
+                <div id="generator" class="ak-tab">
+                    <h2>⚙️ TASK GENERATOR</h2>
+                    <div class="ak-card">
+                        <label>🎯 GOAL / MISSION INTENT</label>
+                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review section..."></textarea>
+                        <div class="ak-form-row">
+                            <label>⚔️ DIFFICULTY: <select id="genDifficulty"><option value="Easy">Easy (20 XP)</option><option value="Medium" selected>Medium (40 XP)</option><option value="Hard">Hard (80 XP)</option><option value="Elite">Elite (250 XP)</option></select></label>
+                            <label>⚡ PRIORITY: <select id="genPriority"><option value="Critical">Critical</option><option value="Important" selected>Important</option><option value="Maintenance">Maintenance</option></select></label>
+                            <label>🔄 REPEATABILITY: <select id="genRepeatability"><option value="One-time">One-time</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option></select></label>
+                        </div>
+                        <div class="ak-form-actions">
+                            <button id="generateSingleBtn">✨ Generate Task</button>
+                            <button id="generateChainBtn">🔗 Generate Chain (3 tasks)</button>
+                        </div>
+                        <div id="generatedPreview" class="generated-preview"></div>
+                        <button id="addGeneratedBtn" style="display:none;">➕ ADD TO ACTIVE MISSIONS</button>
+                    </div>
+                    <div class="ak-card">
+                        <h3>📦 BATCH IMPORT</h3>
+                        <textarea id="batchImport" rows="6" placeholder="Paste tasks, one per line:&#10;Title | Domain | Difficulty | XP | Step1, Step2, Step3"></textarea>
+                        <button id="batchImportExecute">📥 IMPORT TASKS</button>
                     </div>
                 </div>
-                
-                <!-- Active Missions Tab -->
-                <div id="active" class="tab">
-                    <h2>Active Missions</h2>
-                    <div id="activeMissionsList"></div>
+
+                <!-- TASK BANK TAB -->
+                <div id="bank" class="ak-tab">
+                    <h2>📚 TASK BANK</h2>
+                    <input type="text" id="bankSearch" placeholder="🔍 Search tasks..." class="ak-search">
+                    <div class="ak-filters">
+                        <select id="bankDomainFilter"><option value="">All Themes</option><option value="PhD">PhD</option><option value="Skool">Skool</option><option value="Curriculum">Curriculum</option></select>
+                        <select id="bankDifficultyFilter"><option value="">All Difficulties</option><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option></select>
+                    </div>
+                    <div id="taskBankList" class="ak-mission-list"></div>
                 </div>
-                
-                <!-- Task Bank Tab -->
-                <div id="bank" class="tab">
-                    <h2>Task Bank</h2>
-                    <div id="taskBankList"></div>
+
+                <!-- BOSS BATTLES TAB -->
+                <div id="bosses" class="ak-tab">
+                    <h2>👹 BOSS BATTLES</h2>
+                    <div class="ak-card">
+                        <p><strong>Epic multi-phase challenges representing major milestones.</strong></p>
+                        <p>Boss battles unlock at level 5 and test your mastery across domains.</p>
+                    </div>
+                    <div id="bossBattlesList" class="ak-mission-list">
+                        <div class="mission-item">
+                            <div class="mission-header"><h3>🐉 The Literature Hydra</h3><span class="badge elite">Elite</span></div>
+                            <p>A multi-headed beast of endless PDFs and contradictory theories.</p>
+                            <p><strong>Reward:</strong> 300 XP, 150 coins, Hydra Fang</p>
+                            <button class="add-boss" data-title="The Literature Hydra" data-domain="Boss" data-difficulty="Elite" data-xp="300" data-steps='["Phase 1: Organize sources","Phase 2: Resolve contradictions","Phase 3: Write synthesis"]'>⚔️ Start Boss Battle</button>
+                        </div>
+                        <div class="mission-item">
+                            <div class="mission-header"><h3>🗿 The Methodology Golem</h3><span class="badge elite">Elite</span></div>
+                            <p>A stone guardian blocking the path until your research design is unshakeable.</p>
+                            <p><strong>Reward:</strong> 350 XP, 175 coins, Golem Core</p>
+                            <button class="add-boss" data-title="The Methodology Golem" data-domain="Boss" data-difficulty="Elite" data-xp="350" data-steps='["Phase 1: Clarify paradigm","Phase 2: Choose design","Phase 3: Write methodology"]'>⚔️ Start Boss Battle</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- Shop Tab -->
-                <div id="shop" class="tab">
-                    <h2>Shop</h2>
-                    <div class="grid" id="shopList"></div>
+
+                <!-- MINI-QUESTS TAB -->
+                <div id="miniquests" class="ak-tab">
+                    <h2>⚡ MINI-QUESTS</h2>
+                    <div class="ak-card">
+                        <p><strong>Quick 2-10 minute missions for momentum and micro-progress.</strong></p>
+                    </div>
+                    <div id="miniQuestsList" class="ak-mission-list">
+                        <div class="mission-item">
+                            <div class="mission-header"><div class="mission-title">⏱️ Start for 30 Seconds</div><span class="badge easy">Very Easy</span></div>
+                            <p>Work on anything for just 30 seconds. That's it.</p>
+                            <p><strong>Reward:</strong> 5 XP</p>
+                            <button class="add-miniquest" data-title="Start for 30 Seconds" data-domain="Mini-Quests" data-difficulty="Easy" data-xp="5" data-steps='["Open any task","Set 30-second timer","Work without pressure","Stop when timer ends"]'>+ Add Mini-Quest</button>
+                        </div>
+                        <div class="mission-item">
+                            <div class="mission-header"><div class="mission-title">✍️ Write One Line</div><span class="badge easy">Very Easy</span></div>
+                            <p>Write exactly one complete sentence. Save and celebrate.</p>
+                            <p><strong>Reward:</strong> 5 XP</p>
+                            <button class="add-miniquest" data-title="Write One Line" data-domain="Mini-Quests" data-difficulty="Easy" data-xp="5" data-steps='["Open document","Write one sentence","Save and close","Celebrate"]'>+ Add Mini-Quest</button>
+                        </div>
+                        <div class="mission-item">
+                            <div class="mission-header"><div class="mission-title">💧 Drink Water</div><span class="badge easy">Very Easy</span></div>
+                            <p>Stand up, drink a full glass of water, take 3 deep breaths.</p>
+                            <p><strong>Reward:</strong> 5 XP</p>
+                            <button class="add-miniquest" data-title="Drink Water" data-domain="Mini-Quests" data-difficulty="Easy" data-xp="5" data-steps='["Stand up","Get water","Drink full glass","Take 3 deep breaths"]'>+ Add Mini-Quest</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- History Tab -->
-                <div id="history" class="tab">
-                    <h2>History</h2>
-                    <div id="historyList"></div>
-                    <button id="reportBtn">Generate Report</button>
-                    <pre id="reportOutput" style="margin-top: 15px; background: #0a0a0c; padding: 10px; border-radius: 6px; display: none;"></pre>
+
+                <!-- RECOVERY TAB -->
+                <div id="recovery" class="ak-tab">
+                    <h2>🔄 RECOVERY MISSIONS</h2>
+                    <div class="ak-card">
+                        <p><strong>Low-energy missions for getting back on track.</strong></p>
+                    </div>
+                    <div id="recoveryMissionsList" class="ak-mission-list">
+                        <div class="mission-item">
+                            <div class="mission-header"><div class="mission-title">⏱️ 2-Minute Re-Entry</div><span class="badge easy">Easy</span></div>
+                            <p>Just open the task and work for 2 minutes. Stop when timer ends.</p>
+                            <p><strong>Reward:</strong> 10 XP</p>
+                            <button class="add-recovery" data-title="2-Minute Re-Entry" data-domain="Recovery" data-difficulty="Easy" data-xp="10" data-steps='["Open stalled task","Set 2-minute timer","Work gently","Stop when timer ends"]'>+ Add Recovery</button>
+                        </div>
+                        <div class="mission-item">
+                            <div class="mission-header"><div class="mission-title">📝 List 3 Things Only</div><span class="badge easy">Easy</span></div>
+                            <p>Write down exactly 3 things on your mind. No more.</p>
+                            <p><strong>Reward:</strong> 10 XP</p>
+                            <button class="add-recovery" data-title="List 3 Things Only" data-domain="Recovery" data-difficulty="Easy" data-xp="10" data-steps='["Write 3 things on your mind","Circle the easiest one","Stop - no more items"]'>+ Add Recovery</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- AVATAR TAB -->
+                <div id="avatar" class="ak-tab">
+                    <h2>🎭 AVATAR CUSTOMIZATION</h2>
+                    <div class="ak-avatar-container">
+                        <div class="ak-avatar-display" id="avatarContainer">
+                            <div style="width: 150px; height: 150px; background: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; border: 3px solid #d62828;">🌙</div>
+                        </div>
+                        <div class="ak-avatar-info">
+                            <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="20" value="Shadow Scholar">
+                            <div class="avatar-stats">
+                                <p>⚔️ XP MULTIPLIER: <span id="xpMult">1.00</span>x</p>
+                                <p>💰 COIN MULTIPLIER: <span id="coinMult">1.00</span>x</p>
+                                <p>🏆 TOTAL XP EARNED: <span id="totalXPEarned">0</span></p>
+                                <p>📜 MISSIONS COMPLETED: <span id="missionsCompleted">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ak-equipped-gear"><h3>⚔️ EQUIPPED GEAR</h3><div id="equippedList" class="gear-list"></div></div>
+                    <div class="ak-owned-gear"><h3>📦 INVENTORY</h3><div id="inventoryList" class="gear-list"></div></div>
+                </div>
+
+                <!-- SHOP TAB -->
+                <div id="shop" class="ak-tab">
+                    <h2>🛒 FORBIDDEN MARKET</h2>
+                    <p>Your coins: <strong id="shopCoins">150</strong> 💰</p>
+                    <div id="shopItemsList" class="ak-shop-grid"></div>
+                </div>
+
+                <!-- HISTORY TAB -->
+                <div id="history" class="ak-tab">
+                    <h2>📜 MISSION HISTORY</h2>
+                    <div id="weeklyHistory"></div>
+                    <button id="generateReportBtn">📄 GENERATE FULL REPORT</button>
+                    <pre id="reportOutput"></pre>
+                </div>
+
+                <!-- ACHIEVEMENTS TAB -->
+                <div id="achievements" class="ak-tab">
+                    <h2>🏆 ACHIEVEMENTS</h2>
+                    <div id="achievementsList" class="ak-achievements-grid"></div>
+                </div>
+
+                <!-- SETTINGS TAB -->
+                <div id="settings" class="ak-tab">
+                    <h2>⚙️ SYSTEM SETTINGS</h2>
+                    <div class="ak-card">
+                        <button id="forceResetBtn">Force Daily Reset</button>
+                        <button id="forceWeeklyResetBtn">Force Weekly Reset</button>
+                        <button id="clearAllBtn" class="danger">⚠️ WIPE ALL PROGRESS</button>
+                        <button id="exportDataBtn">📥 Export Save Data</button>
+                        <input type="file" id="importDataInput" accept=".json" style="display:none">
+                        <button id="importDataBtn">📤 Import Save Data</button>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
-    
-    <!-- Modal -->
-    <div id="taskModal" class="modal">
-        <div class="modal-content">
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="ak-modal">
+        <div class="ak-modal-content">
             <span class="close">&times;</span>
             <h3 id="modalTitle"></h3>
             <div id="modalBody"></div>
-            <textarea id="taskNotes" rows="3" placeholder="Add notes..."></textarea>
-            <button id="saveNotesBtn">Save Notes</button>
+            <label>📝 NOTES:</label>
+            <textarea id="taskNotes" rows="3"></textarea>
+            <div class="modal-actions">
+                <button id="saveTaskNotes">💾 SAVE NOTES</button>
+                <button id="deleteTaskBtn" class="danger">🗑️ DELETE TASK</button>
+            </div>
         </div>
     </div>
-    
-    <!-- Toast -->
-    <div id="toast" class="toast"></div>
-    
+
+    <div id="rewardToast" class="reward-toast"></div>
+
     <script>
         // ============================================================
-        // SIMPLE WORKING SCRIPT
+        // AKATSUKI PH.D QUEST - COMPLETE WORKING SCRIPT
         // ============================================================
         
         console.log('Script loaded!');
         
-        // State
+        // Global state
         let state = {
             xp: 0,
             coins: 150,
             level: 1,
+            streak: 0,
+            lastResetDate: null,
             activeTasks: [],
-            completedHistory: []
+            completedHistory: [],
+            avatar: {
+                name: 'Shadow Scholar',
+                equipped: [],
+                inventory: []
+            }
         };
         
-        // Default tasks
-        const DEFAULT_TASKS = [
-            { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Critical", steps: ["Open mission board", "Review calendar", "Pick top 3 priorities"] },
-            { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, priority: "Important", steps: ["Write accomplishments", "Note blockers", "Record next action"] }
+        // Daily tasks
+        const DAILY_TASKS = [
+            { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Critical", steps: ["Open mission board", "Review calendar", "Pick top 3 priorities", "Start first block"] },
+            { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, priority: "Important", steps: ["Write accomplishments", "Note blockers", "Record next action"] },
+            { title: "Shutdown Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Important", steps: ["Review completed tasks", "Clear workspace", "Set tomorrow's first action"] }
         ];
         
         // Shop items
         const SHOP_ITEMS = [
-            { id: "cloak", name: "Akatsuki Cloak", cost: 150, effect: "+5% XP" },
-            { id: "mask", name: "ANBU Mask", cost: 100, effect: "+3% XP" },
-            { id: "ring", name: "Akatsuki Ring", cost: 80, effect: "+2% XP" }
+            { id: 'cloak_basic', name: 'Akatsuki Cloak', cost: 150, effect: '+5% XP', desc: 'Classic black cloak with red clouds' },
+            { id: 'mask_anbu', name: 'ANBU Mask', cost: 100, effect: '+3% XP', desc: 'White ANBU-style mask' },
+            { id: 'ring_akatsuki', name: 'Akatsuki Ring', cost: 80, effect: '+2% XP, +2% Coins', desc: 'Glowing ring with secret meaning' },
+            { id: 'raven_companion', name: 'Raven Companion', cost: 200, effect: '+10% XP', desc: 'Loyal messenger perched on shoulder' },
+            { id: 'crimson_aura', name: 'Crimson Aura', cost: 120, effect: '+10% Coins', desc: 'Burning red energy aura' }
         ];
         
         // Helper functions
+        function getTodayStr() { return new Date().toISOString().slice(0, 10); }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
         function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+            const toast = document.getElementById('rewardToast');
+            if (toast) {
+                toast.innerHTML = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }
         }
         
         function saveState() {
@@ -383,155 +578,72 @@
                 try {
                     const parsed = JSON.parse(saved);
                     state = { ...state, ...parsed };
-                } catch(e) {}
+                } catch(e) { console.error(e); }
             }
+            state.activeTasks = state.activeTasks || [];
+            state.completedHistory = state.completedHistory || [];
+            state.avatar = state.avatar || { name: 'Shadow Scholar', equipped: [], inventory: [] };
+            
+            if (!state.lastResetDate) state.lastResetDate = getTodayStr();
             
             if (state.activeTasks.length === 0) {
-                DEFAULT_TASKS.forEach(t => {
+                DAILY_TASKS.forEach(t => {
                     state.activeTasks.push({
                         id: Date.now() + '_' + Math.random(),
                         title: t.title,
                         domain: t.domain,
                         difficulty: t.difficulty,
                         xp: t.xp,
+                        repeatability: 'Daily',
                         priority: t.priority,
                         steps: t.steps.map(s => ({ text: s, completed: false })),
+                        notes: '',
+                        startedAt: new Date().toISOString(),
                         completed: false
                     });
                 });
                 saveState();
             }
-            
             updateUI();
         }
         
-        function updateUI() {
-            // Header
-            document.getElementById('level').textContent = state.level;
-            document.getElementById('xp').textContent = state.xp;
-            document.getElementById('coins').textContent = state.coins;
-            
-            // XP Bar
+        function updateXPBar() {
             const xpPerLevel = 500;
-            const progress = (state.xp % xpPerLevel) / xpPerLevel * 100;
-            document.getElementById('xpFill').style.width = progress + '%';
-            document.getElementById('xpCurrent').textContent = state.xp;
+            const currentLevelXp = (state.level - 1) * xpPerLevel;
+            const nextLevelXp = state.level * xpPerLevel;
+            const progress = ((state.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
             
-            // Dashboard
-            const activeCount = state.activeTasks.filter(t => !t.completed).length;
-            const completedToday = state.completedHistory.filter(h => {
-                return h.completedAt && h.completedAt.slice(0,10) === new Date().toISOString().slice(0,10);
-            }).length;
-            document.getElementById('activeCount').textContent = activeCount;
-            document.getElementById('completedToday').textContent = completedToday;
-            document.getElementById('totalXP').textContent = state.xp;
+            const fill = document.getElementById('xpFill');
+            if (fill) fill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
             
-            // Active Missions
-            renderActiveMissions();
-            
-            // Task Bank
-            renderTaskBank();
-            
-            // Shop
-            renderShop();
-            
-            // History
-            renderHistory();
-        }
-        
-        function renderActiveMissions() {
-            const container = document.getElementById('activeMissionsList');
-            if (!container) return;
-            
-            const active = state.activeTasks.filter(t => !t.completed);
-            if (active.length === 0) {
-                container.innerHTML = '<div class="card">✨ No active missions. Add from Task Bank!</div>';
-                return;
-            }
-            
-            container.innerHTML = active.map(task => `
-                <div class="mission-item" data-task-id="${task.id}">
-                    <div class="mission-header">
-                        <strong>${escapeHtml(task.title)}</strong>
-                        <span class="badge ${task.difficulty.toLowerCase()}">${task.difficulty}</span>
-                    </div>
-                    <div>📁 ${task.domain} | ⭐ ${task.xp} XP</div>
-                    <ul class="step-list">
-                        ${task.steps.map((step, idx) => `
-                            <li class="step-item ${step.completed ? 'completed' : ''}" data-step="${idx}">
-                                <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}>
-                                <label>${escapeHtml(step.text)}</label>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <button class="view-details" data-id="${task.id}">📝 Details</button>
-                </div>
-            `).join('');
-        }
-        
-        function renderTaskBank() {
-            const container = document.getElementById('taskBankList');
-            if (!container) return;
-            
-            const bankTasks = [
-                { title: "Write Literature Review", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find sources", "Read articles", "Write synthesis"] },
-                { title: "Create Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add tips"] },
-                { title: "Design Lesson", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment"] }
-            ];
-            
-            container.innerHTML = bankTasks.map(t => `
-                <div class="mission-item">
-                    <div class="mission-header">
-                        <strong>${escapeHtml(t.title)}</strong>
-                        <span class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</span>
-                    </div>
-                    <div>📁 ${t.domain} | ⭐ ${t.xp} XP</div>
-                    <button class="add-task" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
-                </div>
-            `).join('');
-        }
-        
-        function renderShop() {
-            const container = document.getElementById('shopList');
-            if (!container) return;
-            
-            container.innerHTML = SHOP_ITEMS.map(item => `
-                <div class="shop-item">
-                    <h4>${item.name}</h4>
-                    <p>💰 ${item.cost} coins</p>
-                    <p>${item.effect}</p>
-                    <button class="buy-item" data-id="${item.id}" data-cost="${item.cost}" data-name="${item.name}">Purchase</button>
-                </div>
-            `).join('');
-        }
-        
-        function renderHistory() {
-            const container = document.getElementById('historyList');
-            if (!container) return;
-            
-            if (state.completedHistory.length === 0) {
-                container.innerHTML = '<div class="card">No completed missions yet.</div>';
-                return;
-            }
-            
-            container.innerHTML = state.completedHistory.slice().reverse().map(h => `
-                <div class="card">
-                    ✅ ${escapeHtml(h.title)} - ${h.xpGained} XP
-                    ${h.notes ? `<br><small>📝 ${escapeHtml(h.notes)}</small>` : ''}
-                </div>
-            `).join('');
+            const current = document.getElementById('xpCurrent');
+            const next = document.getElementById('xpNext');
+            const nextLevel = document.getElementById('nextLevel');
+            if (current) current.textContent = state.xp;
+            if (next) next.textContent = nextLevelXp;
+            if (nextLevel) nextLevel.textContent = state.level + 1;
         }
         
         function completeTask(taskId) {
             const task = state.activeTasks.find(t => t.id === taskId);
             if (!task || task.completed) return;
             
-            task.completed = true;
             const xpGain = task.xp;
             const coinGain = Math.floor(xpGain * 0.2);
             
+            task.completed = true;
+            task.finishedAt = new Date().toISOString();
             state.xp += xpGain;
             state.coins += coinGain;
+            
+            state.completedHistory.push({
+                taskId: task.id,
+                title: task.title,
+                completedAt: task.finishedAt,
+                xpGained: xpGain,
+                coinsGained: coinGain,
+                notes: task.notes || ''
+            });
             
             // Level up check
             const newLevel = Math.floor(state.xp / 500) + 1;
@@ -541,16 +653,10 @@
                 showToast(`✨ Level ${state.level}! +100 coins`);
             }
             
-            state.completedHistory.push({
-                title: task.title,
-                xpGained: xpGain,
-                completedAt: new Date().toISOString(),
-                notes: task.notes || ''
-            });
-            
+            updateXPBar();
             saveState();
             updateUI();
-            showToast(`✅ ${task.title} +${xpGain} XP`);
+            showToast(`✅ ${task.title} (+${xpGain} XP, +${coinGain} coins)`);
         }
         
         function addTask(title, domain, difficulty, xp, stepsArray) {
@@ -560,66 +666,523 @@
                 domain: domain,
                 difficulty: difficulty,
                 xp: parseInt(xp),
+                repeatability: 'One-time',
                 priority: 'Important',
                 steps: stepsArray.map(s => ({ text: s, completed: false })),
-                completed: false,
-                notes: ''
+                notes: '',
+                startedAt: new Date().toISOString(),
+                completed: false
             });
             saveState();
             updateUI();
             showToast(`Added: ${title}`);
         }
         
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+        function deleteTask(taskId) {
+            if (!confirm('Delete this task?')) return;
+            state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
+            saveState();
+            updateUI();
+            showToast('Task deleted');
         }
         
-        // ============================================================
-        // EVENT HANDLERS (using delegation)
-        // ============================================================
+        // Render functions
+        function updateUI() {
+            // Header
+            document.getElementById('level').textContent = state.level;
+            document.getElementById('xp').textContent = state.xp;
+            document.getElementById('coins').textContent = state.coins;
+            document.getElementById('streak').textContent = state.streak;
+            
+            // Dashboard
+            const activeCount = state.activeTasks.filter(t => !t.completed).length;
+            const completedToday = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === getTodayStr()).length;
+            document.getElementById('activeCount').textContent = activeCount;
+            document.getElementById('completedToday').textContent = completedToday;
+            document.getElementById('totalXP').textContent = state.xp;
+            document.getElementById('streakDisplay').textContent = state.streak;
+            
+            // Win the day
+            const hasImportant = state.activeTasks.some(t => t.completed && (t.priority === 'Critical' || t.priority === 'Important'));
+            const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
+            const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
+            document.getElementById('winImportant').innerHTML = hasImportant ? '✅' : '⬜';
+            document.getElementById('winRitual').innerHTML = hasRitual ? '✅' : '⬜';
+            document.getElementById('winDoc').innerHTML = hasDoc ? '✅' : '⬜';
+            document.getElementById('winResult').innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅ WIN THE DAY!' : '❌ NOT YET';
+            
+            // Avatar
+            document.getElementById('avatarName').value = state.avatar.name;
+            const totalXP = state.completedHistory.reduce((s, h) => s + (h.xpGained || 0), 0);
+            document.getElementById('totalXPEarned').textContent = totalXP;
+            document.getElementById('missionsCompleted').textContent = state.completedHistory.length;
+            
+            // Shop coins
+            document.getElementById('shopCoins').textContent = state.coins;
+            
+            // Render sections
+            renderActiveMissions();
+            renderTaskBank();
+            renderShop();
+            renderHistory();
+            renderAchievements();
+            renderAvatarEquipment();
+        }
         
+        function renderActiveMissions() {
+            const container = document.getElementById('activeMissionsList');
+            if (!container) return;
+            
+            let tasks = state.activeTasks;
+            const statusFilter = document.getElementById('filterStatus')?.value || 'active';
+            if (statusFilter === 'active') tasks = tasks.filter(t => !t.completed);
+            
+            const domainFilter = document.getElementById('filterDomain')?.value || '';
+            if (domainFilter) tasks = tasks.filter(t => t.domain === domainFilter);
+            
+            const difficultyFilter = document.getElementById('filterDifficulty')?.value || '';
+            if (difficultyFilter) tasks = tasks.filter(t => t.difficulty === difficultyFilter);
+            
+            if (tasks.length === 0) {
+                container.innerHTML = '<div class="ak-card">✨ No missions. Add from Task Bank or Generator!</div>';
+                return;
+            }
+            
+            container.innerHTML = tasks.map(task => `
+                <div class="mission-item" data-task-id="${task.id}">
+                    <div class="mission-header">
+                        <div class="mission-title">${escapeHtml(task.title)}</div>
+                        <div class="mission-badge">
+                            <span class="badge ${task.difficulty.toLowerCase()}">${task.difficulty}</span>
+                            <span class="badge ${task.priority.toLowerCase()}">${task.priority}</span>
+                            ${task.completed ? '<span class="badge" style="background:#00cc66">✓ DONE</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="mission-meta">
+                        <span>📁 ${task.domain}</span>
+                        <span>🔄 ${task.repeatability || 'One-time'}</span>
+                        <span>⭐ ${task.xp} XP</span>
+                    </div>
+                    <ul class="step-list">
+                        ${task.steps.map((step, idx) => `
+                            <li class="step-item ${step.completed ? 'completed' : ''}" data-step-index="${idx}">
+                                <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}>
+                                <label>${escapeHtml(step.text)}</label>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div class="mission-actions">
+                        <button class="view-details" data-id="${task.id}">📝 Details</button>
+                        <button class="delete-task" data-id="${task.id}">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderTaskBank() {
+            const container = document.getElementById('taskBankList');
+            if (!container) return;
+            
+            const bankTasks = [
+                { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
+                { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
+                { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
+                { title: "Code Interview Transcript", domain: "Research Assistantship", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] },
+                { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, steps: ["Open board", "Review calendar", "Pick top 3", "Start"] },
+                { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, steps: ["Write accomplishments", "Note blockers", "Record next action"] }
+            ];
+            
+            const searchTerm = document.getElementById('bankSearch')?.value.toLowerCase() || '';
+            const domainFilter = document.getElementById('bankDomainFilter')?.value || '';
+            const difficultyFilter = document.getElementById('bankDifficultyFilter')?.value || '';
+            
+            let filtered = bankTasks;
+            if (searchTerm) filtered = filtered.filter(t => t.title.toLowerCase().includes(searchTerm));
+            if (domainFilter) filtered = filtered.filter(t => t.domain === domainFilter);
+            if (difficultyFilter) filtered = filtered.filter(t => t.difficulty === difficultyFilter);
+            
+            container.innerHTML = filtered.map(t => `
+                <div class="mission-item">
+                    <div class="mission-header">
+                        <div class="mission-title">${escapeHtml(t.title)}</div>
+                        <div class="mission-badge"><span class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</span></div>
+                    </div>
+                    <div class="mission-meta"><span>📁 ${t.domain}</span><span>⭐ ${t.xp} XP</span></div>
+                    <button class="add-task" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
+                </div>
+            `).join('');
+        }
+        
+        function renderShop() {
+            const container = document.getElementById('shopItemsList');
+            if (!container) return;
+            
+            container.innerHTML = SHOP_ITEMS.map(item => {
+                const owned = state.avatar.inventory?.includes(item.id);
+                return `
+                    <div class="shop-item">
+                        <h4>${item.name}</h4>
+                        <p class="price">💰 ${item.cost} coins</p>
+                        <p class="effect">${item.desc}</p>
+                        <p class="effect"><strong>${item.effect}</strong></p>
+                        ${owned ? '<button class="buy-btn" disabled>✓ Owned</button>' : `<button class="buy-item" data-id="${item.id}" data-cost="${item.cost}" data-name="${item.name}">Purchase</button>`}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderHistory() {
+            const container = document.getElementById('weeklyHistory');
+            if (!container) return;
+            
+            if (state.completedHistory.length === 0) {
+                container.innerHTML = '<div class="ak-card">No completed missions yet.</div>';
+                return;
+            }
+            
+            const last7 = [];
+            for (let i = 0; i < 7; i++) {
+                let d = new Date();
+                d.setDate(d.getDate() - i);
+                last7.push(d.toISOString().slice(0,10));
+            }
+            
+            let html = '';
+            for (const day of last7) {
+                const dayTasks = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === day);
+                html += `<div class="ak-card"><h3>📅 ${day}</h3><ul>`;
+                if (dayTasks.length === 0) html += '<li>✨ No missions</li>';
+                else dayTasks.forEach(t => html += `<li>✅ ${escapeHtml(t.title)} (+${t.xpGained} XP)${t.notes ? `<br><span class="note">📝 ${escapeHtml(t.notes)}</span>` : ''}</li>`);
+                html += `</ul></div>`;
+            }
+            container.innerHTML = html;
+        }
+        
+        function renderAchievements() {
+            const container = document.getElementById('achievementsList');
+            if (!container) return;
+            
+            const achievements = [
+                { id: 'first_blood', name: 'First Blood', icon: '🩸', desc: 'Complete first mission', unlocked: state.completedHistory.length > 0 },
+                { id: 'streak_3', name: 'Spark Ignited', icon: '⚡', desc: '3-day streak', unlocked: state.streak >= 3 },
+                { id: 'streak_7', name: 'Week of Discipline', icon: '📅', desc: '7-day streak', unlocked: state.streak >= 7 },
+                { id: 'level_5', name: 'Rising Shadow', icon: '⭐', desc: 'Reach level 5', unlocked: state.level >= 5 },
+                { id: 'level_10', name: 'Akatsuki Commander', icon: '👑', desc: 'Reach level 10', unlocked: state.level >= 10 }
+            ];
+            
+            container.innerHTML = achievements.map(a => `
+                <div class="achievement-item ${a.unlocked ? 'unlocked' : 'locked'}">
+                    <div class="achievement-icon">${a.icon}</div>
+                    <h4>${a.name}</h4>
+                    <p>${a.desc}</p>
+                    ${a.unlocked ? '<span class="badge">✓ UNLOCKED</span>' : '<span class="badge">🔒 LOCKED</span>'}
+                </div>
+            `).join('');
+        }
+        
+        function renderAvatarEquipment() {
+            const equippedContainer = document.getElementById('equippedList');
+            if (equippedContainer) {
+                if (!state.avatar.equipped || state.avatar.equipped.length === 0) {
+                    equippedContainer.innerHTML = '<div class="gear-item">No gear equipped. Visit the Shop!</div>';
+                } else {
+                    equippedContainer.innerHTML = state.avatar.equipped.map(itemId => {
+                        const item = SHOP_ITEMS.find(i => i.id === itemId);
+                        return `<div class="gear-item">${item ? item.name : itemId} <button class="unequip-item" data-id="${itemId}">✖</button></div>`;
+                    }).join('');
+                }
+            }
+            
+            const inventoryContainer = document.getElementById('inventoryList');
+            if (inventoryContainer) {
+                const owned = (state.avatar.inventory || []).filter(id => !(state.avatar.equipped || []).includes(id));
+                if (owned.length === 0) {
+                    inventoryContainer.innerHTML = '<div class="gear-item">No items in inventory. Buy from Shop!</div>';
+                } else {
+                    inventoryContainer.innerHTML = owned.map(itemId => {
+                        const item = SHOP_ITEMS.find(i => i.id === itemId);
+                        return `<div class="gear-item">${item ? item.name : itemId} <button class="equip-item" data-id="${itemId}">⚔️ Equip</button></div>`;
+                    }).join('');
+                }
+            }
+        }
+        
+        function generateReport() {
+            let report = `═══════════════════════════════════════════\n`;
+            report += `              🌙 AKATSUKI MISSION REPORT\n`;
+            report += `═══════════════════════════════════════════\n\n`;
+            report += `📅 GENERATED: ${new Date().toLocaleString()}\n`;
+            report += `👤 SCHOLAR: ${state.avatar.name}\n`;
+            report += `🏆 LEVEL: ${state.level} | XP: ${state.xp} | STREAK: ${state.streak} days\n`;
+            report += `💰 COINS: ${state.coins}\n\n`;
+            report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+            report += `📜 COMPLETED MISSIONS\n`;
+            report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+            
+            if (state.completedHistory.length === 0) {
+                report += `No missions completed yet.\n`;
+            } else {
+                state.completedHistory.forEach((c, i) => {
+                    report += `${i+1}. ${c.title}\n`;
+                    report += `   📅 Completed: ${new Date(c.completedAt).toLocaleString()}\n`;
+                    report += `   🎯 XP Gained: ${c.xpGained} | 💰 Coins: ${c.coinsGained || 0}\n`;
+                    if (c.notes) report += `   📝 Notes: ${c.notes}\n`;
+                    report += `\n`;
+                });
+            }
+            
+            const output = document.getElementById('reportOutput');
+            if (output) {
+                output.textContent = report;
+                output.style.display = 'block';
+                const blob = new Blob([report], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `akatsuki_report_${getTodayStr()}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+        
+        function generateTask() {
+            const goal = document.getElementById('genGoal')?.value;
+            if (!goal) { showToast('Enter a goal first'); return; }
+            
+            const difficulty = document.getElementById('genDifficulty').value;
+            const priority = document.getElementById('genPriority').value;
+            const repeatability = document.getElementById('genRepeatability').value;
+            const xpMap = { 'Easy': 20, 'Medium': 40, 'Hard': 80, 'Elite': 250 };
+            const xpVal = xpMap[difficulty] || 40;
+            
+            const newTask = {
+                id: Date.now() + '_' + Math.random(),
+                title: goal,
+                domain: 'General',
+                difficulty: difficulty,
+                xp: xpVal,
+                repeatability: repeatability,
+                priority: priority,
+                steps: [
+                    { text: `Define scope: ${goal.substring(0,50)}`, completed: false },
+                    { text: 'Break down into sub-tasks', completed: false },
+                    { text: 'Execute main work', completed: false },
+                    { text: 'Review and document results', completed: false }
+                ],
+                notes: '',
+                startedAt: new Date().toISOString(),
+                completed: false
+            };
+            
+            const preview = document.getElementById('generatedPreview');
+            if (preview) {
+                preview.innerHTML = `<div class="mission-item"><strong>📋 ${escapeHtml(goal)}</strong><br>${difficulty} · ${xpVal} XP</div>`;
+            }
+            
+            const addBtn = document.getElementById('addGeneratedBtn');
+            if (addBtn) {
+                addBtn.style.display = 'inline-block';
+                addBtn.onclick = () => {
+                    state.activeTasks.push(newTask);
+                    saveState();
+                    updateUI();
+                    if (preview) preview.innerHTML = '';
+                    addBtn.style.display = 'none';
+                    document.getElementById('genGoal').value = '';
+                    showToast(`Added: ${newTask.title}`);
+                };
+            }
+        }
+        
+        function generateChain() {
+            const goal = document.getElementById('genGoal')?.value;
+            if (!goal) { showToast('Enter a goal first'); return; }
+            
+            const difficulty = document.getElementById('genDifficulty').value;
+            const xpMap = { 'Easy': 20, 'Medium': 40, 'Hard': 80, 'Elite': 250 };
+            const xpVal = xpMap[difficulty] || 40;
+            
+            const tasks = [];
+            for (let i = 1; i <= 3; i++) {
+                tasks.push({
+                    id: Date.now() + '_' + Math.random(),
+                    title: i === 1 ? goal : `${goal} (Part ${i} of 3)`,
+                    domain: 'General',
+                    difficulty: difficulty,
+                    xp: xpVal,
+                    repeatability: 'One-time',
+                    priority: i === 1 ? 'Critical' : 'Important',
+                    steps: [
+                        { text: `Step 1 for this task`, completed: false },
+                        { text: `Step 2 for this task`, completed: false },
+                        { text: `Step 3 for this task`, completed: false }
+                    ],
+                    notes: '',
+                    startedAt: new Date().toISOString(),
+                    completed: false
+                });
+            }
+            
+            const preview = document.getElementById('generatedPreview');
+            if (preview) {
+                preview.innerHTML = `<div class="mission-item"><strong>🔗 Chain: ${escapeHtml(goal)}</strong><br>3 tasks · ${xpVal * 3} total XP</div>`;
+            }
+            
+            const addBtn = document.getElementById('addGeneratedBtn');
+            if (addBtn) {
+                addBtn.style.display = 'inline-block';
+                addBtn.onclick = () => {
+                    tasks.forEach(t => state.activeTasks.push(t));
+                    saveState();
+                    updateUI();
+                    if (preview) preview.innerHTML = '';
+                    addBtn.style.display = 'none';
+                    document.getElementById('genGoal').value = '';
+                    showToast(`Added chain: ${goal}`);
+                };
+            }
+        }
+        
+        function batchImport() {
+            const text = document.getElementById('batchImport')?.value;
+            if (!text) { showToast('Paste tasks to import'); return; }
+            
+            const lines = text.split('\n');
+            let imported = 0;
+            for (const line of lines) {
+                if (!line.trim()) continue;
+                const parts = line.split('|').map(p => p.trim());
+                if (parts.length >= 2) {
+                    const steps = (parts[4] || 'Plan,Execute,Review').split(',').map(s => ({ text: s.trim(), completed: false }));
+                    state.activeTasks.push({
+                        id: Date.now() + '_' + Math.random(),
+                        title: parts[0],
+                        domain: parts[1] || 'General',
+                        difficulty: parts[2] || 'Medium',
+                        xp: parseInt(parts[3]) || 30,
+                        repeatability: 'One-time',
+                        priority: 'Important',
+                        steps: steps,
+                        notes: '',
+                        startedAt: new Date().toISOString(),
+                        completed: false
+                    });
+                    imported++;
+                }
+            }
+            if (imported > 0) {
+                saveState();
+                updateUI();
+                showToast(`Imported ${imported} tasks!`);
+                document.getElementById('batchImport').value = '';
+            } else {
+                showToast('No valid tasks found');
+            }
+        }
+        
+        function exportData() {
+            const data = { version: '2.0', exportDate: new Date().toISOString(), state: state };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `akatsuki_save_${getTodayStr()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Data exported');
+        }
+        
+        // Event delegation
         function setupEventDelegation() {
-            // Handle all clicks on the content area
-            document.querySelector('.content').addEventListener('click', function(e) {
+            const content = document.querySelector('.ak-content');
+            if (!content) return;
+            
+            // Checkbox changes
+            content.addEventListener('change', (e) => {
+                if (e.target.classList.contains('step-checkbox')) {
+                    const li = e.target.closest('.step-item');
+                    const stepIdx = parseInt(li.dataset.stepIndex);
+                    const missionDiv = li.closest('.mission-item');
+                    const taskId = missionDiv.dataset.taskId;
+                    const task = state.activeTasks.find(t => t.id === taskId);
+                    
+                    if (task && task.steps[stepIdx]) {
+                        task.steps[stepIdx].completed = e.target.checked;
+                        if (e.target.checked) li.classList.add('completed');
+                        else li.classList.remove('completed');
+                        
+                        const allDone = task.steps.every(s => s.completed);
+                        if (allDone && !task.completed) completeTask(taskId);
+                        saveState();
+                        updateUI();
+                    }
+                }
+            });
+            
+            // Button clicks
+            content.addEventListener('click', (e) => {
                 const target = e.target;
                 
-                // Add task from bank
+                // Add from bank
                 if (target.classList.contains('add-task')) {
                     const steps = JSON.parse(target.dataset.steps);
                     addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
                 }
                 
-                // View task details
+                // Add boss
+                if (target.classList.contains('add-boss')) {
+                    const steps = JSON.parse(target.dataset.steps);
+                    addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
+                }
+                
+                // Add mini-quest
+                if (target.classList.contains('add-miniquest')) {
+                    const steps = JSON.parse(target.dataset.steps);
+                    addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
+                }
+                
+                // Add recovery
+                if (target.classList.contains('add-recovery')) {
+                    const steps = JSON.parse(target.dataset.steps);
+                    addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
+                }
+                
+                // View details
                 if (target.classList.contains('view-details')) {
-                    const taskId = target.dataset.id;
-                    const task = state.activeTasks.find(t => t.id === taskId);
+                    const task = state.activeTasks.find(t => t.id === target.dataset.id);
                     if (task) {
                         document.getElementById('modalTitle').textContent = task.title;
-                        document.getElementById('modalBody').innerHTML = `<p>Domain: ${task.domain}</p><p>XP: ${task.xp}</p>`;
+                        document.getElementById('modalBody').innerHTML = `<p>Domain: ${task.domain}</p><p>XP: ${task.xp}</p><p>Started: ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>`;
                         document.getElementById('taskNotes').value = task.notes || '';
                         document.getElementById('taskModal').style.display = 'flex';
                         
-                        document.getElementById('saveNotesBtn').onclick = () => {
+                        document.getElementById('saveTaskNotes').onclick = () => {
                             task.notes = document.getElementById('taskNotes').value;
                             saveState();
                             document.getElementById('taskModal').style.display = 'none';
                             showToast('Notes saved');
                         };
+                        document.getElementById('deleteTaskBtn').onclick = () => {
+                            deleteTask(task.id);
+                            document.getElementById('taskModal').style.display = 'none';
+                        };
                     }
+                }
+                
+                // Delete task
+                if (target.classList.contains('delete-task')) {
+                    deleteTask(target.dataset.id);
                 }
                 
                 // Buy item
                 if (target.classList.contains('buy-item')) {
+                    const id = target.dataset.id;
                     const cost = parseInt(target.dataset.cost);
                     const name = target.dataset.name;
                     if (state.coins >= cost) {
                         state.coins -= cost;
+                        if (!state.avatar.inventory) state.avatar.inventory = [];
+                        state.avatar.inventory.push(id);
                         saveState();
                         updateUI();
                         showToast(`Purchased: ${name}`);
@@ -627,103 +1190,132 @@
                         showToast(`Need ${cost - state.coins} more coins`);
                     }
                 }
-            });
-            
-            // Handle checkbox changes (delegation)
-            document.querySelector('.content').addEventListener('change', function(e) {
-                if (e.target.classList.contains('step-checkbox')) {
-                    const li = e.target.closest('.step-item');
-                    const stepIndex = parseInt(li.dataset.step);
-                    const missionDiv = li.closest('.mission-item');
-                    const taskId = missionDiv.dataset.taskId;
-                    const task = state.activeTasks.find(t => t.id === taskId);
-                    
-                    if (task && task.steps[stepIndex]) {
-                        task.steps[stepIndex].completed = e.target.checked;
-                        if (e.target.checked) {
-                            li.classList.add('completed');
-                        } else {
-                            li.classList.remove('completed');
-                        }
-                        
-                        // Check if all steps completed
-                        const allDone = task.steps.every(s => s.completed);
-                        if (allDone && !task.completed) {
-                            completeTask(taskId);
-                        }
+                
+                // Equip item
+                if (target.classList.contains('equip-item')) {
+                    const id = target.dataset.id;
+                    if (!state.avatar.equipped.includes(id)) {
+                        state.avatar.equipped.push(id);
                         saveState();
                         updateUI();
+                        showToast('Item equipped');
                     }
+                }
+                
+                // Unequip item
+                if (target.classList.contains('unequip-item')) {
+                    const id = target.dataset.id;
+                    state.avatar.equipped = state.avatar.equipped.filter(i => i !== id);
+                    saveState();
+                    updateUI();
+                    showToast('Item unequipped');
                 }
             });
         }
         
         function setupEventListeners() {
             // Tab switching
-            document.querySelectorAll('.tab-btn').forEach(btn => {
+            document.querySelectorAll('.ak-tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const tabId = btn.dataset.tab;
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.ak-tab').forEach(t => t.classList.remove('active'));
                     document.getElementById(tabId).classList.add('active');
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.ak-tab-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                 });
             });
             
-            // Quick generate
-            document.getElementById('quickGenBtn').addEventListener('click', () => {
-                const goal = prompt('Enter your task goal:');
-                if (goal) {
-                    addTask(goal, 'General', 'Medium', 30, ['Plan task', 'Execute work', 'Review results']);
-                }
+            // Generator buttons
+            document.getElementById('generateSingleBtn')?.addEventListener('click', generateTask);
+            document.getElementById('generateChainBtn')?.addEventListener('click', generateChain);
+            document.getElementById('batchImportExecute')?.addEventListener('click', batchImport);
+            
+            // Quick actions
+            document.getElementById('genQuickBtn')?.addEventListener('click', () => {
+                document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
+            });
+            document.getElementById('batchImportBtn')?.addEventListener('click', () => {
+                document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
             });
             
-            // Report button
-            document.getElementById('reportBtn').addEventListener('click', () => {
-                let report = `AKATSUKI REPORT\n`;
-                report += `Generated: ${new Date().toLocaleString()}\n`;
-                report += `Level: ${state.level} | XP: ${state.xp} | Coins: ${state.coins}\n`;
-                report += `\nCompleted Missions:\n`;
-                state.completedHistory.forEach((c, i) => {
-                    report += `${i+1}. ${c.title} (+${c.xpGained} XP)\n`;
-                    if (c.notes) report += `   Notes: ${c.notes}\n`;
-                });
-                
-                const output = document.getElementById('reportOutput');
-                output.textContent = report;
-                output.style.display = 'block';
-                
-                // Download
-                const blob = new Blob([report], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `akatsuki_report_${new Date().toISOString().slice(0,10)}.txt`;
-                a.click();
-                URL.revokeObjectURL(url);
+            // Report
+            document.getElementById('exportReportBtn')?.addEventListener('click', generateReport);
+            document.getElementById('generateReportBtn')?.addEventListener('click', generateReport);
+            
+            // Reset
+            document.getElementById('forceResetBtn')?.addEventListener('click', () => {
+                state.lastResetDate = getTodayStr();
+                saveState();
+                showToast('Daily reset completed');
             });
+            document.getElementById('forceWeeklyResetBtn')?.addEventListener('click', () => {
+                showToast('Weekly reset completed');
+            });
+            document.getElementById('clearAllBtn')?.addEventListener('click', () => {
+                if (confirm('Wipe all progress?')) { localStorage.clear(); location.reload(); }
+            });
+            
+            // Data
+            document.getElementById('exportDataBtn')?.addEventListener('click', exportData);
+            document.getElementById('importDataBtn')?.addEventListener('click', () => {
+                document.getElementById('importDataInput')?.click();
+            });
+            document.getElementById('importDataInput')?.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const imported = JSON.parse(ev.target.result);
+                        if (imported.state) {
+                            state = { ...state, ...imported.state };
+                            saveState();
+                            updateUI();
+                            showToast('Data imported');
+                        }
+                    } catch(err) { showToast('Invalid file'); }
+                };
+                reader.readAsText(file);
+            });
+            
+            // Avatar name
+            document.getElementById('avatarName')?.addEventListener('change', (e) => {
+                state.avatar.name = e.target.value;
+                saveState();
+            });
+            
+            // Filters
+            document.getElementById('filterDomain')?.addEventListener('change', () => updateUI());
+            document.getElementById('filterDifficulty')?.addEventListener('change', () => updateUI());
+            document.getElementById('filterStatus')?.addEventListener('change', () => updateUI());
+            document.getElementById('bankSearch')?.addEventListener('input', () => renderTaskBank());
+            document.getElementById('bankDomainFilter')?.addEventListener('change', () => renderTaskBank());
+            document.getElementById('bankDifficultyFilter')?.addEventListener('change', () => renderTaskBank());
             
             // Modal close
-            document.querySelector('.close').addEventListener('click', () => {
+            document.querySelector('.close')?.addEventListener('click', () => {
                 document.getElementById('taskModal').style.display = 'none';
             });
             window.addEventListener('click', (e) => {
                 const modal = document.getElementById('taskModal');
                 if (e.target === modal) modal.style.display = 'none';
             });
+            
+            // Undo/Redo placeholders
+            document.getElementById('undoBtn')?.addEventListener('click', () => showToast('Undo coming soon'));
+            document.getElementById('redoBtn')?.addEventListener('click', () => showToast('Redo coming soon'));
         }
         
         // Initialize
         function init() {
-            console.log('Initializing app...');
+            console.log('Initializing Akatsuki Quest...');
             loadState();
             setupEventListeners();
             setupEventDelegation();
             updateUI();
-            console.log('App ready!');
+            console.log('Ready!');
         }
         
-        // Start
         init();
     </script>
 </body>
