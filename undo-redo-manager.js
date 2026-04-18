@@ -9,46 +9,28 @@ class UndoRedoManager {
     this.isExecuting = false;
   }
 
-  /**
-   * Execute a command and push to history
-   * @param {Object} command - { execute, undo, description }
-   */
   execute(command) {
     if (this.isExecuting) return;
-    
     this.isExecuting = true;
-    
     try {
-      // Execute the command
       if (command.execute) command.execute();
-      
-      // Push to undo stack
       this.undoStack.push(command);
-      
-      // Clear redo stack on new action
       this.redoStack = [];
-      
-      // Trim history
       while (this.undoStack.length > this.maxHistory) {
         this.undoStack.shift();
       }
-      
       this._notifyChange();
     } finally {
       this.isExecuting = false;
     }
   }
 
-  /**
-   * Undo last command
-   */
   undo() {
     const command = this.undoStack.pop();
     if (!command) {
       this._showToast('Nothing to undo');
       return false;
     }
-    
     this.isExecuting = true;
     try {
       if (command.undo) command.undo();
@@ -61,16 +43,12 @@ class UndoRedoManager {
     }
   }
 
-  /**
-   * Redo last undone command
-   */
   redo() {
     const command = this.redoStack.pop();
     if (!command) {
       this._showToast('Nothing to redo');
       return false;
     }
-    
     this.isExecuting = true;
     try {
       if (command.execute) command.execute();
@@ -83,39 +61,18 @@ class UndoRedoManager {
     }
   }
 
-  /**
-   * Clear all history
-   */
   clear() {
     this.undoStack = [];
     this.redoStack = [];
     this._notifyChange();
   }
 
-  /**
-   * Check if undo is available
-   */
-  canUndo() {
-    return this.undoStack.length > 0;
-  }
-
-  /**
-   * Check if redo is available
-   */
-  canRedo() {
-    return this.redoStack.length > 0;
-  }
-
-  /**
-   * Get undo description (for UI hint)
-   */
+  canUndo() { return this.undoStack.length > 0; }
+  canRedo() { return this.redoStack.length > 0; }
   getUndoDescription() {
     return this.undoStack.length > 0 ? this.undoStack[this.undoStack.length - 1].description : null;
   }
 
-  /**
-   * Notify listeners of history change
-   */
   _notifyChange() {
     if (window.onHistoryChange) {
       window.onHistoryChange({
@@ -136,14 +93,7 @@ class UndoRedoManager {
   }
 }
 
-// ============================================================
-// COMMAND FACTORIES - Create commands for common operations
-// ============================================================
-
 const TaskCommands = {
-  /**
-   * Create command for adding a task
-   */
   addTask(task, options = {}) {
     const { state, saveState, renderAll } = options;
     return {
@@ -161,9 +111,6 @@ const TaskCommands = {
     };
   },
 
-  /**
-   * Create command for deleting a task
-   */
   deleteTask(taskId, taskData, options = {}) {
     const { state, saveState, renderAll } = options;
     return {
@@ -183,9 +130,6 @@ const TaskCommands = {
     };
   },
 
-  /**
-   * Create command for toggling a step
-   */
   toggleStep(taskId, stepIndex, oldCompleted, options = {}) {
     const { state, saveState, renderAll, completeTask } = options;
     return {
@@ -196,8 +140,6 @@ const TaskCommands = {
           task.steps[stepIndex].completed = !oldCompleted;
           if (saveState) saveState();
           if (renderAll) renderAll();
-          
-          // Check if task should auto-complete
           const allDone = task.steps.every(s => s.completed);
           if (allDone && !task.completed && completeTask) {
             completeTask(taskId);
@@ -215,35 +157,25 @@ const TaskCommands = {
     };
   },
 
-  /**
-   * Create command for editing a step (text)
-   */
   editStep(taskId, stepIndex, oldText, newText, options = {}) {
     const { state, saveState, renderAll } = options;
     return {
       description: `Edit step: "${oldText.substring(0, 20)}..."`,
       execute: () => {
         const task = state.activeTasks.find(t => t.id === taskId);
-        if (task && task.steps[stepIndex]) {
-          task.steps[stepIndex].text = newText;
-          if (saveState) saveState();
-          if (renderAll) renderAll();
-        }
+        if (task && task.steps[stepIndex]) task.steps[stepIndex].text = newText;
+        if (saveState) saveState();
+        if (renderAll) renderAll();
       },
       undo: () => {
         const task = state.activeTasks.find(t => t.id === taskId);
-        if (task && task.steps[stepIndex]) {
-          task.steps[stepIndex].text = oldText;
-          if (saveState) saveState();
-          if (renderAll) renderAll();
-        }
+        if (task && task.steps[stepIndex]) task.steps[stepIndex].text = oldText;
+        if (saveState) saveState();
+        if (renderAll) renderAll();
       }
     };
   },
 
-  /**
-   * Create command for adding a step
-   */
   addStep(taskId, stepIndex, stepText, options = {}) {
     const { state, saveState, renderAll } = options;
     return {
@@ -252,11 +184,8 @@ const TaskCommands = {
         const task = state.activeTasks.find(t => t.id === taskId);
         if (task) {
           const newStep = { text: stepText, completed: false };
-          if (stepIndex !== undefined) {
-            task.steps.splice(stepIndex, 0, newStep);
-          } else {
-            task.steps.push(newStep);
-          }
+          if (stepIndex !== undefined) task.steps.splice(stepIndex, 0, newStep);
+          else task.steps.push(newStep);
           if (saveState) saveState();
           if (renderAll) renderAll();
         }
@@ -264,11 +193,8 @@ const TaskCommands = {
       undo: () => {
         const task = state.activeTasks.find(t => t.id === taskId);
         if (task) {
-          if (stepIndex !== undefined) {
-            task.steps.splice(stepIndex, 1);
-          } else {
-            task.steps.pop();
-          }
+          if (stepIndex !== undefined) task.steps.splice(stepIndex, 1);
+          else task.steps.pop();
           if (saveState) saveState();
           if (renderAll) renderAll();
         }
@@ -276,13 +202,10 @@ const TaskCommands = {
     };
   },
 
-  /**
-   * Create command for deleting a step
-   */
   deleteStep(taskId, stepIndex, stepData, options = {}) {
     const { state, saveState, renderAll } = options;
     return {
-      description: `Delete step: "${stepData?.text?.substring(0, 20) || ''}..."`,
+      description: `Delete step`,
       execute: () => {
         const task = state.activeTasks.find(t => t.id === taskId);
         if (task && task.steps[stepIndex]) {
@@ -302,9 +225,6 @@ const TaskCommands = {
     };
   },
 
-  /**
-   * Create command for reordering steps
-   */
   reorderSteps(taskId, oldOrder, newOrder, options = {}) {
     const { state, saveState, renderAll } = options;
     return {
@@ -328,41 +248,10 @@ const TaskCommands = {
         }
       }
     };
-  },
-
-  /**
-   * Create command for editing task properties
-   */
-  editTaskProperty(taskId, property, oldValue, newValue, options = {}) {
-    const { state, saveState, renderAll } = options;
-    return {
-      description: `Edit ${property}: "${oldValue}" → "${newValue}"`,
-      execute: () => {
-        const task = state.activeTasks.find(t => t.id === taskId);
-        if (task) {
-          task[property] = newValue;
-          if (saveState) saveState();
-          if (renderAll) renderAll();
-        }
-      },
-      undo: () => {
-        const task = state.activeTasks.find(t => t.id === taskId);
-        if (task) {
-          task[property] = oldValue;
-          if (saveState) saveState();
-          if (renderAll) renderAll();
-        }
-      }
-    };
   }
 };
 
-// Export for use in main script
 if (typeof window !== 'undefined') {
   window.UndoRedoManager = UndoRedoManager;
   window.TaskCommands = TaskCommands;
-}
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { UndoRedoManager, TaskCommands };
 }
