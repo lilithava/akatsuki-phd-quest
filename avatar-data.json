@@ -140,3 +140,676 @@
     }
   ]
 }
+/**
+ * Akatsuki Avatar Renderer
+ * Renders SVG avatars with layered components, equipment, and visual effects
+ * Integrates with shop-data.json for equipment and achievement-data.json for unlocks
+ */
+
+class AkatsukiAvatarRenderer {
+    constructor(options = {}) {
+        this.container = options.container || document.getElementById('avatarContainer');
+        this.avatarData = options.avatarData || null;
+        this.shopData = options.shopData || null;
+        this.achievementData = options.achievementData || null;
+        this.state = {
+            currentAvatar: null,
+            equippedItems: [],
+            unlockedFeatures: [],
+            currentAnimation: null
+        };
+        this.svg = null;
+        this.defs = null;
+    }
+
+    /**
+     * Initialize the renderer with avatar data
+     */
+    async init(avatarState) {
+        this.state.currentAvatar = avatarState;
+        this.createSVGContainer();
+        await this.loadAssets();
+        this.render();
+    }
+
+    /**
+     * Create the main SVG element
+     */
+    createSVGContainer() {
+        this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.svg.setAttribute('width', '200');
+        this.svg.setAttribute('height', '200');
+        this.svg.setAttribute('viewBox', '0 0 200 200');
+        this.svg.style.backgroundColor = 'transparent';
+        
+        // Add defs for gradients and filters
+        this.defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        this.svg.appendChild(this.defs);
+        
+        this.container.innerHTML = '';
+        this.container.appendChild(this.svg);
+    }
+
+    /**
+     * Load SVG assets and data
+     */
+    async loadAssets() {
+        // In production, these would load from actual files
+        // For now, we'll use built-in drawing methods
+        this.assets = {
+            loaded: true
+        };
+    }
+
+    /**
+     * Main render method - draws all layers in order
+     */
+    render() {
+        if (!this.svg) return;
+        
+        // Clear previous render (keep defs)
+        const children = Array.from(this.svg.children);
+        children.forEach(child => {
+            if (child !== this.defs) {
+                this.svg.removeChild(child);
+            }
+        });
+        
+        // Render layers in z-index order
+        this.renderBackground();
+        this.renderBody();
+        this.renderOutfit();
+        this.renderCloak();
+        this.renderAccessories();
+        this.renderMask();
+        this.renderHeadwear();
+        this.renderCompanion();
+        this.renderAura();
+        this.renderEffects();
+        
+        // Add floating animation
+        this.addAnimation();
+    }
+
+    /**
+     * Render background circle
+     */
+    renderBackground() {
+        const bg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        bg.setAttribute('cx', '100');
+        bg.setAttribute('cy', '100');
+        bg.setAttribute('r', '90');
+        bg.setAttribute('fill', this.getColor('background', '#1a1a2e'));
+        bg.setAttribute('stroke', this.getColor('border', '#d62828'));
+        bg.setAttribute('stroke-width', '3');
+        this.svg.appendChild(bg);
+    }
+
+    /**
+     * Render body with blendshapes
+     */
+    renderBody() {
+        const bodyType = this.state.currentAvatar?.bodyType || 'standard';
+        const bodyColors = {
+            standard: { skin: '#e8c4a0', shadow: '#c49a6c' },
+            tall: { skin: '#e8c4a0', shadow: '#c49a6c' },
+            athletic: { skin: '#d4a574', shadow: '#b8895a' }
+        };
+        
+        const skinColor = this.getColor('skin', bodyColors[bodyType]?.skin || '#e8c4a0');
+        
+        // Head
+        const head = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        head.setAttribute('cx', '100');
+        head.setAttribute('cy', '85');
+        head.setAttribute('r', '35');
+        head.setAttribute('fill', skinColor);
+        this.svg.appendChild(head);
+        
+        // Body/torso
+        const torso = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        torso.setAttribute('d', 'M 75 120 L 75 170 Q 100 185 125 170 L 125 120 Z');
+        torso.setAttribute('fill', skinColor);
+        this.svg.appendChild(torso);
+        
+        // Render facial features
+        this.renderFacialFeatures();
+    }
+
+    /**
+     * Render facial features (eyes, mouth, eyebrows)
+     */
+    renderFacialFeatures() {
+        const eyeType = this.state.currentAvatar?.eyes || 'default';
+        const mouthType = this.state.currentAvatar?.mouth || 'neutral';
+        
+        // Eyes
+        if (eyeType === 'sharingan') {
+            this.renderSharinganEyes();
+        } else if (eyeType === 'byakugan') {
+            this.renderByakuganEyes();
+        } else {
+            this.renderDefaultEyes();
+        }
+        
+        // Mouth
+        this.renderMouth(mouthType);
+        
+        // Eyebrows
+        this.renderEyebrows();
+    }
+
+    /**
+     * Render default eyes
+     */
+    renderDefaultEyes() {
+        const leftEye = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        leftEye.setAttribute('cx', '82');
+        leftEye.setAttribute('cy', '78');
+        leftEye.setAttribute('rx', '7');
+        leftEye.setAttribute('ry', '9');
+        leftEye.setAttribute('fill', '#2a2a2e');
+        this.svg.appendChild(leftEye);
+        
+        const rightEye = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        rightEye.setAttribute('cx', '118');
+        rightEye.setAttribute('cy', '78');
+        rightEye.setAttribute('rx', '7');
+        rightEye.setAttribute('ry', '9');
+        rightEye.setAttribute('fill', '#2a2a2e');
+        this.svg.appendChild(rightEye);
+        
+        // Eye highlights
+        const leftHighlight = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        leftHighlight.setAttribute('cx', '80');
+        leftHighlight.setAttribute('cy', '75');
+        leftHighlight.setAttribute('r', '2');
+        leftHighlight.setAttribute('fill', '#ffffff');
+        this.svg.appendChild(leftHighlight);
+        
+        const rightHighlight = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        rightHighlight.setAttribute('cx', '116');
+        rightHighlight.setAttribute('cy', '75');
+        rightHighlight.setAttribute('r', '2');
+        rightHighlight.setAttribute('fill', '#ffffff');
+        this.svg.appendChild(rightHighlight);
+    }
+
+    /**
+     * Render Sharingan eyes (achievement reward)
+     */
+    renderSharinganEyes() {
+        const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+        pattern.setAttribute('id', 'sharingan');
+        pattern.setAttribute('width', '20');
+        pattern.setAttribute('height', '20');
+        pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+        
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', '10');
+        circle.setAttribute('cy', '10');
+        circle.setAttribute('r', '8');
+        circle.setAttribute('fill', '#d62828');
+        pattern.appendChild(circle);
+        this.defs.appendChild(pattern);
+        
+        const leftEye = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        leftEye.setAttribute('cx', '82');
+        leftEye.setAttribute('cy', '78');
+        leftEye.setAttribute('rx', '8');
+        leftEye.setAttribute('ry', '10');
+        leftEye.setAttribute('fill', 'url(#sharingan)');
+        this.svg.appendChild(leftEye);
+        
+        const rightEye = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        rightEye.setAttribute('cx', '118');
+        rightEye.setAttribute('cy', '78');
+        rightEye.setAttribute('rx', '8');
+        rightEye.setAttribute('ry', '10');
+        rightEye.setAttribute('fill', 'url(#sharingan)');
+        this.svg.appendChild(rightEye);
+    }
+
+    /**
+     * Render Byakugan eyes
+     */
+    renderByakuganEyes() {
+        const leftEye = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        leftEye.setAttribute('cx', '82');
+        leftEye.setAttribute('cy', '78');
+        leftEye.setAttribute('rx', '9');
+        leftEye.setAttribute('ry', '11');
+        leftEye.setAttribute('fill', '#e6e6e6');
+        leftEye.setAttribute('stroke', '#9b59b6');
+        leftEye.setAttribute('stroke-width', '1.5');
+        this.svg.appendChild(leftEye);
+        
+        const rightEye = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        rightEye.setAttribute('cx', '118');
+        rightEye.setAttribute('cy', '78');
+        rightEye.setAttribute('rx', '9');
+        rightEye.setAttribute('ry', '11');
+        rightEye.setAttribute('fill', '#e6e6e6');
+        rightEye.setAttribute('stroke', '#9b59b6');
+        rightEye.setAttribute('stroke-width', '1.5');
+        this.svg.appendChild(rightEye);
+    }
+
+    /**
+     * Render mouth based on type
+     */
+    renderMouth(type) {
+        const mouth = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        
+        switch(type) {
+            case 'smile':
+                mouth.setAttribute('d', 'M 88 100 Q 100 112 112 100');
+                break;
+            case 'determined':
+                mouth.setAttribute('d', 'M 88 100 L 100 108 L 112 100');
+                break;
+            default: // neutral
+                mouth.setAttribute('d', 'M 90 100 Q 100 103 110 100');
+        }
+        
+        mouth.setAttribute('fill', 'none');
+        mouth.setAttribute('stroke', '#2a2a2e');
+        mouth.setAttribute('stroke-width', '2');
+        this.svg.appendChild(mouth);
+    }
+
+    /**
+     * Render eyebrows
+     */
+    renderEyebrows() {
+        const browType = this.state.currentAvatar?.eyebrows || 'default';
+        
+        const leftBrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const rightBrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        
+        if (browType === 'angry') {
+            leftBrow.setAttribute('d', 'M 72 65 Q 82 60 88 68');
+            rightBrow.setAttribute('d', 'M 128 65 Q 118 60 112 68');
+        } else {
+            leftBrow.setAttribute('d', 'M 74 65 Q 82 62 90 65');
+            rightBrow.setAttribute('d', 'M 126 65 Q 118 62 110 65');
+        }
+        
+        leftBrow.setAttribute('fill', 'none');
+        leftBrow.setAttribute('stroke', this.getColor('hair', '#1a1a1a'));
+        leftBrow.setAttribute('stroke-width', '3');
+        this.svg.appendChild(leftBrow);
+        
+        rightBrow.setAttribute('fill', 'none');
+        rightBrow.setAttribute('stroke', this.getColor('hair', '#1a1a1a'));
+        rightBrow.setAttribute('stroke-width', '3');
+        this.svg.appendChild(rightBrow);
+    }
+
+    /**
+     * Render outfit/clothing
+     */
+    renderOutfit() {
+        const outfitColor = this.getColor('outfit', '#1a1a2e');
+        
+        // Shirt/base
+        const shirt = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        shirt.setAttribute('d', 'M 70 130 L 70 175 Q 100 190 130 175 L 130 130 Z');
+        shirt.setAttribute('fill', outfitColor);
+        this.svg.appendChild(shirt);
+        
+        // Collar
+        const collar = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        collar.setAttribute('d', 'M 85 130 L 100 145 L 115 130');
+        collar.setAttribute('fill', 'none');
+        collar.setAttribute('stroke', '#d62828');
+        collar.setAttribute('stroke-width', '2');
+        this.svg.appendChild(collar);
+    }
+
+    /**
+     * Render cloak (if equipped)
+     */
+    renderCloak() {
+        const hasCloak = this.state.currentAvatar?.equipped?.some(i => 
+            SHOP_ITEMS.find(item => item.id === i && item.slot === 'cloak')
+        );
+        
+        if (!hasCloak) return;
+        
+        const cloak = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        cloak.setAttribute('d', 'M 50 120 Q 50 60 100 55 Q 150 60 150 120 L 155 180 Q 100 195 45 180 Z');
+        cloak.setAttribute('fill', 'rgba(214, 40, 40, 0.3)');
+        cloak.setAttribute('stroke', '#d62828');
+        cloak.setAttribute('stroke-width', '1.5');
+        this.svg.appendChild(cloak);
+        
+        // Red clouds pattern on cloak
+        for (let i = 0; i < 3; i++) {
+            const cloud = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            cloud.setAttribute('cx', 80 + (i * 30));
+            cloud.setAttribute('cy', 150);
+            cloud.setAttribute('r', '8');
+            cloud.setAttribute('fill', '#d62828');
+            cloud.setAttribute('opacity', '0.6');
+            this.svg.appendChild(cloud);
+        }
+    }
+
+    /**
+     * Render accessories (rings, weapons, etc.)
+     */
+    renderAccessories() {
+        const hasRing = this.state.currentAvatar?.equipped?.some(i => 
+            SHOP_ITEMS.find(item => item.id === i && item.slot === 'accessory_left')
+        );
+        
+        if (hasRing) {
+            const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            ring.setAttribute('cx', '65');
+            ring.setAttribute('cy', '165');
+            ring.setAttribute('r', '6');
+            ring.setAttribute('fill', 'none');
+            ring.setAttribute('stroke', '#ffd700');
+            ring.setAttribute('stroke-width', '2');
+            this.svg.appendChild(ring);
+        }
+        
+        const hasWeapon = this.state.currentAvatar?.equipped?.some(i => 
+            SHOP_ITEMS.find(item => item.id === i && item.slot === 'accessory_right')
+        );
+        
+        if (hasWeapon) {
+            const weapon = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            weapon.setAttribute('d', 'M 135 155 L 155 135 M 145 165 L 165 145');
+            weapon.setAttribute('stroke', '#c0c0c0');
+            weapon.setAttribute('stroke-width', '2');
+            this.svg.appendChild(weapon);
+        }
+    }
+
+    /**
+     * Render mask (if equipped)
+     */
+    renderMask() {
+        const hasMask = this.state.currentAvatar?.equipped?.some(i => 
+            SHOP_ITEMS.find(item => item.id === i && item.slot === 'mask')
+        );
+        
+        if (!hasMask) return;
+        
+        const mask = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        mask.setAttribute('d', 'M 72 60 Q 100 50 128 60 L 125 95 Q 100 105 75 95 Z');
+        mask.setAttribute('fill', '#e6e6e6');
+        mask.setAttribute('stroke', '#888');
+        mask.setAttribute('stroke-width', '1');
+        this.svg.appendChild(mask);
+        
+        // Mask eye holes
+        const leftHole = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        leftHole.setAttribute('cx', '85');
+        leftHole.setAttribute('cy', '78');
+        leftHole.setAttribute('rx', '6');
+        leftHole.setAttribute('ry', '8');
+        leftHole.setAttribute('fill', '#2a2a2e');
+        this.svg.appendChild(leftHole);
+        
+        const rightHole = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        rightHole.setAttribute('cx', '115');
+        rightHole.setAttribute('cy', '78');
+        rightHole.setAttribute('rx', '6');
+        rightHole.setAttribute('ry', '8');
+        rightHole.setAttribute('fill', '#2a2a2e');
+        this.svg.appendChild(rightHole);
+    }
+
+    /**
+     * Render headwear (hats, headbands)
+     */
+    renderHeadwear() {
+        const hasHeadwear = this.state.currentAvatar?.equipped?.some(i => 
+            SHOP_ITEMS.find(item => item.id === i && item.slot === 'headwear')
+        );
+        
+        if (!hasHeadwear) return;
+        
+        const headband = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        headband.setAttribute('d', 'M 65 50 Q 100 40 135 50 L 133 58 Q 100 50 67 58 Z');
+        headband.setAttribute('fill', '#2a2a2e');
+        headband.setAttribute('stroke', '#d62828');
+        headband.setAttribute('stroke-width', '1.5');
+        this.svg.appendChild(headband);
+        
+        const plate = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        plate.setAttribute('x', '88');
+        plate.setAttribute('y', '44');
+        plate.setAttribute('width', '24');
+        plate.setAttribute('height', '12');
+        plate.setAttribute('rx', '2');
+        plate.setAttribute('fill', '#d62828');
+        this.svg.appendChild(plate);
+    }
+
+    /**
+     * Render companion (if equipped)
+     */
+    renderCompanion() {
+        const companion = this.state.currentAvatar?.equipped?.find(i => 
+            SHOP_ITEMS.find(item => item.id === i && item.slot === 'companion')
+        );
+        
+        if (!companion) return;
+        
+        if (companion === 'companion_raven') {
+            this.renderRaven();
+        } else if (companion === 'companion_wolf') {
+            this.renderWolf();
+        }
+    }
+
+    /**
+     * Render raven companion
+     */
+    renderRaven() {
+        const raven = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        raven.setAttribute('transform', 'translate(150, 50)');
+        
+        const body = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        body.setAttribute('cx', '10');
+        body.setAttribute('cy', '15');
+        body.setAttribute('rx', '12');
+        body.setAttribute('ry', '8');
+        body.setAttribute('fill', '#1a1a1a');
+        raven.appendChild(body);
+        
+        const head = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        head.setAttribute('cx', '22');
+        head.setAttribute('cy', '12');
+        head.setAttribute('r', '6');
+        head.setAttribute('fill', '#1a1a1a');
+        raven.appendChild(head);
+        
+        const eye = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        eye.setAttribute('cx', '24');
+        eye.setAttribute('cy', '11');
+        eye.setAttribute('r', '1.5');
+        eye.setAttribute('fill', '#d62828');
+        raven.appendChild(eye);
+        
+        this.svg.appendChild(raven);
+    }
+
+    /**
+     * Render wolf companion
+     */
+    renderWolf() {
+        const wolf = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        wolf.setAttribute('transform', 'translate(35, 140)');
+        
+        const body = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        body.setAttribute('cx', '15');
+        body.setAttribute('cy', '10');
+        body.setAttribute('rx', '14');
+        body.setAttribute('ry', '8');
+        body.setAttribute('fill', '#4a4a5a');
+        wolf.appendChild(body);
+        
+        const head = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        head.setAttribute('points', '28,5 35,10 28,15');
+        head.setAttribute('fill', '#4a4a5a');
+        wolf.appendChild(head);
+        
+        const eye = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        eye.setAttribute('cx', '31');
+        eye.setAttribute('cy', '9');
+        eye.setAttribute('r', '1.5');
+        eye.setAttribute('fill', '#d62828');
+        wolf.appendChild(eye);
+        
+        this.svg.appendChild(wolf);
+    }
+
+    /**
+     * Render aura (if equipped)
+     */
+    renderAura() {
+        const hasAura = this.state.currentAvatar?.equipped?.some(i => 
+            SHOP_ITEMS.find(item => item.id === i && item.slot === 'aura')
+        );
+        
+        if (!hasAura) return;
+        
+        const aura = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        aura.setAttribute('cx', '100');
+        aura.setAttribute('cy', '100');
+        aura.setAttribute('r', '95');
+        aura.setAttribute('fill', 'none');
+        aura.setAttribute('stroke', '#d62828');
+        aura.setAttribute('stroke-width', '2');
+        aura.setAttribute('stroke-dasharray', '8, 8');
+        aura.setAttribute('opacity', '0.6');
+        this.svg.appendChild(aura);
+        
+        // Add pulsing animation
+        const animate = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+        animate.setAttribute('attributeName', 'opacity');
+        animate.setAttribute('values', '0.3;0.8;0.3');
+        animate.setAttribute('dur', '2s');
+        animate.setAttribute('repeatCount', 'indefinite');
+        aura.appendChild(animate);
+    }
+
+    /**
+     * Render visual effects (level up, achievement)
+     */
+    renderEffects() {
+        if (this.state.currentAnimation === 'level_up') {
+            this.renderLevelUpEffect();
+        }
+    }
+
+    /**
+     * Render level up celebration effect
+     */
+    renderLevelUpEffect() {
+        for (let i = 0; i < 12; i++) {
+            const angle = (i * 30) * Math.PI / 180;
+            const x = 100 + Math.cos(angle) * 70;
+            const y = 100 + Math.sin(angle) * 70;
+            
+            const star = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            star.setAttribute('points', `${x},${y-3} ${x+2},${y-1} ${x+4},${y} ${x+2},${y+1} ${x},${y+3} ${x-2},${y+1} ${x-4},${y} ${x-2},${y-1}`);
+            star.setAttribute('fill', '#ffd700');
+            
+            const animate = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+            animate.setAttribute('attributeName', 'opacity');
+            animate.setAttribute('values', '1;0');
+            animate.setAttribute('dur', '1s');
+            animate.setAttribute('fill', 'freeze');
+            star.appendChild(animate);
+            
+            this.svg.appendChild(star);
+        }
+        
+        // Clear animation after 1 second
+        setTimeout(() => {
+            this.state.currentAnimation = null;
+            this.render();
+        }, 1000);
+    }
+
+    /**
+     * Add floating idle animation
+     */
+    addAnimation() {
+        const animate = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
+        animate.setAttribute('attributeName', 'transform');
+        animate.setAttribute('type', 'translate');
+        animate.setAttribute('values', '0,0; 0,-3; 0,0');
+        animate.setAttribute('dur', '3s');
+        animate.setAttribute('repeatCount', 'indefinite');
+        this.svg.appendChild(animate);
+    }
+
+    /**
+     * Get color from avatar state or default
+     */
+    getColor(type, defaultValue) {
+        if (this.state.currentAvatar?.colors?.[type]) {
+            return this.state.currentAvatar.colors[type];
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Update equipped items and re-render
+     */
+    updateEquipment(equippedItems) {
+        this.state.currentAvatar.equipped = equippedItems;
+        this.render();
+    }
+
+    /**
+     * Trigger level up animation
+     */
+    triggerLevelUp() {
+        this.state.currentAnimation = 'level_up';
+        this.render();
+    }
+
+    /**
+     * Export avatar as SVG string
+     */
+    exportSVG() {
+        const serializer = new XMLSerializer();
+        return serializer.serializeToString(this.svg);
+    }
+
+    /**
+     * Export avatar as PNG (requires canvas)
+     */
+    async exportPNG() {
+        const svgString = this.exportSVG();
+        const blob = new Blob([svgString], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        
+        return new Promise((resolve) => {
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 200;
+                canvas.height = 200;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                URL.revokeObjectURL(url);
+                resolve(canvas.toDataURL('image/png'));
+            };
+            img.src = url;
+        });
+    }
+}
+
+// Export for use in main script
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = AkatsukiAvatarRenderer;
+}
