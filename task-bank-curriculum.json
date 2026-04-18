@@ -1,103 +1,19 @@
 {
   "meta": {
-    "name": "Akatsuki Curriculum Task Bank – Village Knowledge Expansion",
-    "version": "1.0.0",
+    "name": "Village Knowledge Expansion",
+    "version": "2.0.0",
     "domain": "Curriculum",
     "theme": "Village Knowledge Expansion",
-    "description": "Complete mission bank for curriculum design, learning outcomes, lesson architecture, activities, assessments, rubrics, slides, iteration cycles, learner feedback, and course packaging."
+    "description": "Curriculum design, lesson architecture, assessment creation, and teaching material development following ADDIE model and backward design.",
+    "lastUpdated": "2026-04-18"
   },
 
-  "subjects": [
-    "Course Planning",
-    "Learning Outcomes",
-    "Lesson Architecture",
-    "Activities & Practice",
-    "Assessments",
-    "Rubrics",
-    "Slides & Visuals",
-    "Iteration Cycles",
-    "Learner Feedback",
-    "Course Packaging"
-  ],
-
   "tasks": [
-
-    /* ============================================================
-       COURSE PLANNING
-    ============================================================ */
-
     {
-      "id": "curriculum_plan_scope",
-      "title": "Define Course Scope & Sequence",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Course Planning",
-      "sideTopic": "scope",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 40,
-      "repeatability": "One-time",
-      "estimatedTime": 60,
-      "priority": "Critical",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "A clear scope statement + module sequence drafted.",
-      "failureCondition": "Course remains vague or overly broad.",
-      "reward": "Strong foundation for all future lessons.",
-      "recoveryMission": "Write a 5-bullet scope summary only.",
-      "steps": [
-        { "label": "Write the course purpose in 2–3 sentences.", "completed": false },
-        { "label": "List the major modules or units.", "completed": false },
-        { "label": "Define the learner transformation from start to finish.", "completed": false },
-        { "label": "Check alignment with intended audience.", "completed": false },
-        { "label": "Save scope + sequence in your curriculum folder.", "completed": false }
-      ],
-      "tags": ["planning", "scope", "structure"],
-      "notes": "This mission anchors the entire course design."
-    },
-
-    {
-      "id": "curriculum_plan_journey_map",
-      "title": "Build the Learner Journey Map",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Course Planning",
-      "sideTopic": "learner journey",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Repeatable",
-      "estimatedTime": 45,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "A visual or written journey map with stages and milestones.",
-      "failureCondition": "Lessons designed without understanding learner progression.",
-      "reward": "Clearer pacing and module flow.",
-      "recoveryMission": "Write a 5-stage journey outline.",
-      "steps": [
-        { "label": "Define the starting point (skills, mindset, gaps).", "completed": false },
-        { "label": "Define the end point (mastery, outcomes).", "completed": false },
-        { "label": "Map 4–6 stages between start and end.", "completed": false },
-        { "label": "Add emotional + cognitive checkpoints.", "completed": false },
-        { "label": "Save journey map for lesson alignment.", "completed": false }
-      ],
-      "tags": ["planning", "journey", "design"],
-      "notes": "Use this before writing lessons to ensure flow."
-    },
-
-    /* ============================================================
-       LEARNING OUTCOMES
-    ============================================================ */
-
-    {
-      "id": "curriculum_outcomes_write5",
-      "title": "Write 5 Measurable Learning Outcomes",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
+      "id": "curriculum_outcomes",
+      "title": "Write 5 Measurable Learning Outcomes for One Module",
       "subject": "Learning Outcomes",
-      "sideTopic": "verbs",
-      "missionType": "Standard Mission",
+      "sideTopic": "Outcome Design",
       "difficulty": "Medium",
       "xp": 30,
       "repeatability": "Repeatable",
@@ -105,229 +21,77 @@
       "priority": "Important",
       "energy": "Standard Focus",
       "context": "Writing",
-      "successCriteria": "Five outcomes using measurable verbs aligned to lesson goals.",
-      "failureCondition": "Outcomes remain vague or unmeasurable.",
-      "reward": "Clear direction for lesson design.",
-      "recoveryMission": "Write 2 outcomes only.",
+      
+      "phase": "Design (ADDIE)",
+      "timeBlock": "Morning",
+      "prerequisites": [],
+      "outputs": ["5 outcomes", "verb list", "alignment map"],
+      
+      "successCriteria": "5 outcomes using measurable verbs (Bloom's Taxonomy) that match module scope",
+      "failureCondition": "Outcomes remain vague or unmeasurable",
+      "reward": "+30 XP, +15 coins, curriculum clarity",
+      "recoveryMission": "Rewrite top 2 outcomes only",
+      
       "steps": [
-        { "label": "Identify the lesson or module goal.", "completed": false },
-        { "label": "Choose measurable verbs (Bloom’s).", "completed": false },
-        { "label": "Draft 5 outcome statements.", "completed": false },
-        { "label": "Remove vague wording.", "completed": false },
-        { "label": "Check alignment with lesson flow.", "completed": false }
+        {
+          "number": 1,
+          "action": "Write the module's overall goal in 1-2 sentences (3 min)",
+          "duration": "3 min",
+          "measurable": "Goal statement written"
+        },
+        {
+          "number": 2,
+          "action": "Identify the learner transformation: what can they DO after this module? (5 min)",
+          "duration": "5 min",
+          "measurable": "Transformation described"
+        },
+        {
+          "number": 3,
+          "action": "Review Bloom's Taxonomy verb lists for each cognitive level (2 min)",
+          "duration": "2 min",
+          "measurable": "Verbs referenced"
+        },
+        {
+          "number": 4,
+          "action": "Draft 5 outcome statements using different verbs (remember, understand, apply, analyze, evaluate, create) (15 min)",
+          "duration": "15 min",
+          "measurable": "5 draft outcomes written"
+        },
+        {
+          "number": 5,
+          "action": "Remove vague words: 'know', 'understand', 'learn' → replace with measurable actions (5 min)",
+          "duration": "5 min",
+          "measurable": "Vague terms eliminated"
+        },
+        {
+          "number": 6,
+          "action": "Check that each outcome matches a specific lesson or activity in your module (5 min)",
+          "duration": "5 min",
+          "measurable": "Alignment verified"
+        },
+        {
+          "number": 7,
+          "action": "Save outcomes and add to your course design document (3 min)",
+          "duration": "3 min",
+          "measurable": "Outcomes saved"
+        },
+        {
+          "number": 8,
+          "action": "Share outcomes with a peer for clarity check (2 min)",
+          "duration": "2 min",
+          "measurable": "Feedback requested"
+        }
       ],
-      "tags": ["outcomes", "verbs", "alignment"],
-      "notes": "Outcomes drive assessments and activities."
+      
+      "tags": ["curriculum", "outcomes", "bloom", "design"],
+      "notes": "Start with outcomes before designing content. Every activity and assessment should map to an outcome."
     },
-
-    {
-      "id": "curriculum_outcomes_alignment",
-      "title": "Align Outcomes with Assessments",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Learning Outcomes",
-      "sideTopic": "alignment",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Repeatable",
-      "estimatedTime": 45,
-      "priority": "Critical",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "Each outcome has a matching assessment.",
-      "failureCondition": "Assessments do not measure intended outcomes.",
-      "reward": "Stronger instructional coherence.",
-      "recoveryMission": "Align 2 outcomes only.",
-      "steps": [
-        { "label": "List all outcomes for the lesson/module.", "completed": false },
-        { "label": "List all assessments.", "completed": false },
-        { "label": "Match each outcome to an assessment.", "completed": false },
-        { "label": "Identify gaps or mismatches.", "completed": false },
-        { "label": "Revise assessments or outcomes accordingly.", "completed": false }
-      ],
-      "tags": ["alignment", "assessment", "outcomes"],
-      "notes": "Alignment is the backbone of good curriculum."
-    },
-
-    /* ============================================================
-       LESSON ARCHITECTURE
-    ============================================================ */
 
     {
       "id": "curriculum_lesson_flow",
-      "title": "Design Lesson Flow & Pacing",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
+      "title": "Design Complete Lesson Flow with Timing",
       "subject": "Lesson Architecture",
-      "sideTopic": "flow",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 40,
-      "repeatability": "Repeatable",
-      "estimatedTime": 50,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "Lesson flow with hook → teach → apply → reflect.",
-      "failureCondition": "Lesson lacks structure or pacing.",
-      "reward": "More engaging and effective lessons.",
-      "recoveryMission": "Write a 4-step flow outline.",
-      "steps": [
-        { "label": "Define the lesson objective.", "completed": false },
-        { "label": "Write the hook or opener.", "completed": false },
-        { "label": "Outline teaching segments.", "completed": false },
-        { "label": "Add practice or application tasks.", "completed": false },
-        { "label": "Add reflection or exit ticket.", "completed": false }
-      ],
-      "tags": ["lesson", "flow", "architecture"],
-      "notes": "Use consistent flow patterns for clarity."
-    },
-
-    {
-      "id": "curriculum_lesson_hook",
-      "title": "Write a Strong Lesson Hook",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Lesson Architecture",
-      "sideTopic": "hooks",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Repeatable",
-      "estimatedTime": 20,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Writing",
-      "successCriteria": "A hook that grabs attention and frames the lesson.",
-      "failureCondition": "Starting lessons cold without engagement.",
-      "reward": "Higher learner engagement.",
-      "recoveryMission": "Write a 1-sentence hook.",
-      "steps": [
-        { "label": "Identify the core tension or question.", "completed": false },
-        { "label": "Write a short story, question, or scenario.", "completed": false },
-        { "label": "Connect the hook to the lesson objective.", "completed": false },
-        { "label": "Refine wording for clarity.", "completed": false },
-        { "label": "Save hook in lesson notes.", "completed": false }
-      ],
-      "tags": ["hook", "engagement"],
-      "notes": "Hooks set the emotional tone of the lesson."
-    },
-
-    /* ============================================================
-       ACTIVITIES & PRACTICE
-    ============================================================ */
-
-    {
-      "id": "curriculum_activity_design",
-      "title": "Design One Practice Activity",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Activities & Practice",
-      "sideTopic": "activity design",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Repeatable",
-      "estimatedTime": 45,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "One activity that reinforces the target skill.",
-      "failureCondition": "Activity does not align with outcomes.",
-      "reward": "Better learner mastery.",
-      "recoveryMission": "Write a 3-step practice task.",
-      "steps": [
-        { "label": "Pick the target skill.", "completed": false },
-        { "label": "Define what success looks like.", "completed": false },
-        { "label": "Write instructions for the activity.", "completed": false },
-        { "label": "Add submission or demonstration format.", "completed": false },
-        { "label": "Save activity in lesson plan.", "completed": false }
-      ],
-      "tags": ["activity", "practice"],
-      "notes": "Activities should be short, clear, and aligned."
-    },
-
-    /* ============================================================
-       ASSESSMENTS
-    ============================================================ */
-
-    {
-      "id": "curriculum_assessment_mastery",
-      "title": "Build One Mastery Check",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Assessments",
-      "sideTopic": "mastery checks",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 40,
-      "repeatability": "Repeatable",
-      "estimatedTime": 45,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "One mastery check that proves understanding.",
-      "failureCondition": "Assessment cannot measure mastery.",
-      "reward": "Clear evidence of learning.",
-      "recoveryMission": "Write 3 check questions only.",
-      "steps": [
-        { "label": "Pick target outcome.", "completed": false },
-        { "label": "Define what mastery looks like.", "completed": false },
-        { "label": "Write task prompt.", "completed": false },
-        { "label": "Add submission format.", "completed": false },
-        { "label": "Add scoring or rubric note.", "completed": false }
-      ],
-      "tags": ["assessment", "mastery"],
-      "notes": "Mastery checks should be simple and direct."
-    },
-
-    /* ============================================================
-       RUBRICS
-    ============================================================ */
-
-    {
-      "id": "curriculum_rubric_build",
-      "title": "Build a Rubric for One Assessment",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Rubrics",
-      "sideTopic": "criteria",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Repeatable",
-      "estimatedTime": 45,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "Rubric with 3–5 criteria and clear levels.",
-      "failureCondition": "Rubric too vague or subjective.",
-      "reward": "Fair and consistent assessment.",
-      "recoveryMission": "Write 3 criteria only.",
-      "steps": [
-        { "label": "List the skills or outcomes being assessed.", "completed": false },
-        { "label": "Write 3–5 criteria.", "completed": false },
-        { "label": "Define performance levels (e.g., 1–4).", "completed": false },
-        { "label": "Add examples or indicators.", "completed": false },
-        { "label": "Save rubric in assessment folder.", "completed": false }
-      ],
-      "tags": ["rubric", "criteria"],
-      "notes": "Rubrics reduce ambiguity and bias."
-    },
-
-    /* ============================================================
-       SLIDES & VISUALS
-    ============================================================ */
-
-    {
-      "id": "curriculum_slides_build",
-      "title": "Build Slide Deck for One Lesson",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Slides & Visuals",
-      "sideTopic": "slide building",
-      "missionType": "Standard Mission",
+      "sideTopic": "Flow & Pacing",
       "difficulty": "Medium",
       "xp": 45,
       "repeatability": "Repeatable",
@@ -335,106 +99,8 @@
       "priority": "Important",
       "energy": "Standard Focus",
       "context": "Writing",
-      "successCriteria": "Slide deck with clear flow and visuals.",
-      "failureCondition": "Slides cluttered or text-heavy.",
-      "reward": "More engaging lessons.",
-      "recoveryMission": "Draft 5 core slides only.",
-      "steps": [
-        { "label": "Outline slide sequence.", "completed": false },
-        { "label": "Add key teaching points.", "completed": false },
-        { "label": "Add visuals or examples.", "completed": false },
-        { "label": "Refine layout for clarity.", "completed": false },
-        { "label": "Export and save deck.", "completed": false }
-      ],
-      "tags": ["slides", "visuals"],
-      "notes": "Use minimal text and strong visuals."
-    },
-
-    /* ============================================================
-       ITERATION CYCLES
-    ============================================================ */
-
-    {
-      "id": "curriculum_iteration_pass",
-      "title": "Run One Lesson Iteration Pass",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Iteration Cycles",
-      "sideTopic": "revision",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Weekly",
-      "estimatedTime": 45,
-      "priority": "Maintenance",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "Lesson improved based on notes or feedback.",
-      "failureCondition": "Lessons remain unchanged despite issues.",
-      "reward": "Higher lesson quality.",
-      "recoveryMission": "Fix 3 small issues only.",
-      "steps": [
-        { "label": "Open last version of the lesson.", "completed": false },
-        { "label": "Review notes or feedback.", "completed": false },
-        { "label": "Fix clarity or pacing issues.", "completed": false },
-        { "label": "Update activities or examples.", "completed": false },
-        { "label": "Save new version.", "completed": false }
-      ],
-      "tags": ["iteration", "revision"],
-      "notes": "Small weekly improvements compound massively."
-    },
-
-    /* ============================================================
-       LEARNER FEEDBACK
-    ============================================================ */
-
-    {
-      "id": "curriculum_feedback_review",
-      "title": "Review Learner Feedback for One Module",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Learner Feedback",
-      "sideTopic": "feedback sorting",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Weekly",
-      "estimatedTime": 40,
-      "priority": "Maintenance",
-      "energy": "Standard Focus",
-      "context": "Online",
-      "successCriteria": "Feedback sorted into patterns and action items.",
-      "failureCondition": "Feedback ignored or unorganized.",
-      "reward": "Better course improvements.",
-      "recoveryMission": "Write 3 feedback patterns only.",
-      "steps": [
-        { "label": "Collect feedback from posts or forms.", "completed": false },
-        { "label": "Sort into themes (clarity, pacing, difficulty).", "completed": false },
-        { "label": "Identify 2–3 actionable items.", "completed": false },
-        { "label": "Add items to iteration list.", "completed": false },
-        { "label": "Save summary in feedback log.", "completed": false }
-      ],
-      "tags": ["feedback", "iteration"],
-      "notes": "Feedback is gold for curriculum refinement."
-    },
-
-    /* ============================================================
-       COURSE PACKAGING
-    ============================================================ */
-
-    {
-      "id": "curriculum_package_module",
-      "title": "Package One Module for Delivery",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "subject": "Course Packaging",
-      "sideTopic": "module packaging",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 45,
-      "repeatability": "Repeatable",
-      "estimatedTime": 60,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "Module packaged
+      
+      "phase": "Development (ADDIE)",
+      "timeBlock": "Morning",
+      "prerequisites": ["curriculum_outcomes"],
+      "outputs": ["
