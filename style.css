@@ -727,96 +727,154 @@ button.danger:hover {
         min-width: auto;
     }
 }
-/* Enhanced Task Generator */
-.generator-enhanced {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 1.5rem;
-}
+/* ============================================================
+   STEP EDITING STYLES - ADD AT END OF FILE
+   ============================================================ */
 
-.generator-input-section {
-  margin-bottom: 1.5rem;
-}
-
-.generator-input-section textarea {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.generator-fields {
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
-  margin-top: 1rem;
-}
-
-.form-row {
+.editable-step {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-.form-group {
-  flex: 1;
-  min-width: 150px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--text-dim);
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: var(--card);
   margin-bottom: 0.25rem;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.editable-step:hover {
+  background: var(--card-hover);
+}
+
+.step-text {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.step-controls {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.editable-step:hover .step-controls {
+  opacity: 1;
+}
+
+.step-controls button {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.7rem;
+  border-radius: 4px;
+}
+
+.step-controls button:hover {
+  background: var(--red);
+  color: white;
+  transform: none;
+}
+
+.step-inline-editor {
+  flex: 1;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.step-edit-input {
+  flex: 1;
+  background: #1a1a1e;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.step-edit-actions button {
+  background: #1a1a1e;
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  color: var(--text);
+}
+
+.step-edit-actions .step-save-btn:hover {
+  background: var(--success);
+  color: black;
+}
+
+.step-add-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.step-add-content {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 400px;
+  max-width: 90%;
+}
+
+.step-add-content h4 {
+  margin-bottom: 1rem;
+  color: var(--red);
+}
+
+.step-add-textarea {
   width: 100%;
   background: #1a1a1e;
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.5rem;
   border-radius: 6px;
+  margin-bottom: 1rem;
+  resize: vertical;
 }
 
-.step-editor-row {
+.step-add-actions {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  justify-content: flex-end;
 }
 
-.step-editor-input {
-  flex: 1;
-  background: #1a1a1e;
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 0.4rem;
-  border-radius: 4px;
+.add-step-item {
+  list-style: none;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
 }
 
-.step-editor-row button {
+.step-add-btn {
   background: none;
-  border: none;
+  border: 1px dashed var(--border);
   color: var(--text-dim);
-  cursor: pointer;
-  padding: 0.2rem 0.4rem;
+  padding: 0.3rem 0.8rem;
+  width: 100%;
 }
 
-.step-editor-row button:hover {
+.step-add-btn:hover {
+  border-color: var(--red);
   color: var(--red);
+  background: none;
+  transform: none;
 }
 
-.generator-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.generator-actions .primary {
-  background: var(--red);
-}
-
-.generator-actions .primary:hover {
-  background: var(--red-dark);
+/* Disabled button styles */
+#undoBtn:disabled, #redoBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
