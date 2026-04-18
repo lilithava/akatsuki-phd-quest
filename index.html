@@ -1,11 +1,10 @@
 /**
- * Akatsuki PhD Quest - Full Working Version
- * For use with the complete HTML structure
+ * Akatsuki PhD Quest - Complete Working Version
  */
 
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM ready, initializing Akatsuki Quest...');
+    console.log('DOM ready, initializing...');
     initApp();
 });
 
@@ -16,12 +15,8 @@ let state = {
     level: 1,
     streak: 0,
     lastResetDate: null,
-    lastWeeklyResetDate: null,
     activeTasks: [],
     completedHistory: [],
-    undoStack: [],
-    redoStack: [],
-    unlockedAchievements: [],
     avatar: {
         name: 'Shadow Scholar',
         equipped: [],
@@ -29,28 +24,23 @@ let state = {
     }
 };
 
-// Daily recurring tasks
+// Daily tasks
 const DAILY_TASKS = [
-    { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Critical", energy: "Low Energy",
-      steps: ["Open mission board", "Review today's calendar", "Pick top 3 priorities", "Start first block"] },
-    { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, priority: "Important", energy: "Low Energy",
-      steps: ["Write what you accomplished", "Note any blockers", "Record tomorrow's first task"] },
-    { title: "Shutdown Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Important", energy: "Low Energy",
-      steps: ["Review completed tasks", "Clear workspace", "Set tomorrow's first action"] }
+    { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Critical", steps: ["Open mission board", "Review calendar", "Pick top 3 priorities", "Start first block"] },
+    { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, priority: "Important", steps: ["Write accomplishments", "Note blockers", "Record next action"] },
+    { title: "Shutdown Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Important", steps: ["Review completed tasks", "Clear workspace", "Set tomorrow's first action"] }
+];
+
+// Shop items
+const SHOP_ITEMS = [
+    { id: 'cloak_basic', name: 'Akatsuki Cloak', cost: 150, effect: '+5% XP', desc: 'Classic black cloak' },
+    { id: 'mask_anbu', name: 'ANBU Mask', cost: 100, effect: '+3% XP', desc: 'White ANBU mask' },
+    { id: 'ring_akatsuki', name: 'Akatsuki Ring', cost: 80, effect: '+2% XP, +2% Coins', desc: 'Glowing ring' }
 ];
 
 // Helper functions
 function getTodayStr() {
-    return new Date().toISOString().slice(0,10);
-}
-
-function getLastMonday() {
-    const d = new Date();
-    d.setHours(0,0,0,0);
-    const day = d.getDay();
-    const diff = (day === 0 ? 6 : day - 1);
-    d.setDate(d.getDate() - diff);
-    return d.toISOString().slice(0,10);
+    return new Date().toISOString().slice(0, 10);
 }
 
 function escapeHtml(str) {
@@ -63,10 +53,10 @@ function escapeHtml(str) {
     });
 }
 
-function showToast(message) {
+function showToast(msg) {
     const toast = document.getElementById('rewardToast');
     if (toast) {
-        toast.innerHTML = message;
+        toast.innerHTML = msg;
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2000);
     }
@@ -82,48 +72,32 @@ function loadState() {
         try {
             const parsed = JSON.parse(saved);
             state = { ...state, ...parsed };
-            state.activeTasks = state.activeTasks || [];
-            state.completedHistory = state.completedHistory || [];
-            state.unlockedAchievements = state.unlockedAchievements || [];
-            state.avatar = state.avatar || { name: 'Shadow Scholar', equipped: [], inventory: [] };
-        } catch(e) { console.error(e); }
+        } catch(e) {}
     }
+    state.activeTasks = state.activeTasks || [];
+    state.completedHistory = state.completedHistory || [];
+    state.avatar = state.avatar || { name: 'Shadow Scholar', equipped: [], inventory: [] };
     
     if (!state.lastResetDate) state.lastResetDate = getTodayStr();
-    if (!state.lastWeeklyResetDate) state.lastWeeklyResetDate = getLastMonday();
     
-    // Add daily tasks if none exist
     if (state.activeTasks.length === 0) {
-        DAILY_TASKS.forEach(taskTemplate => {
+        DAILY_TASKS.forEach(t => {
             state.activeTasks.push({
                 id: Date.now() + '_' + Math.random(),
-                title: taskTemplate.title,
-                domain: taskTemplate.domain,
-                difficulty: taskTemplate.difficulty,
-                xp: taskTemplate.xp,
+                title: t.title,
+                domain: t.domain,
+                difficulty: t.difficulty,
+                xp: t.xp,
                 repeatability: 'Daily',
-                priority: taskTemplate.priority,
-                energy: taskTemplate.energy,
-                steps: taskTemplate.steps.map(text => ({ text, completed: false })),
+                priority: t.priority,
+                steps: t.steps.map(s => ({ text: s, completed: false })),
                 notes: '',
                 startedAt: new Date().toISOString(),
                 completed: false
             });
         });
+        saveState();
     }
-    
-    updateXPLevel();
-    saveState();
-}
-
-function updateXPLevel() {
-    const xpPerLevel = 500;
-    const newLevel = Math.floor(state.xp / xpPerLevel) + 1;
-    if (newLevel > state.level) {
-        state.coins += 100;
-        showToast(`✨ Level Up! You reached level ${newLevel}! +100 coins`);
-    }
-    state.level = newLevel;
     updateXPBar();
 }
 
@@ -133,29 +107,22 @@ function updateXPBar() {
     const nextLevelXp = state.level * xpPerLevel;
     const progress = ((state.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
     
-    const xpFill = document.getElementById('xpFill');
-    if (xpFill) xpFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    const fill = document.getElementById('xpFill');
+    if (fill) fill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
     
-    const xpCurrent = document.getElementById('xpCurrent');
-    const xpNext = document.getElementById('xpNext');
-    const nextLevelSpan = document.getElementById('nextLevel');
-    if (xpCurrent) xpCurrent.innerText = state.xp;
-    if (xpNext) xpNext.innerText = nextLevelXp;
-    if (nextLevelSpan) nextLevelSpan.innerText = state.level + 1;
-}
-
-function updateTaskCompletion(task) {
-    const allStepsDone = task.steps.every(s => s.completed);
-    if (allStepsDone && !task.completed) {
-        completeTask(task.id);
-    }
+    const current = document.getElementById('xpCurrent');
+    const next = document.getElementById('xpNext');
+    const nextLevel = document.getElementById('nextLevel');
+    if (current) current.textContent = state.xp;
+    if (next) next.textContent = nextLevelXp;
+    if (nextLevel) nextLevel.textContent = state.level + 1;
 }
 
 function completeTask(taskId) {
     const task = state.activeTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
     
-    const xpGain = task.xp || 15;
+    const xpGain = task.xp;
     const coinGain = Math.floor(xpGain * 0.2);
     
     task.completed = true;
@@ -172,91 +139,76 @@ function completeTask(taskId) {
         notes: task.notes || ''
     });
     
-    showToast(`✅ Completed: ${task.title} (+${xpGain} XP, +${coinGain} coins)`);
-    updateXPLevel();
+    // Check level up
+    const newLevel = Math.floor(state.xp / 500) + 1;
+    if (newLevel > state.level) {
+        state.level = newLevel;
+        state.coins += 100;
+        showToast(`✨ Level ${state.level}! +100 coins`);
+    }
+    
+    showToast(`✅ ${task.title} (+${xpGain} XP, +${coinGain} coins)`);
+    updateXPBar();
     saveState();
     renderAll();
 }
 
-// ============================================================
-// RENDER FUNCTIONS
-// ============================================================
-
+// Render functions
 function renderAll() {
-    renderHeader();
-    renderDashboard();
-    renderActiveMissions();
-    renderTaskBank();
-    renderHistory();
-    renderAvatar();
-    renderShop();
-    renderAchievements();
-}
-
-function renderHeader() {
-    const levelEl = document.getElementById('level');
-    const xpEl = document.getElementById('xp');
-    const coinsEl = document.getElementById('coins');
-    const streakEl = document.getElementById('streak');
-    if (levelEl) levelEl.innerText = state.level;
-    if (xpEl) xpEl.innerText = state.xp;
-    if (coinsEl) coinsEl.innerText = state.coins;
-    if (streakEl) streakEl.innerText = state.streak;
-}
-
-function renderDashboard() {
+    // Header
+    document.getElementById('level').textContent = state.level;
+    document.getElementById('xp').textContent = state.xp;
+    document.getElementById('coins').textContent = state.coins;
+    document.getElementById('streak').textContent = state.streak;
+    
+    // Dashboard
     const activeCount = state.activeTasks.filter(t => !t.completed).length;
-    const completedToday = state.completedHistory.filter(h => 
-        h.completedAt?.slice(0,10) === getTodayStr()
-    ).length;
+    const completedToday = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === getTodayStr()).length;
+    document.getElementById('activeCount').textContent = activeCount;
+    document.getElementById('completedToday').textContent = completedToday;
+    document.getElementById('totalXP').textContent = state.xp;
+    document.getElementById('streakDisplay').textContent = state.streak;
     
-    const activeCountEl = document.getElementById('activeCount');
-    const completedTodayEl = document.getElementById('completedToday');
-    const totalXPEl = document.getElementById('totalXP');
-    const streakDisplayEl = document.getElementById('streakDisplay');
-    
-    if (activeCountEl) activeCountEl.innerText = activeCount;
-    if (completedTodayEl) completedTodayEl.innerText = completedToday;
-    if (totalXPEl) totalXPEl.innerText = state.xp;
-    if (streakDisplayEl) streakDisplayEl.innerText = state.streak;
-    
+    // Win the day
     const hasImportant = state.activeTasks.some(t => t.completed && (t.priority === 'Critical' || t.priority === 'Important'));
     const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
     const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
+    document.getElementById('winImportant').innerHTML = hasImportant ? '✅' : '⬜';
+    document.getElementById('winRitual').innerHTML = hasRitual ? '✅' : '⬜';
+    document.getElementById('winDoc').innerHTML = hasDoc ? '✅' : '⬜';
+    document.getElementById('winResult').innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅ WIN THE DAY!' : '❌ NOT YET';
     
-    const winImportant = document.getElementById('winImportant');
-    const winRitual = document.getElementById('winRitual');
-    const winDoc = document.getElementById('winDoc');
-    const winResult = document.getElementById('winResult');
+    // Active missions
+    renderActiveMissions();
     
-    if (winImportant) winImportant.innerHTML = hasImportant ? '✅' : '⬜';
-    if (winRitual) winRitual.innerHTML = hasRitual ? '✅' : '⬜';
-    if (winDoc) winDoc.innerHTML = hasDoc ? '✅' : '⬜';
-    if (winResult) {
-        winResult.innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅ WIN THE DAY!' : '❌ NOT YET';
-    }
+    // Task bank
+    renderTaskBank();
+    
+    // Avatar
+    document.getElementById('avatarName').value = state.avatar.name;
+    const totalXP = state.completedHistory.reduce((s, h) => s + (h.xpGained || 0), 0);
+    document.getElementById('totalXPEarned').textContent = totalXP;
+    document.getElementById('missionsCompleted').textContent = state.completedHistory.length;
+    
+    // Shop
+    document.getElementById('shopCoins').textContent = state.coins;
+    renderShopItems();
+    
+    // History
+    renderHistory();
 }
 
 function renderActiveMissions() {
     const container = document.getElementById('activeMissionsList');
     if (!container) return;
     
-    let filteredTasks = state.activeTasks.filter(t => !t.completed);
-    
-    const domainFilter = document.getElementById('filterDomain')?.value || '';
-    const difficultyFilter = document.getElementById('filterDifficulty')?.value || '';
-    const priorityFilter = document.getElementById('filterPriority')?.value || '';
-    
-    if (domainFilter) filteredTasks = filteredTasks.filter(t => t.domain === domainFilter);
-    if (difficultyFilter) filteredTasks = filteredTasks.filter(t => t.difficulty === difficultyFilter);
-    if (priorityFilter) filteredTasks = filteredTasks.filter(t => t.priority === priorityFilter);
-    
-    if (filteredTasks.length === 0) {
-        container.innerHTML = '<div class="ak-card">✨ No active missions. Add some from the Task Bank!</div>';
+    const activeTasks = state.activeTasks.filter(t => !t.completed);
+    if (activeTasks.length === 0) {
+        container.innerHTML = '<div class="ak-card">✨ No active missions. Add from Task Bank!</div>';
         return;
     }
     
-    container.innerHTML = filteredTasks.map(task => `
+    container.innerHTML = activeTasks.map(task => `
         <div class="mission-item" data-task-id="${task.id}">
             <div class="mission-header">
                 <div class="mission-title">${escapeHtml(task.title)}</div>
@@ -278,288 +230,46 @@ function renderActiveMissions() {
                     </li>
                 `).join('')}
             </ul>
-            <div class="mission-actions">
-                <button class="view-task-details" data-task-id="${task.id}">📝 Details</button>
-            </div>
+            <button class="view-task-details" data-task-id="${task.id}">📝 Details</button>
         </div>
     `).join('');
-    
-    // Attach event listeners for dynamically created checkboxes using delegation
-    attachDelegatedEvents();
-}
-
-function attachDelegatedEvents() {
-    // Use event delegation on the parent container
-    const mainContent = document.querySelector('.ak-content');
-    if (!mainContent) return;
-    
-    // Remove old listener to avoid duplicates, then add new one
-    mainContent.removeEventListener('change', handleCheckboxChange);
-    mainContent.addEventListener('change', handleCheckboxChange);
-    
-    mainContent.removeEventListener('click', handleButtonClick);
-    mainContent.addEventListener('click', handleButtonClick);
-}
-
-function handleCheckboxChange(e) {
-    const checkbox = e.target;
-    if (!checkbox.classList.contains('step-checkbox')) return;
-    
-    const li = checkbox.closest('.step-item');
-    const stepIndex = parseInt(li.dataset.stepIndex);
-    const missionDiv = li.closest('.mission-item');
-    const taskId = missionDiv.dataset.taskId;
-    
-    const task = state.activeTasks.find(t => t.id === taskId);
-    if (task && task.steps[stepIndex]) {
-        task.steps[stepIndex].completed = checkbox.checked;
-        if (checkbox.checked) {
-            li.classList.add('completed');
-        } else {
-            li.classList.remove('completed');
-        }
-        updateTaskCompletion(task);
-        saveState();
-        renderDashboard();
-        renderHeader();
-    }
-}
-
-function handleButtonClick(e) {
-    const target = e.target;
-    
-    // Add from bank button
-    if (target.classList.contains('add-from-bank')) {
-        const stepsArray = JSON.parse(target.dataset.steps);
-        const newTask = {
-            id: Date.now() + '_' + Math.random(),
-            title: target.dataset.title,
-            domain: target.dataset.domain,
-            difficulty: target.dataset.difficulty,
-            xp: parseInt(target.dataset.xp),
-            repeatability: 'One-time',
-            priority: 'Important',
-            steps: stepsArray.map(text => ({ text, completed: false })),
-            notes: '',
-            startedAt: new Date().toISOString(),
-            completed: false
-        };
-        state.activeTasks.push(newTask);
-        saveState();
-        renderAll();
-        showToast(`Added: ${newTask.title}`);
-    }
-    
-    // Add mini-quest button
-    if (target.classList.contains('add-miniquest')) {
-        const missionDiv = target.closest('.mission-item');
-        const title = missionDiv.querySelector('.mission-title')?.innerText || 'Mini-Quest';
-        const newTask = {
-            id: Date.now() + '_' + Math.random(),
-            title: title,
-            domain: 'Mini-Quests',
-            difficulty: 'Easy',
-            xp: 10,
-            repeatability: 'One-time',
-            priority: 'Maintenance',
-            steps: [
-                { text: missionDiv.querySelector('p')?.innerText?.split('.')[0] || 'Complete this mini-quest', completed: false }
-            ],
-            notes: '',
-            startedAt: new Date().toISOString(),
-            completed: false
-        };
-        state.activeTasks.push(newTask);
-        saveState();
-        renderAll();
-        showToast(`Added: ${title}`);
-    }
-    
-    // Add recovery button
-    if (target.classList.contains('add-recovery')) {
-        const missionDiv = target.closest('.mission-item');
-        const title = missionDiv.querySelector('.mission-title')?.innerText || 'Recovery Mission';
-        const newTask = {
-            id: Date.now() + '_' + Math.random(),
-            title: title,
-            domain: 'Recovery',
-            difficulty: 'Easy',
-            xp: 10,
-            repeatability: 'One-time',
-            priority: 'Maintenance',
-            steps: [
-                { text: missionDiv.querySelector('p')?.innerText?.split('.')[0] || 'Complete this recovery mission', completed: false }
-            ],
-            notes: '',
-            startedAt: new Date().toISOString(),
-            completed: false
-        };
-        state.activeTasks.push(newTask);
-        saveState();
-        renderAll();
-        showToast(`Added: ${title}`);
-    }
-    
-    // View task details
-    if (target.classList.contains('view-task-details')) {
-        const taskId = target.dataset.taskId;
-        openTaskModal(taskId);
-    }
-    
-    // Buy button
-    if (target.classList.contains('buy-btn') && target.dataset.id) {
-        const itemId = target.dataset.id;
-        const cost = parseInt(target.dataset.cost);
-        
-        if (state.coins >= cost) {
-            state.coins -= cost;
-            if (!state.avatar.inventory) state.avatar.inventory = [];
-            state.avatar.inventory.push(itemId);
-            showToast(`Purchased: ${itemId}`);
-            saveState();
-            renderShop();
-            renderAvatar();
-            renderHeader();
-        } else {
-            showToast(`Not enough coins! Need ${cost - state.coins} more`);
-        }
-    }
-    
-    // Equip button
-    if (target.classList.contains('equip-btn')) {
-        const itemId = target.dataset.item;
-        if (!state.avatar.equipped.includes(itemId)) {
-            state.avatar.equipped.push(itemId);
-            saveState();
-            renderAvatar();
-            showToast(`Equipped ${itemId}`);
-        }
-    }
-    
-    // Unequip button
-    if (target.classList.contains('unequip-btn')) {
-        const itemId = target.dataset.item;
-        state.avatar.equipped = state.avatar.equipped.filter(i => i !== itemId);
-        saveState();
-        renderAvatar();
-        showToast('Item unequipped');
-    }
 }
 
 function renderTaskBank() {
     const container = document.getElementById('taskBankList');
     if (!container) return;
     
-    const sampleTasks = [
-        { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
-        { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
-        { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
-        { title: "Code Interview Transcript", domain: "Research Assistantship", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] },
-        { title: "Write Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, steps: ["Write accomplishments", "Note blockers", "Set next action"] },
-        { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, steps: ["Open board", "Review calendar", "Pick top 3", "Start"] }
+    const tasks = [
+        { title: "Write Literature Review", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find sources", "Read articles", "Write synthesis", "Add citations"] },
+        { title: "Create Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add tips", "Publish"] },
+        { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment"] }
     ];
     
-    const searchTerm = document.getElementById('bankSearch')?.value.toLowerCase() || '';
-    const domainFilter = document.getElementById('bankDomainFilter')?.value || '';
-    const difficultyFilter = document.getElementById('bankDifficultyFilter')?.value || '';
-    
-    let filtered = sampleTasks.filter(t => t.title.toLowerCase().includes(searchTerm));
-    if (domainFilter) filtered = filtered.filter(t => t.domain === domainFilter);
-    if (difficultyFilter) filtered = filtered.filter(t => t.difficulty === difficultyFilter);
-    
-    container.innerHTML = filtered.map(t => `
+    container.innerHTML = tasks.map(t => `
         <div class="mission-item">
             <div class="mission-header">
                 <div class="mission-title">${escapeHtml(t.title)}</div>
-                <div class="mission-badge">
-                    <span class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</span>
-                </div>
+                <div class="mission-badge"><span class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</span></div>
             </div>
-            <div class="mission-meta">
-                <span>📁 ${t.domain}</span>
-                <span>⭐ ${t.xp} XP</span>
-            </div>
-            <div class="mission-actions">
-                <button class="add-from-bank" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
-            </div>
+            <div class="mission-meta"><span>📁 ${t.domain}</span><span>⭐ ${t.xp} XP</span></div>
+            <button class="add-from-bank" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
         </div>
     `).join('');
 }
 
-function renderAvatar() {
-    const nameInput = document.getElementById('avatarName');
-    if (nameInput) {
-        nameInput.value = state.avatar.name;
-        nameInput.onchange = (e) => {
-            state.avatar.name = e.target.value;
-            saveState();
-        };
-    }
-    
-    const totalXPEarned = state.completedHistory.reduce((sum, h) => sum + (h.xpGained || 0), 0);
-    const missionsCompleted = state.completedHistory.length;
-    
-    const totalXPEarnedEl = document.getElementById('totalXPEarned');
-    const missionsCompletedEl = document.getElementById('missionsCompleted');
-    if (totalXPEarnedEl) totalXPEarnedEl.innerText = totalXPEarned;
-    if (missionsCompletedEl) missionsCompletedEl.innerText = missionsCompleted;
-    
-    // Update multipliers (simplified - no actual effect yet)
-    const xpMultEl = document.getElementById('xpMult');
-    const coinMultEl = document.getElementById('coinMult');
-    if (xpMultEl) xpMultEl.innerText = '1.00';
-    if (coinMultEl) coinMultEl.innerText = '1.00';
-    
-    const equippedContainer = document.getElementById('equippedList');
-    if (equippedContainer) {
-        if (!state.avatar.equipped || state.avatar.equipped.length === 0) {
-            equippedContainer.innerHTML = '<div class="gear-item">No gear equipped. Visit the Shop!</div>';
-        } else {
-            equippedContainer.innerHTML = state.avatar.equipped.map(itemId => {
-                return `<div class="gear-item">${itemId} 
-                    <button class="unequip-btn" data-item="${itemId}">✖</button></div>`;
-            }).join('');
-        }
-    }
-    
-    const inventoryContainer = document.getElementById('inventoryList');
-    if (inventoryContainer) {
-        const ownedNotEquipped = (state.avatar.inventory || []).filter(id => !(state.avatar.equipped || []).includes(id));
-        if (ownedNotEquipped.length === 0) {
-            inventoryContainer.innerHTML = '<div class="gear-item">No items in inventory. Buy from Shop!</div>';
-        } else {
-            inventoryContainer.innerHTML = ownedNotEquipped.map(itemId => {
-                return `<div class="gear-item">${itemId} 
-                    <button class="equip-btn" data-item="${itemId}">⚔️ Equip</button></div>`;
-            }).join('');
-        }
-    }
-}
-
-function renderShop() {
+function renderShopItems() {
     const container = document.getElementById('shopItemsList');
-    const coinsSpan = document.getElementById('shopCoins');
-    if (coinsSpan) coinsSpan.innerText = state.coins;
     if (!container) return;
     
-    const shopItems = [
-        { id: 'cloak_basic', name: 'Akatsuki Cloak', cost: 150, effect: '+5% XP', description: 'Classic black cloak with red clouds' },
-        { id: 'mask_anbu', name: 'ANBU Mask', cost: 100, effect: '+3% XP', description: 'White ANBU-style mask' },
-        { id: 'ring_akatsuki', name: 'Akatsuki Ring', cost: 80, effect: '+2% XP, +2% Coins', description: 'Glowing ring with secret meaning' },
-        { id: 'raven_companion', name: 'Raven Companion', cost: 200, effect: '+10% XP', description: 'Loyal messenger perched on shoulder' },
-        { id: 'crimson_aura', name: 'Crimson Aura', cost: 120, effect: '+10% Coins', description: 'Burning red energy aura' }
-    ];
-    
-    container.innerHTML = shopItems.map(item => {
+    container.innerHTML = SHOP_ITEMS.map(item => {
         const owned = state.avatar.inventory?.includes(item.id);
         return `
             <div class="shop-item">
                 <h4>${item.name}</h4>
                 <p class="price">💰 ${item.cost} coins</p>
-                <p class="effect">${item.description}</p>
-                <p class="effect">${item.effect}</p>
-                ${owned ? `<button class="buy-btn" disabled>✓ Owned</button>` :
-                  `<button class="buy-btn" data-id="${item.id}" data-cost="${item.cost}">Purchase (${item.cost}💰)</button>`}
+                <p class="effect">${item.desc}</p>
+                <p class="effect"><strong>${item.effect}</strong></p>
+                ${owned ? '<button disabled>✓ Owned</button>' : `<button class="buy-btn" data-id="${item.id}" data-cost="${item.cost}" data-name="${item.name}">Purchase</button>`}
             </div>
         `;
     }).join('');
@@ -569,484 +279,334 @@ function renderHistory() {
     const container = document.getElementById('weeklyHistory');
     if (!container) return;
     
-    const last7Days = [];
+    const last7 = [];
     for (let i = 0; i < 7; i++) {
         let d = new Date();
         d.setDate(d.getDate() - i);
-        last7Days.push(d.toISOString().slice(0,10));
+        last7.push(d.toISOString().slice(0,10));
     }
     
     let html = '';
-    for (const day of last7Days) {
-        const dayCompletions = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === day);
+    for (const day of last7) {
+        const dayTasks = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === day);
         html += `<div class="ak-card"><h3>📅 ${day}</h3><ul>`;
-        if (dayCompletions.length === 0) {
-            html += '<li>✨ No missions completed</li>';
-        } else {
-            dayCompletions.forEach(c => {
-                html += `<li><strong>✅ ${escapeHtml(c.title)}</strong> (+${c.xpGained} XP, +${c.coinsGained || 0} coins)`;
-                if (c.notes) html += `<br><span style="font-size:0.8rem; color:#aaa;">📝 ${escapeHtml(c.notes.substring(0, 100))}</span>`;
-                html += `</li>`;
-            });
-        }
+        if (dayTasks.length === 0) html += '<li>No missions</li>';
+        else dayTasks.forEach(t => html += `<li>✅ ${escapeHtml(t.title)} (+${t.xpGained} XP)</li>`);
         html += `</ul></div>`;
     }
     container.innerHTML = html;
 }
 
-function renderAchievements() {
-    const container = document.getElementById('achievementsList');
-    if (!container) return;
-    
-    const achievements = [
-        { id: 'first_blood', name: 'First Blood', description: 'Complete your first mission', requirement: 'Complete 1 mission', xpReward: 50 },
-        { id: 'crimson_streak', name: 'Crimson Streak', description: 'Maintain 14-day streak', requirement: '14 day streak', xpReward: 200 }
-    ];
-    
-    container.innerHTML = achievements.map(ach => {
-        const unlocked = state.unlockedAchievements.includes(ach.id);
-        return `
-            <div class="achievement-item ${unlocked ? 'unlocked' : 'locked'}">
-                <div class="achievement-icon">${unlocked ? '🏆' : '🔒'}</div>
-                <h4>${ach.name}</h4>
-                <p>${ach.description}</p>
-                <small>${ach.xpReward} XP</small>
-                ${unlocked ? '<small>✓ Unlocked</small>' : `<small>${ach.requirement}</small>`}
-            </div>
-        `;
-    }).join('');
-}
-
-function openTaskModal(taskId) {
-    const task = state.activeTasks.find(t => t.id === taskId);
-    if (!task) return;
-    
-    const modal = document.getElementById('taskModal');
-    if (!modal) return;
-    
-    document.getElementById('modalTitle').innerText = task.title;
-    document.getElementById('modalBody').innerHTML = `
-        <p><strong>Domain:</strong> ${task.domain}</p>
-        <p><strong>Difficulty:</strong> ${task.difficulty}</p>
-        <p><strong>XP Reward:</strong> ${task.xp}</p>
-        <p><strong>Repeatability:</strong> ${task.repeatability}</p>
-        <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
-        <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
-    `;
-    document.getElementById('taskNotes').value = task.notes || '';
-    
-    const saveBtn = document.getElementById('saveTaskNotes');
-    const newSaveBtn = saveBtn.cloneNode(true);
-    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-    newSaveBtn.onclick = () => {
-        task.notes = document.getElementById('taskNotes').value;
-        saveState();
-        modal.style.display = 'none';
-        showToast('Notes saved!');
-    };
-    
-    const deleteBtn = document.getElementById('deleteTaskBtn');
-    if (deleteBtn) {
-        const newDeleteBtn = deleteBtn.cloneNode(true);
-        deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
-        newDeleteBtn.onclick = () => {
-            if (confirm(`Delete task "${task.title}"?`)) {
-                state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
-                saveState();
-                modal.style.display = 'none';
-                renderAll();
-                showToast(`Deleted: ${task.title}`);
-            }
-        };
-    }
-    
-    modal.style.display = 'flex';
-    const closeBtn = modal.querySelector('.close');
-    if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-}
-
 function generateReport() {
-    const totalXPEarned = state.completedHistory.reduce((sum, h) => sum + (h.xpGained || 0), 0);
-    
     let report = `═══════════════════════════════════════════\n`;
-    report += `              🌙 AKATSUKI MISSION REPORT\n`;
+    report += `              🌙 AKATSUKI REPORT\n`;
     report += `═══════════════════════════════════════════\n\n`;
-    report += `📅 GENERATED: ${new Date().toLocaleString()}\n`;
-    report += `👤 SCHOLAR: ${state.avatar.name}\n`;
-    report += `🏆 LEVEL: ${state.level} | XP: ${state.xp} | STREAK: ${state.streak} days\n`;
-    report += `💰 COINS: ${state.coins}\n\n`;
-    report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-    report += `📊 LIFETIME STATISTICS\n`;
-    report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-    report += `Total Missions Completed: ${state.completedHistory.length}\n`;
-    report += `Total XP Earned: ${totalXPEarned}\n`;
-    report += `Current Streak: ${state.streak} days\n\n`;
+    report += `📅 ${new Date().toLocaleString()}\n`;
+    report += `👤 ${state.avatar.name}\n`;
+    report += `🏆 LEVEL ${state.level} | ${state.xp} XP | ${state.coins} coins\n\n`;
     report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
     report += `📜 COMPLETED MISSIONS\n`;
     report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
     
-    if (state.completedHistory.length === 0) {
-        report += `No missions completed yet.\n\n`;
-    } else {
-        state.completedHistory.forEach((c, idx) => {
-            report += `${idx + 1}. ${c.title}\n`;
-            report += `   📅 Completed: ${new Date(c.completedAt).toLocaleString()}\n`;
-            report += `   🎯 XP Gained: ${c.xpGained} | 💰 Coins: ${c.coinsGained || 0}\n`;
-            if (c.notes) report += `   📝 Notes: ${c.notes}\n`;
-            report += `\n`;
-        });
-    }
+    state.completedHistory.forEach((c, i) => {
+        report += `${i+1}. ${c.title}\n`;
+        report += `   +${c.xpGained} XP\n`;
+        if (c.notes) report += `   📝 ${c.notes}\n`;
+        report += `\n`;
+    });
     
-    const reportOutput = document.getElementById('reportOutput');
-    if (reportOutput) {
-        reportOutput.innerText = report;
-        reportOutput.style.display = 'block';
-        
+    const output = document.getElementById('reportOutput');
+    if (output) {
+        output.textContent = report;
+        output.style.display = 'block';
         const blob = new Blob([report], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `akatsuki_report_${new Date().toISOString().slice(0,10)}.txt`;
+        a.download = `akatsuki_report_${getTodayStr()}.txt`;
         a.click();
         URL.revokeObjectURL(url);
     }
 }
 
-function batchImport() {
-    const textarea = document.getElementById('batchImport');
-    if (!textarea) return;
+// Event delegation
+function setupEventDelegation() {
+    const content = document.querySelector('.ak-content');
+    if (!content) return;
     
-    const lines = textarea.value.split('\n');
-    let imported = 0;
+    // Checkbox changes
+    content.addEventListener('change', (e) => {
+        if (e.target.classList.contains('step-checkbox')) {
+            const li = e.target.closest('.step-item');
+            const stepIdx = parseInt(li.dataset.stepIndex);
+            const missionDiv = li.closest('.mission-item');
+            const taskId = missionDiv.dataset.taskId;
+            const task = state.activeTasks.find(t => t.id === taskId);
+            
+            if (task && task.steps[stepIdx]) {
+                task.steps[stepIdx].completed = e.target.checked;
+                if (e.target.checked) li.classList.add('completed');
+                else li.classList.remove('completed');
+                
+                const allDone = task.steps.every(s => s.completed);
+                if (allDone && !task.completed) completeTask(taskId);
+                saveState();
+                renderAll();
+            }
+        }
+    });
     
-    for (const line of lines) {
-        if (!line.trim()) continue;
-        const parts = line.split('|').map(p => p.trim());
-        if (parts.length >= 2) {
-            const steps = (parts[4] || 'Plan task,Execute work,Review results').split(',').map(s => ({ text: s.trim(), completed: false }));
+    // Button clicks
+    content.addEventListener('click', (e) => {
+        // Add from bank
+        if (e.target.classList.contains('add-from-bank')) {
+            const steps = JSON.parse(e.target.dataset.steps);
             state.activeTasks.push({
                 id: Date.now() + '_' + Math.random(),
-                title: parts[0],
-                domain: parts[1] || 'General',
-                difficulty: parts[2] || 'Medium',
-                xp: parseInt(parts[3]) || 30,
+                title: e.target.dataset.title,
+                domain: e.target.dataset.domain,
+                difficulty: e.target.dataset.difficulty,
+                xp: parseInt(e.target.dataset.xp),
                 repeatability: 'One-time',
                 priority: 'Important',
-                steps: steps,
+                steps: steps.map(s => ({ text: s, completed: false })),
                 notes: '',
                 startedAt: new Date().toISOString(),
                 completed: false
             });
-            imported++;
+            saveState();
+            renderAll();
+            showToast(`Added: ${e.target.dataset.title}`);
         }
-    }
-    
-    if (imported > 0) {
-        saveState();
-        renderAll();
-        showToast(`Imported ${imported} tasks!`);
-        textarea.value = '';
-    } else {
-        showToast('No valid tasks found. Format: Title | Domain | Difficulty | XP | Step1, Step2');
-    }
-}
-
-function exportData() {
-    const exportData = {
-        version: '2.1.0',
-        exportDate: new Date().toISOString(),
-        state: {
-            xp: state.xp,
-            coins: state.coins,
-            level: state.level,
-            streak: state.streak,
-            activeTasks: state.activeTasks,
-            completedHistory: state.completedHistory,
-            avatar: state.avatar,
-            unlockedAchievements: state.unlockedAchievements
+        
+        // View details
+        if (e.target.classList.contains('view-task-details')) {
+            const task = state.activeTasks.find(t => t.id === e.target.dataset.taskId);
+            if (task) {
+                document.getElementById('modalTitle').textContent = task.title;
+                document.getElementById('modalBody').innerHTML = `<p>Domain: ${task.domain}</p><p>XP: ${task.xp}</p>`;
+                document.getElementById('taskNotes').value = task.notes || '';
+                document.getElementById('taskModal').style.display = 'flex';
+                
+                document.getElementById('saveTaskNotes').onclick = () => {
+                    task.notes = document.getElementById('taskNotes').value;
+                    saveState();
+                    document.getElementById('taskModal').style.display = 'none';
+                    showToast('Notes saved');
+                };
+                document.getElementById('deleteTaskBtn').onclick = () => {
+                    state.activeTasks = state.activeTasks.filter(t => t.id !== task.id);
+                    saveState();
+                    renderAll();
+                    document.getElementById('taskModal').style.display = 'none';
+                    showToast('Task deleted');
+                };
+            }
         }
-    };
-    
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `akatsuki_save_${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('Data exported!');
-}
-
-function importData(file) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        try {
-            const imported = JSON.parse(event.target.result);
-            if (imported.state) {
-                state = { ...state, ...imported.state };
+        
+        // Buy item
+        if (e.target.classList.contains('buy-btn')) {
+            const id = e.target.dataset.id;
+            const cost = parseInt(e.target.dataset.cost);
+            const name = e.target.dataset.name;
+            if (state.coins >= cost) {
+                state.coins -= cost;
+                if (!state.avatar.inventory) state.avatar.inventory = [];
+                state.avatar.inventory.push(id);
                 saveState();
                 renderAll();
-                showToast('Data imported successfully!');
+                showToast(`Purchased: ${name}`);
             } else {
-                showToast('Invalid save file format');
+                showToast(`Need ${cost - state.coins} more coins`);
             }
-        } catch(err) {
-            showToast('Error importing data');
         }
-    };
-    reader.readAsText(file);
+    });
 }
 
+// Setup regular event listeners
 function setupEventListeners() {
     // Tab switching
     document.querySelectorAll('.ak-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const tabId = btn.dataset.tab;
-            document.querySelectorAll('.ak-tab').forEach(tab => tab.classList.remove('active'));
-            const targetTab = document.getElementById(tabId);
-            if (targetTab) targetTab.classList.add('active');
+            document.querySelectorAll('.ak-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
             document.querySelectorAll('.ak-tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         });
     });
     
-    // Undo/Redo (placeholder)
-    document.getElementById('undoBtn')?.addEventListener('click', () => showToast('Undo coming soon'));
-    document.getElementById('redoBtn')?.addEventListener('click', () => showToast('Redo coming soon'));
+    // Generate task
+    document.getElementById('generateSingleBtn')?.addEventListener('click', () => {
+        const goal = document.getElementById('genGoal')?.value;
+        if (!goal) { showToast('Enter a goal'); return; }
+        
+        const difficulty = document.getElementById('genDifficulty').value;
+        const priority = document.getElementById('genPriority').value;
+        const xpVal = difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : 80;
+        
+        const newTask = {
+            id: Date.now() + '_' + Math.random(),
+            title: goal,
+            domain: 'General',
+            difficulty: difficulty,
+            xp: xpVal,
+            repeatability: 'One-time',
+            priority: priority,
+            steps: [
+                { text: `Define scope: ${goal.substring(0,40)}`, completed: false },
+                { text: 'Break down into sub-tasks', completed: false },
+                { text: 'Execute main work', completed: false },
+                { text: 'Review and document', completed: false }
+            ],
+            notes: '',
+            startedAt: new Date().toISOString(),
+            completed: false
+        };
+        
+        const preview = document.getElementById('generatedPreview');
+        if (preview) {
+            preview.innerHTML = `<div class="mission-item"><strong>📋 ${escapeHtml(goal)}</strong><br>${difficulty} · ${xpVal} XP</div>`;
+        }
+        
+        const addBtn = document.getElementById('addGeneratedBtn');
+        if (addBtn) {
+            addBtn.style.display = 'inline-block';
+            addBtn.onclick = () => {
+                state.activeTasks.push(newTask);
+                saveState();
+                renderAll();
+                if (preview) preview.innerHTML = '';
+                addBtn.style.display = 'none';
+                document.getElementById('genGoal').value = '';
+                showToast(`Added: ${newTask.title}`);
+            };
+        }
+    });
+    
+    // Batch import
+    document.getElementById('batchImportExecute')?.addEventListener('click', () => {
+        const text = document.getElementById('batchImport')?.value;
+        if (!text) { showToast('Paste tasks to import'); return; }
+        
+        const lines = text.split('\n');
+        let imported = 0;
+        for (const line of lines) {
+            if (!line.trim()) continue;
+            const parts = line.split('|').map(p => p.trim());
+            if (parts.length >= 2) {
+                const steps = (parts[4] || 'Plan,Execute,Review').split(',').map(s => ({ text: s.trim(), completed: false }));
+                state.activeTasks.push({
+                    id: Date.now() + '_' + Math.random(),
+                    title: parts[0],
+                    domain: parts[1] || 'General',
+                    difficulty: parts[2] || 'Medium',
+                    xp: parseInt(parts[3]) || 30,
+                    repeatability: 'One-time',
+                    priority: 'Important',
+                    steps: steps,
+                    notes: '',
+                    startedAt: new Date().toISOString(),
+                    completed: false
+                });
+                imported++;
+            }
+        }
+        if (imported > 0) {
+            saveState();
+            renderAll();
+            showToast(`Imported ${imported} tasks!`);
+            document.getElementById('batchImport').value = '';
+        } else {
+            showToast('No valid tasks found');
+        }
+    });
     
     // Reset buttons
     document.getElementById('forceResetBtn')?.addEventListener('click', () => {
         state.lastResetDate = getTodayStr();
         saveState();
-        renderAll();
-        showToast('Daily reset completed!');
-    });
-    
-    document.getElementById('forceWeeklyResetBtn')?.addEventListener('click', () => {
-        state.lastWeeklyResetDate = getLastMonday();
-        saveState();
-        renderAll();
-        showToast('Weekly reset completed!');
+        showToast('Daily reset completed');
     });
     
     document.getElementById('clearAllBtn')?.addEventListener('click', () => {
-        if (confirm('⚠️ WIPE ALL PROGRESS? This cannot be undone.')) {
+        if (confirm('Wipe all progress?')) {
             localStorage.clear();
             location.reload();
         }
     });
     
-    // Report buttons
+    // Report
     document.getElementById('exportReportBtn')?.addEventListener('click', generateReport);
     document.getElementById('generateReportBtn')?.addEventListener('click', generateReport);
     
-    // Quick generate
+    // Quick generate tab switch
     document.getElementById('genQuickBtn')?.addEventListener('click', () => {
         document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
     });
     
-    // Batch import
+    // Batch import tab switch
     document.getElementById('batchImportBtn')?.addEventListener('click', () => {
         document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
     });
-    document.getElementById('batchImportExecute')?.addEventListener('click', batchImport);
     
-    // Data export/import
-    document.getElementById('exportDataBtn')?.addEventListener('click', exportData);
+    // Export data
+    document.getElementById('exportDataBtn')?.addEventListener('click', () => {
+        const data = { version: '1.0', exportDate: new Date().toISOString(), state: state };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `akatsuki_save_${getTodayStr()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Data exported');
+    });
+    
+    // Import data
     document.getElementById('importDataBtn')?.addEventListener('click', () => {
         document.getElementById('importDataInput')?.click();
     });
     document.getElementById('importDataInput')?.addEventListener('change', (e) => {
-        if (e.target.files[0]) importData(e.target.files[0]);
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            try {
+                const imported = JSON.parse(ev.target.result);
+                if (imported.state) {
+                    state = { ...state, ...imported.state };
+                    saveState();
+                    renderAll();
+                    showToast('Data imported');
+                }
+            } catch(err) { showToast('Invalid file'); }
+        };
+        reader.readAsText(file);
     });
     
-    // Task Generator - Single Task
-    const generateSingleBtn = document.getElementById('generateSingleBtn');
-    if (generateSingleBtn) {
-        generateSingleBtn.addEventListener('click', () => {
-            const goal = document.getElementById('genGoal')?.value;
-            if (!goal) {
-                showToast('Enter a goal first');
-                return;
-            }
-            
-            const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
-            const priority = document.getElementById('genPriority')?.value || 'Important';
-            const xpValue = difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : 80;
-            const themeSelect = document.getElementById('genTheme');
-            const themeMap = {
-                'phd': 'PhD', 'skool': 'Skool', 'curriculum': 'Curriculum',
-                'ra': 'Research Assistantship', 'docs': 'Documentation', 'rituals': 'Rituals'
-            };
-            const domain = themeMap[themeSelect?.value] || 'General';
-            
-            const newTask = {
-                id: Date.now() + '_' + Math.random(),
-                title: goal,
-                domain: domain,
-                difficulty: difficulty,
-                xp: xpValue,
-                repeatability: document.getElementById('genRepeatability')?.value || 'One-time',
-                priority: priority,
-                steps: [
-                    { text: `Clarify scope: ${goal.substring(0, 50)}`, completed: false },
-                    { text: 'Break down into sub-tasks', completed: false },
-                    { text: 'Execute main work', completed: false },
-                    { text: 'Review and document results', completed: false }
-                ],
-                notes: '',
-                startedAt: new Date().toISOString(),
-                completed: false
-            };
-            
-            const previewDiv = document.getElementById('generatedPreview');
-            if (previewDiv) {
-                previewDiv.innerHTML = `
-                    <div class="mission-item">
-                        <div class="mission-header">
-                            <strong>📋 ${escapeHtml(goal)}</strong>
-                            <div class="mission-badge">
-                                <span class="badge ${difficulty.toLowerCase()}">${difficulty}</span>
-                                <span class="badge ${priority.toLowerCase()}">${priority}</span>
-                            </div>
-                        </div>
-                        <div class="mission-meta">
-                            <span>📁 ${domain}</span>
-                            <span>⭐ ${xpValue} XP</span>
-                        </div>
-                        <ul><li>Clarify scope</li><li>Break down into sub-tasks</li><li>Execute main work</li><li>Review results</li></ul>
-                    </div>
-                `;
-            }
-            
-            const addBtn = document.getElementById('addGeneratedBtn');
-            if (addBtn) {
-                addBtn.style.display = 'inline-block';
-                const newAddBtn = addBtn.cloneNode(true);
-                addBtn.parentNode.replaceChild(newAddBtn, addBtn);
-                newAddBtn.onclick = () => {
-                    state.activeTasks.push(newTask);
-                    saveState();
-                    if (previewDiv) previewDiv.innerHTML = '';
-                    newAddBtn.style.display = 'none';
-                    renderAll();
-                    showToast(`Generated: ${newTask.title}`);
-                    document.querySelector('.ak-tab-btn[data-tab="active"]')?.click();
-                };
-            }
+    // Modal close
+    document.querySelectorAll('.close').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('taskModal').style.display = 'none';
         });
-    }
+    });
+    window.onclick = (e) => {
+        const modal = document.getElementById('taskModal');
+        if (e.target === modal) modal.style.display = 'none';
+    };
     
-    // Generate Chain (simplified - just generates 3 tasks)
-    const generateChainBtn = document.getElementById('generateChainBtn');
-    if (generateChainBtn) {
-        generateChainBtn.addEventListener('click', () => {
-            const goal = document.getElementById('genGoal')?.value;
-            if (!goal) {
-                showToast('Enter a goal first');
-                return;
-            }
-            
-            const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
-            const themeSelect = document.getElementById('genTheme');
-            const themeMap = {
-                'phd': 'PhD', 'skool': 'Skool', 'curriculum': 'Curriculum',
-                'ra': 'Research Assistantship', 'docs': 'Documentation', 'rituals': 'Rituals'
-            };
-            const domain = themeMap[themeSelect?.value] || 'General';
-            const xpValue = difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : 80;
-            
-            const tasks = [];
-            for (let i = 1; i <= 3; i++) {
-                tasks.push({
-                    id: Date.now() + '_' + Math.random() + '_' + i,
-                    title: i === 1 ? goal : `${goal} (Part ${i} of 3)`,
-                    domain: domain,
-                    difficulty: difficulty,
-                    xp: xpValue,
-                    repeatability: 'One-time',
-                    priority: i === 1 ? 'Critical' : 'Important',
-                    steps: [
-                        { text: `Step 1 for: ${goal.substring(0, 40)}`, completed: false },
-                        { text: 'Step 2', completed: false },
-                        { text: 'Step 3', completed: false }
-                    ],
-                    notes: '',
-                    startedAt: new Date().toISOString(),
-                    completed: false
-                });
-            }
-            
-            const previewDiv = document.getElementById('generatedPreview');
-            if (previewDiv) {
-                previewDiv.innerHTML = `
-                    <div class="mission-item">
-                        <div class="mission-header">
-                            <strong>🔗 Chain: ${escapeHtml(goal)}</strong>
-                            <div class="mission-badge">
-                                <span class="badge">3 tasks</span>
-                            </div>
-                        </div>
-                        <div class="mission-meta">
-                            <span>📁 ${domain}</span>
-                            <span>⭐ Total XP: ${xpValue * 3}</span>
-                        </div>
-                        <ul>${tasks.map(t => `<li>${escapeHtml(t.title)}</li>`).join('')}</ul>
-                    </div>
-                `;
-            }
-            
-            const addBtn = document.getElementById('addGeneratedBtn');
-            if (addBtn) {
-                addBtn.style.display = 'inline-block';
-                const newAddBtn = addBtn.cloneNode(true);
-                addBtn.parentNode.replaceChild(newAddBtn, addBtn);
-                newAddBtn.onclick = () => {
-                    tasks.forEach(task => state.activeTasks.push(task));
-                    saveState();
-                    if (previewDiv) previewDiv.innerHTML = '';
-                    newAddBtn.style.display = 'none';
-                    renderAll();
-                    showToast(`Added chain: ${goal} (3 tasks)`);
-                    document.querySelector('.ak-tab-btn[data-tab="active"]')?.click();
-                };
-            }
-        });
-    }
-    
-    // Filters
-    const filterDomain = document.getElementById('filterDomain');
-    const filterDifficulty = document.getElementById('filterDifficulty');
-    const filterPriority = document.getElementById('filterPriority');
-    if (filterDomain) filterDomain.addEventListener('change', () => renderActiveMissions());
-    if (filterDifficulty) filterDifficulty.addEventListener('change', () => renderActiveMissions());
-    if (filterPriority) filterPriority.addEventListener('change', () => renderActiveMissions());
-    
-    // Bank search/filters
-    const bankSearch = document.getElementById('bankSearch');
-    const bankDomainFilter = document.getElementById('bankDomainFilter');
-    const bankDifficultyFilter = document.getElementById('bankDifficultyFilter');
-    if (bankSearch) bankSearch.addEventListener('input', () => renderTaskBank());
-    if (bankDomainFilter) bankDomainFilter.addEventListener('change', () => renderTaskBank());
-    if (bankDifficultyFilter) bankDifficultyFilter.addEventListener('change', () => renderTaskBank());
+    // Undo/Redo placeholders
+    document.getElementById('undoBtn')?.addEventListener('click', () => showToast('Undo coming soon'));
+    document.getElementById('redoBtn')?.addEventListener('click', () => showToast('Redo coming soon'));
 }
 
-// ============================================================
-// INITIALIZATION
-// ============================================================
-
+// Initialize
 function initApp() {
-    console.log('Initializing Akatsuki Quest...');
-    
+    console.log('Initializing...');
     loadState();
     setupEventListeners();
-    attachDelegatedEvents();
+    setupEventDelegation();
     renderAll();
-    
-    console.log('🎯 Akatsuki Quest Ready!', { 
-        tasks: state.activeTasks.filter(t => !t.completed).length,
-        coins: state.coins,
-        level: state.level
-    });
+    console.log('Ready!');
 }
