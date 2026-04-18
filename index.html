@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akatsuki PhD Quest - Shadow Missions</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
 </head>
 <body>
     <div class="ak-app">
@@ -39,14 +41,17 @@
                 <button class="ak-tab-btn" data-tab="active">📋 ACTIVE MISSIONS</button>
                 <button class="ak-tab-btn" data-tab="generator">⚙️ TASK GENERATOR</button>
                 <button class="ak-tab-btn" data-tab="bank">📚 TASK BANK</button>
+                <button class="ak-tab-btn" data-tab="bosses">👹 BOSS BATTLES</button>
+                <button class="ak-tab-btn" data-tab="miniquests">⚡ MINI-QUESTS</button>
+                <button class="ak-tab-btn" data-tab="recovery">🔄 RECOVERY</button>
                 <button class="ak-tab-btn" data-tab="avatar">🎭 AVATAR</button>
                 <button class="ak-tab-btn" data-tab="shop">🛒 SHOP</button>
                 <button class="ak-tab-btn" data-tab="history">📜 HISTORY</button>
                 <button class="ak-tab-btn" data-tab="achievements">🏆 ACHIEVEMENTS</button>
                 <button class="ak-tab-btn" data-tab="settings">⚙️ SETTINGS</button>
                 <div class="ak-undo-redo">
-                    <button id="undoBtn">↩️ UNDO</button>
-                    <button id="redoBtn">↪️ REDO</button>
+                    <button id="undoBtn" title="Undo last action">↩️ UNDO</button>
+                    <button id="redoBtn" title="Redo last action">↪️ REDO</button>
                 </div>
             </aside>
 
@@ -58,18 +63,27 @@
                         <div class="ak-card">
                             <h3>🎯 WIN THE DAY</h3>
                             <div class="win-condition">
-                                <div class="win-item"><span class="win-check" id="winImportant">⬜</span> Critical/Important Mission</div>
-                                <div class="win-item"><span class="win-check" id="winRitual">⬜</span> Ritual Mission</div>
-                                <div class="win-item"><span class="win-check" id="winDoc">⬜</span> Documentation Mission</div>
+                                <div class="win-item">
+                                    <span class="win-check" id="winImportant">⬜</span> 
+                                    <span>Critical/Important Mission</span>
+                                </div>
+                                <div class="win-item">
+                                    <span class="win-check" id="winRitual">⬜</span> 
+                                    <span>Ritual Mission</span>
+                                </div>
+                                <div class="win-item">
+                                    <span class="win-check" id="winDoc">⬜</span> 
+                                    <span>Documentation Mission</span>
+                                </div>
                                 <div class="win-result" id="winResult">❌ NOT ACHIEVED</div>
                             </div>
                         </div>
                         <div class="ak-card">
                             <h3>📊 PROGRESS</h3>
-                            <p>Active Missions: <span id="activeCount">0</span></p>
-                            <p>Completed Today: <span id="completedToday">0</span></p>
-                            <p>Total XP Earned: <span id="totalXP">0</span></p>
-                            <p>Current Streak: <span id="streakDisplay">0</span> days</p>
+                            <p>Active Missions: <strong><span id="activeCount">0</span></strong></p>
+                            <p>Completed Today: <strong><span id="completedToday">0</span></strong></p>
+                            <p>Total XP Earned: <strong><span id="totalXP">0</span></strong></p>
+                            <p>Current Streak: <strong><span id="streakDisplay">0</span> days</strong></p>
                         </div>
                         <div class="ak-card">
                             <h3>⚡ QUICK ACTIONS</h3>
@@ -80,7 +94,9 @@
                     </div>
                     <div class="ak-card">
                         <h3>🏆 RECENT ACHIEVEMENTS</h3>
-                        <div id="recentAchievements"></div>
+                        <div id="recentAchievements">
+                            <p style="color: #888;">Complete missions to unlock achievements!</p>
+                        </div>
                     </div>
                 </div>
 
@@ -88,10 +104,32 @@
                 <div id="active" class="ak-tab">
                     <h2>📋 ACTIVE MISSIONS</h2>
                     <div class="ak-filters">
-                        <select id="filterDomain"><option value="">All Domains</option></select>
-                        <select id="filterDifficulty"><option value="">All Difficulties</option></select>
-                        <select id="filterPriority"><option value="">All Priorities</option></select>
-                        <select id="filterStatus"><option value="active">Active Only</option><option value="all">All Tasks</option></select>
+                        <select id="filterDomain">
+                            <option value="">All Domains</option>
+                            <option value="PhD">PhD</option>
+                            <option value="Skool">Skool</option>
+                            <option value="Curriculum">Curriculum</option>
+                            <option value="Research Assistantship">Research Assistantship</option>
+                            <option value="Documentation">Documentation</option>
+                            <option value="Rituals">Rituals</option>
+                        </select>
+                        <select id="filterDifficulty">
+                            <option value="">All Difficulties</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                            <option value="Elite">Elite</option>
+                        </select>
+                        <select id="filterPriority">
+                            <option value="">All Priorities</option>
+                            <option value="Critical">Critical</option>
+                            <option value="Important">Important</option>
+                            <option value="Maintenance">Maintenance</option>
+                        </select>
+                        <select id="filterStatus">
+                            <option value="active">Active Only</option>
+                            <option value="all">All Tasks</option>
+                        </select>
                     </div>
                     <div id="activeMissionsList" class="ak-mission-list"></div>
                 </div>
@@ -100,51 +138,90 @@
                 <div id="generator" class="ak-tab">
                     <h2>⚙️ TASK GENERATOR</h2>
                     <div class="ak-card">
-                        <label>🎯 GOAL / MISSION INTENT</label>
-                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review on AI displacement..."></textarea>
+                        <label><strong>🎯 GOAL / MISSION INTENT</strong></label>
+                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review section on AI displacement..."></textarea>
                         
                         <div class="ak-form-row">
-                            <label>📁 THEME: <select id="genTheme"></select></label>
-                            <label>📂 SUBJECT: <select id="genSubject" disabled><option>Select Theme First</option></select></label>
-                            <label>🏷️ SIDE TOPIC: <select id="genSideTopic" disabled><option>Select Subject First</option></select></label>
+                            <label>
+                                📁 THEME: 
+                                <select id="genTheme">
+                                    <option value="phd">🎓 Shadow Research Missions</option>
+                                    <option value="skool">👥 Clan Leadership & Skool</option>
+                                    <option value="curriculum">📖 Village Knowledge Expansion</option>
+                                    <option value="ra">🔬 Intelligence Gathering</option>
+                                    <option value="docs">📝 Eternal Documentation</option>
+                                    <option value="rituals">🌙 Discipline & Rituals</option>
+                                </select>
+                            </label>
+                            <label>
+                                📂 SUBJECT: 
+                                <select id="genSubject" disabled>
+                                    <option>Select Theme First</option>
+                                </select>
+                            </label>
+                            <label>
+                                🏷️ SIDE TOPIC: 
+                                <select id="genSideTopic" disabled>
+                                    <option>Select Subject First</option>
+                                </select>
+                            </label>
                         </div>
                         
                         <div class="ak-form-row">
-                            <label>⚔️ DIFFICULTY: <select id="genDifficulty">
-                                <option value="Easy">Easy (10-25 XP)</option>
-                                <option value="Medium" selected>Medium (25-55 XP)</option>
-                                <option value="Hard">Hard (60-130 XP)</option>
-                                <option value="Elite">Elite (150-500 XP)</option>
-                            </select></label>
-                            <label>🔄 REPEATABILITY: <select id="genRepeatability">
-                                <option value="One-time" selected>One-time</option>
-                                <option value="Daily">Daily</option>
-                                <option value="Weekly">Weekly</option>
-                            </select></label>
-                            <label>⚡ PRIORITY: <select id="genPriority">
-                                <option value="Critical">Critical</option>
-                                <option value="Important" selected>Important</option>
-                                <option value="Maintenance">Maintenance</option>
-                            </select></label>
+                            <label>
+                                ⚔️ DIFFICULTY: 
+                                <select id="genDifficulty">
+                                    <option value="Easy">Easy (10-25 XP)</option>
+                                    <option value="Medium" selected>Medium (25-55 XP)</option>
+                                    <option value="Hard">Hard (60-130 XP)</option>
+                                    <option value="Elite">Elite (150-500 XP)</option>
+                                </select>
+                            </label>
+                            <label>
+                                🔄 REPEATABILITY: 
+                                <select id="genRepeatability">
+                                    <option value="One-time" selected>One-time</option>
+                                    <option value="Daily">Daily</option>
+                                    <option value="Weekly">Weekly</option>
+                                    <option value="Monthly">Monthly</option>
+                                </select>
+                            </label>
+                            <label>
+                                ⚡ PRIORITY: 
+                                <select id="genPriority">
+                                    <option value="Critical">🔥 Critical</option>
+                                    <option value="Important" selected>⚠️ Important</option>
+                                    <option value="Maintenance">🛠️ Maintenance</option>
+                                </select>
+                            </label>
                         </div>
                         
                         <div class="ak-form-row">
-                            <label>🔋 ENERGY: <select id="genEnergy">
-                                <option value="Low Energy">Low Energy</option>
-                                <option value="Standard Focus" selected>Standard Focus</option>
-                                <option value="Deep Focus">Deep Focus</option>
-                            </select></label>
-                            <label>📍 CONTEXT: <select id="genContext">
-                                <option value="Home">Home</option>
-                                <option value="Office">Office</option>
-                                <option value="Library">Library</option>
-                                <option value="Online" selected>Online</option>
-                            </select></label>
-                            <label>📅 HORIZON: <select id="genHorizon">
-                                <option value="today">Today (2 tasks)</option>
-                                <option value="week" selected>This Week (4 tasks)</option>
-                                <option value="month">This Month (6 tasks)</option>
-                            </select></label>
+                            <label>
+                                🔋 ENERGY: 
+                                <select id="genEnergy">
+                                    <option value="Low Energy">😴 Low Energy</option>
+                                    <option value="Standard Focus" selected>😐 Standard Focus</option>
+                                    <option value="Deep Focus">🧠 Deep Focus</option>
+                                </select>
+                            </label>
+                            <label>
+                                📍 CONTEXT: 
+                                <select id="genContext">
+                                    <option value="Home">🏠 Home</option>
+                                    <option value="Office">🏢 Office</option>
+                                    <option value="Library">📚 Library</option>
+                                    <option value="Online" selected>🌐 Online</option>
+                                </select>
+                            </label>
+                            <label>
+                                📅 HORIZON: 
+                                <select id="genHorizon">
+                                    <option value="today">Today (2 tasks)</option>
+                                    <option value="week" selected>This Week (4 tasks)</option>
+                                    <option value="month">This Month (6 tasks)</option>
+                                </select>
+                            </label>
                         </div>
                         
                         <div class="ak-form-actions">
@@ -158,7 +235,10 @@
                     
                     <div class="ak-card">
                         <h3>📦 BATCH IMPORT</h3>
-                        <textarea id="batchImport" rows="6" placeholder="Paste multiple tasks, one per line, using format:&#10;Title | Domain | Difficulty | XP | Step1, Step2, Step3&#10;&#10;Example:&#10;Write Lit Review | PhD | Hard | 85 | Find sources, Read articles, Write synthesis, Add citations"></textarea>
+                        <p style="font-size: 0.9rem; color: #888;">Paste multiple tasks, one per line. Format: <code>Title | Domain | Difficulty | XP | Step1, Step2, Step3</code></p>
+                        <textarea id="batchImport" rows="6" placeholder="Example:
+Write Lit Review | PhD | Hard | 85 | Find sources, Read articles, Write synthesis, Add citations
+Create Skool Post | Skool | Medium | 35 | Choose topic, Write hook, Add tips, Publish"></textarea>
                         <button id="batchImportExecute">📥 IMPORT TASKS</button>
                     </div>
                 </div>
@@ -168,10 +248,149 @@
                     <h2>📚 TASK BANK</h2>
                     <input type="text" id="bankSearch" placeholder="🔍 Search tasks..." class="ak-search">
                     <div class="ak-filters">
-                        <select id="bankDomainFilter"><option value="">All Themes</option></select>
-                        <select id="bankDifficultyFilter"><option value="">All Difficulties</option></select>
+                        <select id="bankDomainFilter">
+                            <option value="">All Themes</option>
+                            <option value="PhD">PhD</option>
+                            <option value="Skool">Skool</option>
+                            <option value="Curriculum">Curriculum</option>
+                        </select>
+                        <select id="bankDifficultyFilter">
+                            <option value="">All Difficulties</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
                     </div>
                     <div id="taskBankList" class="ak-mission-list"></div>
+                </div>
+
+                <!-- BOSS BATTLES TAB -->
+                <div id="bosses" class="ak-tab">
+                    <h2>👹 BOSS BATTLES</h2>
+                    <div class="ak-card">
+                        <p><strong>Epic multi-phase challenges representing major milestones.</strong></p>
+                        <p>Boss battles unlock at level 5 and test your mastery across domains.</p>
+                    </div>
+                    <div id="bossBattlesList" class="ak-mission-list">
+                        <div class="boss-item locked">
+                            <div class="boss-header">
+                                <h3>🐉 The Literature Hydra</h3>
+                                <span class="badge elite">Elite</span>
+                            </div>
+                            <p>A multi-headed beast of endless PDFs and contradictory theories.</p>
+                            <p><strong>Reward:</strong> 300 XP, 150 coins, Hydra Fang item</p>
+                            <p><strong>Unlock:</strong> Level 5 + Complete literature review foundation</p>
+                            <button disabled>🔒 LOCKED</button>
+                        </div>
+                        <div class="boss-item locked">
+                            <div class="boss-header">
+                                <h3>🗿 The Methodology Golem</h3>
+                                <span class="badge elite">Elite</span>
+                            </div>
+                            <p>A stone guardian blocking the path until your research design is unshakeable.</p>
+                            <p><strong>Reward:</strong> 350 XP, 175 coins, Golem Core item</p>
+                            <p><strong>Unlock:</strong> Level 7 + Defeat Literature Hydra</p>
+                            <button disabled>🔒 LOCKED</button>
+                        </div>
+                        <div class="boss-item locked">
+                            <div class="boss-header">
+                                <h3>😈 The Burnout Demon</h3>
+                                <span class="badge elite">Elite</span>
+                            </div>
+                            <p>Feeds on exhaustion and guilt. Requires real recovery, not just productivity.</p>
+                            <p><strong>Reward:</strong> 400 XP, 200 coins, Resilience Aura</p>
+                            <p><strong>Unlock:</strong> Auto-triggers after 3 missed days</p>
+                            <button disabled>🔒 LOCKED</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MINI-QUESTS TAB -->
+                <div id="miniquests" class="ak-tab">
+                    <h2>⚡ MINI-QUESTS</h2>
+                    <div class="ak-card">
+                        <p><strong>Quick 2-10 minute missions for momentum and micro-progress.</strong></p>
+                        <p>Perfect for when you're stuck, tired, or need a quick win.</p>
+                    </div>
+                    <div id="miniQuestsList" class="ak-mission-list">
+                        <div class="mission-item mini">
+                            <div class="mission-header">
+                                <div class="mission-title">⏱️ Start for 30 Seconds</div>
+                                <span class="badge easy">Very Easy</span>
+                            </div>
+                            <p>Work on anything for just 30 seconds. That's it.</p>
+                            <p><strong>Reward:</strong> 5 XP - Momentum spark</p>
+                            <button class="add-miniquest">+ Add to Active</button>
+                        </div>
+                        <div class="mission-item mini">
+                            <div class="mission-header">
+                                <div class="mission-title">✍️ Write One Line</div>
+                                <span class="badge easy">Very Easy</span>
+                            </div>
+                            <p>Write exactly one complete sentence. Save and celebrate.</p>
+                            <p><strong>Reward:</strong> 5 XP - Writer's block broken</p>
+                            <button class="add-miniquest">+ Add to Active</button>
+                        </div>
+                        <div class="mission-item mini">
+                            <div class="mission-header">
+                                <div class="mission-title">🖥️ Clear Desktop Clutter</div>
+                                <span class="badge easy">Very Easy</span>
+                            </div>
+                            <p>Delete 3 files, move 3 files, close 3 tabs.</p>
+                            <p><strong>Reward:</strong> 10 XP - Clean workspace</p>
+                            <button class="add-miniquest">+ Add to Active</button>
+                        </div>
+                        <div class="mission-item mini">
+                            <div class="mission-header">
+                                <div class="mission-title">💧 Drink Water</div>
+                                <span class="badge easy">Very Easy</span>
+                            </div>
+                            <p>Stand up, drink a full glass of water, take 3 deep breaths.</p>
+                            <p><strong>Reward:</strong> 5 XP - Energy boost</p>
+                            <button class="add-miniquest">+ Add to Active</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RECOVERY TAB -->
+                <div id="recovery" class="ak-tab">
+                    <h2>🔄 RECOVERY MISSIONS</h2>
+                    <div class="ak-card">
+                        <p><strong>Low-energy missions for getting back on track.</strong></p>
+                        <p>Use these when you've missed days, feel overwhelmed, or need to rebuild momentum.</p>
+                    </div>
+                    <div id="recoveryMissionsList" class="ak-mission-list">
+                        <div class="mission-item recovery">
+                            <div class="mission-header">
+                                <div class="mission-title">⏱️ 2-Minute Re-Entry</div>
+                                <span class="badge easy">Easy</span>
+                            </div>
+                            <p>Just open the task and work for 2 minutes. Stop when timer ends.</p>
+                            <p><strong>Trigger:</strong> After missing 1+ days</p>
+                            <p><strong>Reward:</strong> 10 XP - Momentum restored</p>
+                            <button class="add-recovery">+ Add to Active</button>
+                        </div>
+                        <div class="mission-item recovery">
+                            <div class="mission-header">
+                                <div class="mission-title">📝 List 3 Things Only</div>
+                                <span class="badge easy">Easy</span>
+                            </div>
+                            <p>Write down exactly 3 things on your mind. No more.</p>
+                            <p><strong>Trigger:</strong> When overwhelmed (10+ active tasks)</p>
+                            <p><strong>Reward:</strong> 10 XP - Mental clarity</p>
+                            <button class="add-recovery">+ Add to Active</button>
+                        </div>
+                        <div class="mission-item recovery">
+                            <div class="mission-header">
+                                <div class="mission-title">🧘 Grounding Ritual</div>
+                                <span class="badge easy">Easy</span>
+                            </div>
+                            <p>Stop. Breathe 5 times. Relax shoulders. Drink water.</p>
+                            <p><strong>Trigger:</strong> Burnout detected</p>
+                            <p><strong>Reward:</strong> 10 XP - Energy stabilized</p>
+                            <button class="add-recovery">+ Add to Active</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- AVATAR TAB -->
@@ -179,10 +398,12 @@
                     <h2>🎭 AVATAR CUSTOMIZATION</h2>
                     <div class="ak-avatar-container">
                         <div class="ak-avatar-display" id="avatarContainer">
-                            <!-- Avatar SVG will be rendered here -->
+                            <div style="width: 200px; height: 200px; background: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; border: 3px solid #d62828;">
+                                🌙
+                            </div>
                         </div>
                         <div class="ak-avatar-info">
-                            <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="20" value="Shadow Scholar">
+                            <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="30" value="Shadow Scholar">
                             <div class="avatar-stats">
                                 <p>⚔️ XP MULTIPLIER: <span id="xpMult">1.00</span>x</p>
                                 <p>💰 COIN MULTIPLIER: <span id="coinMult">1.00</span>x</p>
@@ -233,13 +454,18 @@
                     </div>
                     <div class="ak-card">
                         <h3>💾 DATA MANAGEMENT</h3>
-                        <button id="exportDataBtn">Export Save Data</button>
+                        <button id="exportDataBtn">📥 Export Save Data</button>
                         <input type="file" id="importDataInput" accept=".json" style="display:none">
-                        <button id="importDataBtn">Import Save Data</button>
+                        <button id="importDataBtn">📤 Import Save Data</button>
                     </div>
                     <div class="ak-card">
-                        <h3>📊 DATA STATUS</h3>
-                        <div id="dataStatus"></div>
+                        <h3>ℹ️ ABOUT</h3>
+                        <p><strong>Akatsuki PhD Quest</strong></p>
+                        <p>Version 2.1.0</p>
+                        <p>A gamified productivity system for PhD research, community building, and discipline.</p>
+                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #2a2a2d;">
+                            <a href="https://github.com/lilithava/akatsuki-phd-quest" target="_blank" style="color: #d62828;">GitHub Repository</a>
+                        </p>
                     </div>
                 </div>
             </main>
@@ -253,7 +479,7 @@
             <h3 id="modalTitle"></h3>
             <div id="modalBody"></div>
             <label>📝 NOTES:</label>
-            <textarea id="taskNotes" rows="3" placeholder="Add your notes here... These will appear in reports."></textarea>
+            <textarea id="taskNotes" rows="3" placeholder="Add your notes here..."></textarea>
             <div class="modal-actions">
                 <button id="saveTaskNotes">💾 SAVE NOTES</button>
                 <button id="deleteTaskBtn" class="danger">🗑️ DELETE TASK</button>
@@ -261,25 +487,10 @@
         </div>
     </div>
 
-    <!-- Step Edit Modal -->
-    <div id="stepModal" class="ak-modal">
-        <div class="ak-modal-content">
-            <span class="close">&times;</span>
-            <h3>Edit Step</h3>
-            <textarea id="stepEditText" rows="3" placeholder="Edit step description..."></textarea>
-            <div class="modal-actions">
-                <button id="saveStepBtn">💾 SAVE</button>
-                <button id="deleteStepBtn" class="danger">🗑️ DELETE STEP</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Reward Toast -->
     <div id="rewardToast" class="reward-toast"></div>
 
-    <script src="data-loader.js"></script>
-    <script src="task-generator.js"></script>
-    <script src="avatar-system.js"></script>
-    <script src="script.js"></script>
+    <!-- Scripts -->
+    <script src="script-fixed.js"></script>
 </body>
 </html>
