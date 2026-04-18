@@ -27,7 +27,9 @@
             <div class="ak-xp-bar">
                 <div class="ak-xp-fill" id="xpFill" style="width: 0%"></div>
             </div>
-            <div class="ak-xp-text"><span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span></div>
+            <div class="ak-xp-text">
+                <span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span>
+            </div>
         </div>
 
         <div class="ak-layout">
@@ -72,7 +74,7 @@
                         <div class="ak-card">
                             <h3>⚡ QUICK ACTIONS</h3>
                             <button id="genQuickBtn">✨ Quick Generate</button>
-                            <button id="batchImportBtn">📦 Batch Import Tasks</button>
+                            <button id="batchImportBtn">📦 Batch Import</button>
                             <button id="exportReportBtn">📄 Export Report</button>
                         </div>
                     </div>
@@ -89,8 +91,7 @@
                         <select id="filterDomain"><option value="">All Domains</option></select>
                         <select id="filterDifficulty"><option value="">All Difficulties</option></select>
                         <select id="filterPriority"><option value="">All Priorities</option></select>
-                        <select id="filterEnergy"><option value="">All Energy Levels</option></select>
-                        <select id="filterRepeatability"><option value="">All Repeatability</option></select>
+                        <select id="filterStatus"><option value="active">Active Only</option><option value="all">All Tasks</option></select>
                     </div>
                     <div id="activeMissionsList" class="ak-mission-list"></div>
                 </div>
@@ -102,69 +103,56 @@
                         <label>🎯 GOAL / MISSION INTENT</label>
                         <textarea id="genGoal" rows="2" placeholder="Example: Write literature review on AI displacement..."></textarea>
                         
-                        <label>📁 THEME</label>
-                        <select id="genTheme">
-                            <option value="Shadow Research Missions">Shadow Research Missions</option>
-                            <option value="Village Knowledge Expansion">Village Knowledge Expansion</option>
-                            <option value="Clan Leadership & Skool Community">Clan Leadership & Skool Community</option>
-                            <option value="Intelligence Gathering">Intelligence Gathering</option>
-                            <option value="Eternal Documentation Scrolls">Eternal Documentation Scrolls</option>
-                            <option value="Discipline & Rituals">Discipline & Rituals</option>
-                        </select>
-                        
-                        <label>📂 SUBJECT</label>
-                        <select id="genSubject">
-                            <option value="">Select Theme First</option>
-                        </select>
-                        
-                        <label>🏷️ SIDE TOPIC</label>
-                        <select id="genSideTopic">
-                            <option value="">Select Subject First</option>
-                        </select>
+                        <div class="ak-form-row">
+                            <label>📁 THEME: <select id="genTheme"></select></label>
+                            <label>📂 SUBJECT: <select id="genSubject" disabled><option>Select Theme First</option></select></label>
+                            <label>🏷️ SIDE TOPIC: <select id="genSideTopic" disabled><option>Select Subject First</option></select></label>
+                        </div>
                         
                         <div class="ak-form-row">
-                            <label>⚔️ DIFFICULTY: 
-                                <select id="genDifficulty">
-                                    <option value="Easy">Easy (10-20 XP)</option>
-                                    <option value="Medium" selected>Medium (25-50 XP)</option>
-                                    <option value="Hard">Hard (60-120 XP)</option>
-                                    <option value="Elite">Elite (150-500 XP)</option>
-                                </select>
-                            </label>
-                            <label>🔄 REPEATABILITY: 
-                                <select id="genRepeatability">
-                                    <option value="One-time" selected>One-time</option>
-                                    <option value="Daily">Daily</option>
-                                    <option value="Weekly">Weekly</option>
-                                </select>
-                            </label>
-                            <label>⚡ PRIORITY: 
-                                <select id="genPriority">
-                                    <option value="Critical">Critical</option>
-                                    <option value="Important" selected>Important</option>
-                                    <option value="Maintenance">Maintenance</option>
-                                </select>
-                            </label>
+                            <label>⚔️ DIFFICULTY: <select id="genDifficulty">
+                                <option value="Easy">Easy (10-25 XP)</option>
+                                <option value="Medium" selected>Medium (25-55 XP)</option>
+                                <option value="Hard">Hard (60-130 XP)</option>
+                                <option value="Elite">Elite (150-500 XP)</option>
+                            </select></label>
+                            <label>🔄 REPEATABILITY: <select id="genRepeatability">
+                                <option value="One-time" selected>One-time</option>
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                            </select></label>
+                            <label>⚡ PRIORITY: <select id="genPriority">
+                                <option value="Critical">Critical</option>
+                                <option value="Important" selected>Important</option>
+                                <option value="Maintenance">Maintenance</option>
+                            </select></label>
                         </div>
+                        
                         <div class="ak-form-row">
-                            <label>🔋 ENERGY: 
-                                <select id="genEnergy">
-                                    <option value="Low Energy">Low Energy</option>
-                                    <option value="Standard Focus" selected>Standard Focus</option>
-                                    <option value="Deep Focus">Deep Focus</option>
-                                </select>
-                            </label>
-                            <label>📍 CONTEXT: 
-                                <select id="genContext">
-                                    <option value="Home">Home</option>
-                                    <option value="Office">Office</option>
-                                    <option value="Library">Library</option>
-                                    <option value="Online" selected>Online</option>
-                                </select>
-                            </label>
+                            <label>🔋 ENERGY: <select id="genEnergy">
+                                <option value="Low Energy">Low Energy</option>
+                                <option value="Standard Focus" selected>Standard Focus</option>
+                                <option value="Deep Focus">Deep Focus</option>
+                            </select></label>
+                            <label>📍 CONTEXT: <select id="genContext">
+                                <option value="Home">Home</option>
+                                <option value="Office">Office</option>
+                                <option value="Library">Library</option>
+                                <option value="Online" selected>Online</option>
+                            </select></label>
+                            <label>📅 HORIZON: <select id="genHorizon">
+                                <option value="today">Today (2 tasks)</option>
+                                <option value="week" selected>This Week (4 tasks)</option>
+                                <option value="month">This Month (6 tasks)</option>
+                            </select></label>
                         </div>
-                        <button id="generateBtn">✨ GENERATE MISSION</button>
-                        <div id="generatedPreview"></div>
+                        
+                        <div class="ak-form-actions">
+                            <button id="generateSingleBtn">✨ Generate Single Task</button>
+                            <button id="generateChainBtn">🔗 Generate Mission Chain</button>
+                        </div>
+                        
+                        <div id="generatedPreview" class="generated-preview"></div>
                         <button id="addGeneratedBtn" style="display:none;">➕ ADD TO ACTIVE MISSIONS</button>
                     </div>
                     
@@ -190,15 +178,8 @@
                 <div id="avatar" class="ak-tab">
                     <h2>🎭 AVATAR CUSTOMIZATION</h2>
                     <div class="ak-avatar-container">
-                        <div class="ak-avatar-display">
-                            <svg id="avatarSvg" viewBox="0 0 200 200" width="200" height="200">
-                                <circle cx="100" cy="100" r="90" fill="#1a1a2e" stroke="#d62828" stroke-width="3"/>
-                                <circle cx="100" cy="95" r="45" fill="#e8c4a0"/>
-                                <ellipse cx="80" cy="85" rx="8" ry="10" fill="#2a2a2e"/>
-                                <ellipse cx="120" cy="85" rx="8" ry="10" fill="#2a2a2e"/>
-                                <path d="M 85 110 Q 100 120 115 110" fill="none" stroke="#2a2a2e" stroke-width="2"/>
-                                <text x="100" y="185" text-anchor="middle" fill="#e6e6e6" font-size="12" id="avatarNameText">Scholar</text>
-                            </svg>
+                        <div class="ak-avatar-display" id="avatarContainer">
+                            <!-- Avatar SVG will be rendered here -->
                         </div>
                         <div class="ak-avatar-info">
                             <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="20" value="Shadow Scholar">
@@ -256,22 +237,39 @@
                         <input type="file" id="importDataInput" accept=".json" style="display:none">
                         <button id="importDataBtn">Import Save Data</button>
                     </div>
+                    <div class="ak-card">
+                        <h3>📊 DATA STATUS</h3>
+                        <div id="dataStatus"></div>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Task Modal -->
+    <!-- Task Edit Modal -->
     <div id="taskModal" class="ak-modal">
         <div class="ak-modal-content">
             <span class="close">&times;</span>
             <h3 id="modalTitle"></h3>
             <div id="modalBody"></div>
             <label>📝 NOTES:</label>
-            <textarea id="taskNotes" rows="3"></textarea>
+            <textarea id="taskNotes" rows="3" placeholder="Add your notes here... These will appear in reports."></textarea>
             <div class="modal-actions">
                 <button id="saveTaskNotes">💾 SAVE NOTES</button>
                 <button id="deleteTaskBtn" class="danger">🗑️ DELETE TASK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step Edit Modal -->
+    <div id="stepModal" class="ak-modal">
+        <div class="ak-modal-content">
+            <span class="close">&times;</span>
+            <h3>Edit Step</h3>
+            <textarea id="stepEditText" rows="3" placeholder="Edit step description..."></textarea>
+            <div class="modal-actions">
+                <button id="saveStepBtn">💾 SAVE</button>
+                <button id="deleteStepBtn" class="danger">🗑️ DELETE STEP</button>
             </div>
         </div>
     </div>
@@ -280,6 +278,8 @@
     <div id="rewardToast" class="reward-toast"></div>
 
     <script src="data-loader.js"></script>
+    <script src="task-generator.js"></script>
+    <script src="avatar-system.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
