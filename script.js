@@ -1,8 +1,20 @@
-// Akatsuki PhD Quest - Complete Working System
-// Wait for DOM to be fully loaded before running
+// Akatsuki PhD Quest - Complete Working System with JSON Bank Integration
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, starting Akatsuki Quest...');
-    initApp();
+    // Wait for data to load
+    const checkData = setInterval(() => {
+        if (window.AK_DATA && Object.keys(window.AK_DATA).length > 0) {
+            clearInterval(checkData);
+            console.log('Data loaded:', Object.keys(window.AK_DATA));
+            initApp();
+        }
+    }, 100);
+    // Timeout after 3 seconds
+    setTimeout(() => {
+        clearInterval(checkData);
+        console.log('Data load timeout, using defaults');
+        initApp();
+    }, 3000);
 });
 
 // Shop items with actual XP/coin multipliers
@@ -21,6 +33,10 @@ const SHOP_ITEMS = [
 const ACHIEVEMENTS = [
     { id: 'first_blood', name: 'First Blood', description: 'Complete your first mission', requirement: 'Complete 1 mission', xpReward: 50 },
     { id: 'scroll_keeper', name: 'Scroll Keeper', description: 'Log documentation 7 days in a row', requirement: '7 day documentation streak', xpReward: 100 },
+    { id: 'shadow_scholar', name: 'Shadow Scholar', description: 'Complete 10 literature tasks', requirement: '10 literature tasks', xpReward: 150 },
+    { id: 'data_hunter', name: 'Data Hunter', description: 'Finish 5 data missions', requirement: '5 data missions', xpReward: 100 },
+    { id: 'clan_builder', name: 'Clan Builder', description: 'Publish 10 community posts', requirement: '10 community posts', xpReward: 100 },
+    { id: 'boss_slayer', name: 'Boss Slayer', description: 'Clear first elite mission', requirement: 'Complete an Elite mission', xpReward: 200 },
     { id: 'crimson_streak', name: 'Crimson Streak', description: 'Maintain 14-day streak', requirement: '14 day streak', xpReward: 200 },
     { id: 'akatsuki_commander', name: 'Akatsuki Commander', description: 'Reach level 10', requirement: 'Level 10', xpReward: 300 }
 ];
@@ -66,7 +82,65 @@ const THEMES = {
     }
 };
 
+// Collect all tasks from loaded JSON banks
+let globalTaskBank = [];
+
+function loadTasksFromBanks() {
+    globalTaskBank = [];
+    
+    // Define bank files and their display names
+    const bankFiles = [
+        { key: 'phd', name: 'PhD Missions', file: 'task-bank-phd.json' },
+        { key: 'skool', name: 'Skool Missions', file: 'task-bank-skool.json' },
+        { key: 'curriculum', name: 'Curriculum Missions', file: 'task-bank-curriculum.json' },
+        { key: 'ra', name: 'RA Missions', file: 'task-bank-ra.json' },
+        { key: 'docs', name: 'Documentation Missions', file: 'task-bank-docs.json' },
+        { key: 'rituals', name: 'Rituals', file: 'task-bank-rituals.json' },
+        { key: 'bosses', name: 'Boss Battles', file: 'boss-battles.json' },
+        { key: 'recovery', name: 'Recovery Missions', file: 'recovery-missions.json' },
+        { key: 'mini', name: 'Mini Quests', file: 'mini-quests.json' }
+    ];
+    
+    for (const bank of bankFiles) {
+        const data = window.AK_DATA[bank.key];
+        if (data) {
+            console.log(`Loading from ${bank.key}:`, data);
+            // Handle different JSON structures
+            if (data.tasks && Array.isArray(data.tasks)) {
+                globalTaskBank.push(...data.tasks.map(t => ({ ...t, sourceBank: bank.name })));
+            }
+            if (data.missions && Array.isArray(data.missions)) {
+                globalTaskBank.push(...data.missions.map(t => ({ ...t, sourceBank: bank.name })));
+            }
+            if (data.quests && Array.isArray(data.quests)) {
+                globalTaskBank.push(...data.quests.map(t => ({ ...t, sourceBank: bank.name })));
+            }
+            if (data.bosses && Array.isArray(data.bosses)) {
+                globalTaskBank.push(...data.bosses.map(t => ({ ...t, sourceBank: bank.name, difficulty: 'Elite', xp: t.xp || 250 })));
+            }
+        } else {
+            console.warn(`Bank not loaded: ${bank.key}`);
+        }
+    }
+    
+    // Add default tasks if no banks loaded
+    if (globalTaskBank.length === 0) {
+        console.log('No banks loaded, using default tasks');
+        globalTaskBank = [
+            { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
+            { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
+            { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
+            { title: "Code Interview Transcript", domain: "Research Assistantship", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] }
+        ];
+    }
+    
+    console.log(`Loaded ${globalTaskBank.length} tasks from banks`);
+}
+
 function initApp() {
+    // Load tasks from JSON banks
+    loadTasksFromBanks();
+    
     // ---------- STATE ----------
     let state = {
         xp: 0,
@@ -118,6 +192,10 @@ function initApp() {
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
+        // Force UI update immediately
+        renderHeader();
+        renderDashboard();
+        updateXPBar();
     }
 
     function getMultipliers() {
@@ -143,7 +221,11 @@ function initApp() {
         }
         state.level = newLevel;
         updateStreak();
-        
+        updateXPBar();
+    }
+    
+    function updateXPBar() {
+        const xpPerLevel = 500;
         const currentLevelXp = (state.level - 1) * xpPerLevel;
         const nextLevelXp = state.level * xpPerLevel;
         const progress = ((state.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
@@ -213,6 +295,7 @@ function initApp() {
         updateXPLevel();
         saveState();
         checkAchievements();
+        renderAll(); // Force full UI refresh
     }
 
     function checkAndRegenerateTasks() {
@@ -345,6 +428,7 @@ function initApp() {
     }
 
     function checkAchievements() {
+        let changed = false;
         ACHIEVEMENTS.forEach(ach => {
             if (state.unlockedAchievements.includes(ach.id)) return;
             
@@ -352,6 +436,14 @@ function initApp() {
             switch(ach.id) {
                 case 'first_blood':
                     if (state.completedHistory.length >= 1) unlocked = true;
+                    break;
+                case 'shadow_scholar':
+                    const litTasks = state.completedHistory.filter(h => 
+                        h.title?.toLowerCase().includes('literature') || 
+                        h.title?.toLowerCase().includes('article') ||
+                        h.title?.toLowerCase().includes('research')
+                    );
+                    if (litTasks.length >= 10) unlocked = true;
                     break;
                 case 'crimson_streak':
                     if (state.streak >= 14) unlocked = true;
@@ -365,10 +457,13 @@ function initApp() {
                 state.unlockedAchievements.push(ach.id);
                 state.xp += ach.xpReward;
                 showReward(`🏆 Achievement: ${ach.name} (+${ach.xpReward} XP)`, ach.xpReward, 0);
+                changed = true;
             }
         });
-        updateXPLevel();
-        renderAchievements();
+        if (changed) {
+            updateXPLevel();
+            renderAchievements();
+        }
     }
 
     function saveState() {
@@ -474,14 +569,20 @@ function initApp() {
         const container = document.getElementById('activeMissionsList');
         if (!container) return;
         
-        const activeTasks = state.activeTasks.filter(t => !t.completed);
+        // Apply filters
+        let filteredTasks = state.activeTasks.filter(t => !t.completed);
+        const domainFilter = document.getElementById('filterDomain')?.value || '';
+        const difficultyFilter = document.getElementById('filterDifficulty')?.value || '';
         
-        if (activeTasks.length === 0) {
-            container.innerHTML = '<div class="ak-card">✨ No active missions. Add some from the Task Bank or Generator!</div>';
+        if (domainFilter) filteredTasks = filteredTasks.filter(t => t.domain === domainFilter);
+        if (difficultyFilter) filteredTasks = filteredTasks.filter(t => t.difficulty === difficultyFilter);
+        
+        if (filteredTasks.length === 0) {
+            container.innerHTML = '<div class="ak-card">✨ No active missions. Complete some tasks!</div>';
             return;
         }
         
-        container.innerHTML = activeTasks.map(task => `
+        container.innerHTML = filteredTasks.map(task => `
             <div class="mission-item" data-task-id="${task.id}">
                 <div class="mission-header">
                     <div class="mission-title">${escapeHtml(task.title)}</div>
@@ -511,36 +612,46 @@ function initApp() {
         
         // Attach event listeners
         document.querySelectorAll('.step-checkbox').forEach(cb => {
-            cb.addEventListener('change', function(e) {
-                const li = this.closest('.step-item');
-                const stepIndex = parseInt(li.dataset.stepIndex);
-                const missionDiv = li.closest('.mission-item');
-                const taskId = missionDiv.dataset.taskId;
-                
-                const task = state.activeTasks.find(t => t.id === taskId);
-                if (task && task.steps[stepIndex]) {
-                    const oldState = task.steps[stepIndex].completed;
-                    task.steps[stepIndex].completed = this.checked;
-                    
-                    if (this.checked) {
-                        li.classList.add('completed');
-                    } else {
-                        li.classList.remove('completed');
-                    }
-                    
-                    pushUndo({ type: 'toggleStep', taskId, stepIndex, oldState });
-                    updateTaskCompletion(task);
-                    saveState();
-                }
-            });
+            cb.removeEventListener('change', handleStepToggle);
+            cb.addEventListener('change', handleStepToggle);
         });
         
         document.querySelectorAll('.view-task-details').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const taskId = this.dataset.taskId;
-                openTaskModal(taskId);
-            });
+            btn.removeEventListener('click', handleDetailsClick);
+            btn.addEventListener('click', handleDetailsClick);
         });
+    }
+    
+    function handleStepToggle(e) {
+        const checkbox = e.target;
+        const li = checkbox.closest('.step-item');
+        const stepIndex = parseInt(li.dataset.stepIndex);
+        const missionDiv = li.closest('.mission-item');
+        const taskId = missionDiv.dataset.taskId;
+        
+        const task = state.activeTasks.find(t => t.id === taskId);
+        if (task && task.steps[stepIndex]) {
+            const oldState = task.steps[stepIndex].completed;
+            task.steps[stepIndex].completed = checkbox.checked;
+            
+            if (checkbox.checked) {
+                li.classList.add('completed');
+            } else {
+                li.classList.remove('completed');
+            }
+            
+            pushUndo({ type: 'toggleStep', taskId, stepIndex, oldState });
+            updateTaskCompletion(task);
+            saveState();
+            checkAchievements();
+            renderDashboard(); // Update dashboard immediately
+            renderHeader(); // Update header immediately
+        }
+    }
+    
+    function handleDetailsClick(e) {
+        const taskId = e.target.dataset.taskId;
+        openTaskModal(taskId);
     }
     
     function openTaskModal(taskId) {
@@ -593,54 +704,72 @@ function initApp() {
         const container = document.getElementById('taskBankList');
         if (!container) return;
         
-        // Sample tasks for the bank
-        const sampleTasks = [
-            { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
-            { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
-            { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
-            { title: "Code Interview Transcript", domain: "Research Assistantship", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] }
-        ];
+        const searchTerm = document.getElementById('bankSearch')?.value.toLowerCase() || '';
+        const domainFilter = document.getElementById('bankDomainFilter')?.value || '';
+        const difficultyFilter = document.getElementById('bankDifficultyFilter')?.value || '';
         
-        container.innerHTML = sampleTasks.map(t => `
+        let filtered = [...globalTaskBank];
+        if (searchTerm) filtered = filtered.filter(t => t.title?.toLowerCase().includes(searchTerm));
+        if (domainFilter) filtered = filtered.filter(t => t.domain === domainFilter);
+        if (difficultyFilter) filtered = filtered.filter(t => t.difficulty === difficultyFilter);
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="ak-card">No tasks found. Check that JSON files loaded correctly.</div>';
+            return;
+        }
+        
+        container.innerHTML = filtered.slice(0, 30).map(t => `
             <div class="mission-item">
                 <div class="mission-header">
                     <div class="mission-title">${escapeHtml(t.title)}</div>
                     <div class="mission-badge">
-                        <span class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</span>
+                        <span class="badge ${t.difficulty?.toLowerCase()}">${t.difficulty || 'Medium'}</span>
                     </div>
                 </div>
                 <div class="mission-meta">
-                    <span>📁 ${t.domain}</span>
-                    <span>⭐ ${t.xp} XP</span>
+                    <span>📁 ${t.domain || t.theme || 'General'}</span>
+                    <span>⭐ ${t.xp || 30} XP</span>
+                    ${t.sourceBank ? `<span>📦 ${t.sourceBank}</span>` : ''}
                 </div>
+                ${t.successCriteria ? `<div class="mission-meta">🎯 ${t.successCriteria.substring(0, 80)}...</div>` : ''}
                 <div class="mission-actions">
-                    <button class="add-from-bank" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
+                    <button class="add-from-bank" data-title="${escapeHtml(t.title)}" data-domain="${t.domain || t.theme || 'General'}" data-difficulty="${t.difficulty || 'Medium'}" data-xp="${t.xp || 30}" data-steps='${JSON.stringify(t.microSteps || t.steps || ["Plan task", "Execute work", "Review results"])}'>+ Add to Active</button>
                 </div>
             </div>
         `).join('');
         
         document.querySelectorAll('.add-from-bank').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const stepsArray = JSON.parse(this.dataset.steps);
-                const newTask = {
-                    id: Date.now() + '_' + Math.random(),
-                    title: this.dataset.title,
-                    domain: this.dataset.domain,
-                    difficulty: this.dataset.difficulty,
-                    xp: parseInt(this.dataset.xp),
-                    repeatability: 'One-time',
-                    priority: 'Important',
-                    steps: stepsArray.map(text => ({ text, completed: false })),
-                    notes: '',
-                    startedAt: new Date().toISOString(),
-                    completed: false
-                };
-                state.activeTasks.push(newTask);
-                saveState();
-                renderAll();
-                showReward(`Added: ${newTask.title}`, 0, 0);
-            });
+            btn.removeEventListener('click', handleAddFromBank);
+            btn.addEventListener('click', handleAddFromBank);
         });
+    }
+    
+    function handleAddFromBank(e) {
+        const btn = e.target;
+        let stepsArray = [];
+        try {
+            stepsArray = JSON.parse(btn.dataset.steps);
+        } catch(e) { 
+            stepsArray = ["Plan this task", "Execute the main work", "Review and document"]; 
+        }
+        
+        const newTask = {
+            id: Date.now() + '_' + Math.random(),
+            title: btn.dataset.title,
+            domain: btn.dataset.domain,
+            difficulty: btn.dataset.difficulty,
+            xp: parseInt(btn.dataset.xp),
+            repeatability: 'One-time',
+            priority: 'Important',
+            steps: stepsArray.map(text => ({ text, completed: false })),
+            notes: '',
+            startedAt: new Date().toISOString(),
+            completed: false
+        };
+        state.activeTasks.push(newTask);
+        saveState();
+        renderAll();
+        showReward(`Added: ${newTask.title}`, 0, 0);
     }
     
     function renderAvatar() {
@@ -687,6 +816,7 @@ function initApp() {
                         state.avatar.equipped = state.avatar.equipped.filter(i => i !== btn.dataset.item);
                         saveState();
                         renderAll();
+                        showReward(`Unequipped item`, 0, 0);
                     };
                 });
             }
@@ -1037,7 +1167,6 @@ function initApp() {
                 const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
                 const repeatability = document.getElementById('genRepeatability')?.value || 'One-time';
                 const priority = document.getElementById('genPriority')?.value || 'Important';
-                const energy = document.getElementById('genEnergy')?.value || 'Standard Focus';
                 
                 const xpValue = difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : difficulty === 'Hard' ? 90 : 200;
                 
@@ -1056,7 +1185,6 @@ function initApp() {
                     xp: xpValue,
                     repeatability: repeatability,
                     priority: priority,
-                    energy: energy,
                     steps: steps.map(text => ({ text, completed: false })),
                     notes: '',
                     startedAt: new Date().toISOString(),
@@ -1099,41 +1227,9 @@ function initApp() {
             });
         }
         
-        // Theme dropdowns
-        const themeSelect = document.getElementById('genTheme');
-        const subjectSelect = document.getElementById('genSubject');
-        const sideTopicSelect = document.getElementById('genSideTopic');
-        
-        if (themeSelect) {
-            themeSelect.addEventListener('change', () => {
-                const theme = themeSelect.value;
-                const subjects = THEMES[theme]?.subjects || [];
-                if (subjectSelect) {
-                    subjectSelect.innerHTML = '<option value="">Select Subject</option>' + subjects.map(s => `<option value="${s}">${s}</option>`).join('');
-                    subjectSelect.disabled = subjects.length === 0;
-                }
-            });
-            themeSelect.dispatchEvent(new Event('change'));
-        }
-        
-        if (subjectSelect) {
-            subjectSelect.addEventListener('change', () => {
-                const theme = themeSelect?.value;
-                const subject = subjectSelect.value;
-                const sideTopics = THEMES[theme]?.sideTopics?.[subject] || [];
-                if (sideTopicSelect) {
-                    sideTopicSelect.innerHTML = '<option value="">Select Side Topic</option>' + sideTopics.map(st => `<option value="${st}">${st}</option>`).join('');
-                    sideTopicSelect.disabled = sideTopics.length === 0;
-                }
-            });
-        }
-        
         // Filters
         const domains = ['PhD', 'Skool', 'Curriculum', 'Documentation', 'Rituals'];
         const difficulties = ['Easy', 'Medium', 'Hard', 'Elite'];
-        const priorities = ['Critical', 'Important', 'Maintenance'];
-        const energies = ['Low Energy', 'Standard Focus', 'Deep Focus'];
-        const repeatabilities = ['One-time', 'Daily', 'Weekly'];
         
         const filterDomain = document.getElementById('filterDomain');
         if (filterDomain) {
@@ -1145,24 +1241,6 @@ function initApp() {
         if (filterDifficulty) {
             filterDifficulty.innerHTML = '<option value="">All Difficulties</option>' + difficulties.map(d => `<option value="${d}">${d}</option>`).join('');
             filterDifficulty.addEventListener('change', () => renderActiveMissions());
-        }
-        
-        const filterPriority = document.getElementById('filterPriority');
-        if (filterPriority) {
-            filterPriority.innerHTML = '<option value="">All Priorities</option>' + priorities.map(p => `<option value="${p}">${p}</option>`).join('');
-            filterPriority.addEventListener('change', () => renderActiveMissions());
-        }
-        
-        const filterEnergy = document.getElementById('filterEnergy');
-        if (filterEnergy) {
-            filterEnergy.innerHTML = '<option value="">All Energy Levels</option>' + energies.map(e => `<option value="${e}">${e}</option>`).join('');
-            filterEnergy.addEventListener('change', () => renderActiveMissions());
-        }
-        
-        const filterRepeatability = document.getElementById('filterRepeatability');
-        if (filterRepeatability) {
-            filterRepeatability.innerHTML = '<option value="">All Repeatability</option>' + repeatabilities.map(r => `<option value="${r}">${r}</option>`).join('');
-            filterRepeatability.addEventListener('change', () => renderActiveMissions());
         }
         
         const bankSearch = document.getElementById('bankSearch');
@@ -1189,6 +1267,7 @@ function initApp() {
     console.log('🎯 Akatsuki Quest Ready!', { 
         tasks: state.activeTasks.filter(t => !t.completed).length,
         coins: state.coins,
-        level: state.level
+        level: state.level,
+        bankSize: globalTaskBank.length
     });
 }
