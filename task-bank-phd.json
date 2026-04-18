@@ -1,103 +1,19 @@
 {
   "meta": {
-    "name": "Akatsuki PhD Task Bank – Shadow Research Missions",
-    "version": "1.0.0",
+    "name": "Shadow Research Missions",
+    "version": "2.0.0",
     "domain": "PhD",
     "theme": "Shadow Research Missions",
-    "description": "Core PhD missions for research question development, literature review, theory, methodology, data collection, analysis, writing, revision, advisor communication, and academic identity."
+    "description": "Core PhD research missions for literature review, data analysis, academic writing, and dissertation progress. Each mission includes specific time estimates, measurable steps, and implementation notes.",
+    "lastUpdated": "2026-04-18"
   },
 
-  "subjects": [
-    "Research Question Development",
-    "Literature Review",
-    "Theory Building",
-    "Methodology",
-    "Data Collection",
-    "Data Analysis",
-    "Academic Writing",
-    "Revision & Submission",
-    "Advisor Communication",
-    "Academic Identity Building"
-  ],
-
   "tasks": [
-
-    /* =========================
-       RESEARCH QUESTION DEV
-    ========================== */
-
     {
-      "id": "phd_rq_gap_scan",
-      "title": "Scan the Shadows for One Research Gap",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Research Question Development",
-      "sideTopic": "gap spotting",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Repeatable",
-      "estimatedTime": 40,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Online",
-      "successCriteria": "One clearly articulated gap statement written in your notes.",
-      "failureCondition": "Browsing articles without capturing a specific gap.",
-      "reward": "Progress toward a sharper research question.",
-      "recoveryMission": "Write a 3-sentence gap statement from any one article.",
-      "steps": [
-        { "label": "Open your main topic notes or concept map.", "completed": false },
-        { "label": "Search for 3–5 recent articles on your topic.", "completed": false },
-        { "label": "Skim abstracts and note what they DO cover.", "completed": false },
-        { "label": "Write 3 bullets on what seems missing or underdeveloped.", "completed": false },
-        { "label": "Draft one gap statement starting with “What is not yet clear is…”", "completed": false }
-      ],
-      "tags": ["research-question", "gap", "ideation"],
-      "notes": "Use this when you feel your question is fuzzy or too broad."
-    },
-
-    {
-      "id": "phd_rq_refine_scope",
-      "title": "Refine One Overgrown Research Question",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Research Question Development",
-      "sideTopic": "scope control",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Repeatable",
-      "estimatedTime": 45,
-      "priority": "Critical",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "One research question rewritten to be specific, feasible, and aligned with your method.",
-      "failureCondition": "Keeping a vague or multi-part question unchanged.",
-      "reward": "Sharper direction and easier methodology decisions.",
-      "recoveryMission": "Rewrite the question into two shorter candidate versions.",
-      "steps": [
-        { "label": "Copy your current research question into a fresh note.", "completed": false },
-        { "label": "Underline vague terms (e.g., ‘impact’, ‘effect’, ‘people’).", "completed": false },
-        { "label": "Specify population, context, and key construct.", "completed": false },
-        { "label": "Check if the question can be answered with your planned method.", "completed": false },
-        { "label": "Write the refined version and label it v2.", "completed": false }
-      ],
-      "tags": ["research-question", "scope", "clarity"],
-      "notes": "Use when you feel your question is doing too much at once."
-    },
-
-    /* =========================
-       LITERATURE REVIEW
-    ========================== */
-
-    {
-      "id": "phd_lr_hunt_5_articles",
-      "title": "Hunt 5 Relevant Articles for One Thread",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
+      "id": "phd_lit_search",
+      "title": "Hunt 5 Relevant Articles for Literature Review",
       "subject": "Literature Review",
-      "sideTopic": "source finding",
-      "missionType": "Standard Mission",
+      "sideTopic": "Source Finding",
       "difficulty": "Medium",
       "xp": 35,
       "repeatability": "Weekly",
@@ -105,353 +21,436 @@
       "priority": "Critical",
       "energy": "Standard Focus",
       "context": "Online",
-      "successCriteria": "5 relevant articles saved with full citation details.",
-      "failureCondition": "Collecting fewer than 3 usable sources or not saving citations.",
-      "reward": "Expanded source bank for one conceptual thread.",
-      "recoveryMission": "Find 2 anchor papers only and save them properly.",
+      
+      "phase": "Literature Search",
+      "timeBlock": "Morning",
+      "prerequisites": [],
+      "outputs": ["5 PDFs", "citation file", "screening notes"],
+      
+      "successCriteria": "5 relevant, peer-reviewed sources saved with complete citations",
+      "failureCondition": "Fewer than 3 usable sources or missing citation information",
+      "reward": "+35 XP, +15 coins, source bank growth",
+      "recoveryMission": "Find 2 anchor papers only and save their citations",
+      
       "steps": [
-        { "label": "Open your library database or Google Scholar.", "completed": false },
-        { "label": "Search one focused keyword cluster for your thread.", "completed": false },
-        { "label": "Save top 10 promising results.", "completed": false },
-        { "label": "Screen abstracts and discard weak fits.", "completed": false },
-        { "label": "Keep the best 5 and save PDFs + citations.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open your university library portal or Google Scholar",
+          "duration": "2 min",
+          "measurable": "Browser tab open to database"
+        },
+        {
+          "number": 2,
+          "action": "Write down 3 specific keyword combinations for your research question",
+          "duration": "5 min",
+          "measurable": "3 keyword strings documented in notes"
+        },
+        {
+          "number": 3,
+          "action": "Run each keyword search and save the top 10 results to a folder",
+          "duration": "15 min",
+          "measurable": "30 total articles saved (10 per search)"
+        },
+        {
+          "number": 4,
+          "action": "Screen abstracts: keep only articles published in last 5 years from Q1/Q2 journals",
+          "duration": "15 min",
+          "measurable": "Abstract screening notes for each candidate"
+        },
+        {
+          "number": 5,
+          "action": "Select the best 5 articles that directly address your research gap",
+          "duration": "5 min",
+          "measurable": "5 articles identified with justification notes"
+        },
+        {
+          "number": 6,
+          "action": "Export citations in your reference manager (Zotero/Mendeley/Paperpile)",
+          "duration": "3 min",
+          "measurable": "Citations added to reference library"
+        }
       ],
-      "tags": ["literature", "search", "sources"],
-      "notes": "Pair this with a reading mission to avoid hoarding PDFs."
+      
+      "tags": ["literature", "search", "sources", "weekly"],
+      "notes": "Use your university's interlibrary loan if articles aren't freely available. Set a timer for each step to maintain momentum."
     },
 
     {
-      "id": "phd_lr_extract_insights",
+      "id": "phd_lit_annotate",
       "title": "Extract Key Insights from One Article",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
       "subject": "Literature Review",
-      "sideTopic": "annotation",
-      "missionType": "Standard Mission",
+      "sideTopic": "Annotation",
       "difficulty": "Medium",
       "xp": 40,
       "repeatability": "Daily",
       "estimatedTime": 35,
       "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Home",
-      "successCriteria": "One article summarized in 5–8 sentences with 3 key takeaways.",
-      "failureCondition": "Reading without capturing structured notes.",
-      "reward": "One more article fully integrated into your mental map.",
-      "recoveryMission": "Capture abstract + 3 bullet takeaways only.",
+      "energy": "Deep Focus",
+      "context": "Library",
+      
+      "phase": "Literature Analysis",
+      "timeBlock": "Morning",
+      "prerequisites": ["phd_lit_search"],
+      "outputs": ["annotated PDF", "synthesis note", "citation entry"],
+      
+      "successCriteria": "Article summarized in 5-8 sentences with 3 key quotes and 3 original insights",
+      "failureCondition": "Article read without any captured notes",
+      "reward": "+40 XP, +20 coins, research chain progress",
+      "recoveryMission": "Capture abstract + 3 bullet points only",
+      
       "steps": [
-        { "label": "Open the article and read abstract + conclusion.", "completed": false },
-        { "label": "Scan methods and findings sections.", "completed": false },
-        { "label": "Highlight 3–5 key arguments or results.", "completed": false },
-        { "label": "Write a short synthesis paragraph in your notes.", "completed": false },
-        { "label": "Tag the note with topic, method, and relevance.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open the PDF and read the title, abstract, and conclusion first (5 min)",
+          "duration": "5 min",
+          "measurable": "Abstract and conclusion highlighted"
+        },
+        {
+          "number": 2,
+          "action": "Identify the research question and theoretical framework (3 min)",
+          "duration": "3 min",
+          "measurable": "RQ and framework written in notes"
+        },
+        {
+          "number": 3,
+          "action": "Scan the methodology section: note sample size, methods, key measures (5 min)",
+          "duration": "5 min",
+          "measurable": "Methodology summary in notes"
+        },
+        {
+          "number": 4,
+          "action": "Highlight 3-5 key findings or arguments in the results/discussion (10 min)",
+          "duration": "10 min",
+          "measurable": "3-5 passages highlighted with page numbers"
+        },
+        {
+          "number": 5,
+          "action": "Write 2-3 original insights connecting this article to your research (7 min)",
+          "duration": "7 min",
+          "measurable": "Connection notes with page references"
+        },
+        {
+          "number": 6,
+          "action": "Identify 1-2 limitations or unanswered questions (3 min)",
+          "duration": "3 min",
+          "measurable": "Limitations documented"
+        },
+        {
+          "number": 7,
+          "action": "Save annotated PDF and add citation to your literature matrix (2 min)",
+          "duration": "2 min",
+          "measurable": "Matrix updated with new entry"
+        }
       ],
-      "tags": ["literature", "annotation", "synthesis"],
-      "notes": "Use the same note structure for every article to keep things consistent."
+      
+      "tags": ["literature", "annotation", "reading", "daily"],
+      "notes": "Use a consistent color-coding system: yellow for findings, blue for methods, green for quotes you might use."
     },
 
     {
-      "id": "phd_lr_matrix_update",
-      "title": "Update the Literature Matrix for One Concept",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
+      "id": "phd_lit_matrix",
+      "title": "Update Literature Matrix for One Conceptual Theme",
       "subject": "Literature Review",
-      "sideTopic": "matrix building",
-      "missionType": "Standard Mission",
+      "sideTopic": "Matrix Building",
       "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Repeatable",
-      "estimatedTime": 40,
+      "xp": 45,
+      "repeatability": "Weekly",
+      "estimatedTime": 50,
       "priority": "Important",
       "energy": "Standard Focus",
       "context": "Writing",
-      "successCriteria": "Matrix updated with at least 3 new rows or cleaned entries.",
-      "failureCondition": "Leaving new articles unintegrated into your matrix.",
-      "reward": "Clearer overview of who said what and where.",
-      "recoveryMission": "Add at least 1 new article to the matrix.",
+      
+      "phase": "Literature Synthesis",
+      "timeBlock": "Morning",
+      "prerequisites": ["phd_lit_annotate"],
+      "outputs": ["updated matrix", "theme summary", "gap statement"],
+      
+      "successCriteria": "Matrix updated with at least 5 new entries, columns filled completely",
+      "failureCondition": "New articles added without filling in all matrix columns",
+      "reward": "+45 XP, +25 coins, synthesis clarity",
+      "recoveryMission": "Add 2 new articles to matrix with minimal columns",
+      
       "steps": [
-        { "label": "Open your literature matrix (sheet or table).", "completed": false },
-        { "label": "Pick one concept or thread to focus on.", "completed": false },
-        { "label": "Add rows for any newly read articles.", "completed": false },
-        { "label": "Fill in columns: theory, method, sample, key findings.", "completed": false },
-        { "label": "Highlight gaps or contradictions you notice.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open your literature matrix spreadsheet (Google Sheets/Excel)",
+          "duration": "1 min",
+          "measurable": "Matrix file open"
+        },
+        {
+          "number": 2,
+          "action": "Review existing column headers: Author/Year, Theory, Method, Sample, Key Findings, Gaps, Relevance",
+          "duration": "3 min",
+          "measurable": "All 7 columns verified"
+        },
+        {
+          "number": 3,
+          "action": "Add rows for 5 newly annotated articles from the past week",
+          "duration": "5 min",
+          "measurable": "5 new rows created"
+        },
+        {
+          "number": 4,
+          "action": "Fill in all 7 columns for each new article using your annotation notes",
+          "duration": "25 min",
+          "measurable": "All 35 cells (5x7) completed"
+        },
+        {
+          "number": 5,
+          "action": "Identify patterns: which theories appear most? Which methods dominate? (8 min)",
+          "duration": "8 min",
+          "measurable": "Pattern notes written"
+        },
+        {
+          "number": 6,
+          "action": "Write a 3-5 sentence synthesis of what this theme reveals about your topic (5 min)",
+          "duration": "5 min",
+          "measurable": "Synthesis paragraph saved"
+        },
+        {
+          "number": 7,
+          "action": "Draft a gap statement: what's missing from this literature? (3 min)",
+          "duration": "3 min",
+          "measurable": "Gap statement written"
+        }
       ],
-      "tags": ["literature", "matrix", "organization"],
-      "notes": "This mission keeps your review from becoming a pile of disconnected notes."
+      
+      "tags": ["literature", "matrix", "synthesis", "weekly"],
+      "notes": "Keep your matrix as a master reference. Color-code rows by theme (e.g., blue for theory A, red for theory B)."
     },
 
-    /* =========================
-       THEORY BUILDING
-    ========================== */
-
     {
-      "id": "phd_theory_map_mechanisms",
-      "title": "Map Mechanisms for One Core Concept",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Theory Building",
-      "sideTopic": "mechanism mapping",
-      "missionType": "Deep Work Mission",
+      "id": "phd_write_section",
+      "title": "Draft 500 Words for a Chapter Section",
+      "subject": "Academic Writing",
+      "sideTopic": "Section Drafting",
       "difficulty": "Hard",
-      "xp": 90,
-      "repeatability": "Repeatable",
+      "xp": 85,
+      "repeatability": "Daily",
       "estimatedTime": 90,
-      "priority": "Important",
+      "priority": "Critical",
       "energy": "Deep Focus",
-      "context": "Library",
-      "successCriteria": "A visual or written map of how one concept operates in your context.",
-      "failureCondition": "Keeping the concept as a vague label without mechanisms.",
-      "reward": "Stronger theoretical backbone for your argument.",
-      "recoveryMission": "Write a 5-bullet list of possible mechanisms.",
+      "context": "Writing",
+      
+      "phase": "Writing",
+      "timeBlock": "Morning",
+      "prerequisites": ["phd_lit_matrix"],
+      "outputs": ["500+ word draft", "citation list", "outline update"],
+      
+      "successCriteria": "500+ original words written, with at least 3 citations, forming a coherent argument",
+      "failureCondition": "Editing existing text or writing fewer than 300 words",
+      "reward": "+85 XP, +40 coins, chapter progress",
+      "recoveryMission": "Write 150 words from a bullet outline only",
+      
       "steps": [
-        { "label": "Choose one focal concept (e.g., identity threat, AI displacement).", "completed": false },
-        { "label": "List all factors that might influence it.", "completed": false },
-        { "label": "Sketch arrows or relationships between factors and outcomes.", "completed": false },
-        { "label": "Note any rival explanations or alternative paths.", "completed": false },
-        { "label": "Write a short narrative explaining the mechanism map.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open your chapter outline and choose one specific subsection to draft",
+          "duration": "5 min",
+          "measurable": "Subsection identified and outlined"
+        },
+        {
+          "number": 2,
+          "action": "Gather all relevant annotated articles and matrix entries for this subsection",
+          "duration": "10 min",
+          "measurable": "5-8 sources organized by your desk"
+        },
+        {
+          "number": 3,
+          "action": "Write a clear topic sentence that states the paragraph's main claim",
+          "duration": "5 min",
+          "measurable": "Topic sentence written"
+        },
+        {
+          "number": 4,
+          "action": "Draft 2-3 evidence paragraphs, each with: claim → evidence → interpretation (40 min)",
+          "duration": "40 min",
+          "measurable": "2-3 complete paragraphs written"
+        },
+        {
+          "number": 5,
+          "action": "Add in-text citations for each piece of evidence as you write",
+          "duration": "5 min",
+          "measurable": "All claims have citations"
+        },
+        {
+          "number": 6,
+          "action": "Write a synthesis sentence that connects this subsection to your main argument (5 min)",
+          "duration": "5 min",
+          "measurable": "Synthesis sentence written"
+        },
+        {
+          "number": 7,
+          "action": "Write a transition sentence to the next subsection (5 min)",
+          "duration": "5 min",
+          "measurable": "Transition written"
+        },
+        {
+          "number": 8,
+          "action": "Save version with date in filename (e.g., Chapter1_v2_2026-04-18) (2 min)",
+          "duration": "2 min",
+          "measurable": "File saved with version number"
+        },
+        {
+          "number": 9,
+          "action": "Log word count and next action in your documentation (3 min)",
+          "duration": "3 min",
+          "measurable": "Log entry complete"
+        }
       ],
-      "tags": ["theory", "mechanisms", "conceptual"],
-      "notes": "Use this before writing theory sections or propositions."
+      
+      "tags": ["writing", "drafting", "chapter", "deep-work"],
+      "notes": "Don't edit while drafting. Just write. Editing comes later. Use the Pomodoro technique: 25 min write, 5 min break."
     },
 
-    /* =========================
-       METHODOLOGY
-    ========================== */
-
     {
-      "id": "phd_method_compare_designs",
-      "title": "Compare Two Possible Research Designs",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Methodology",
-      "sideTopic": "design choice",
-      "missionType": "Standard Mission",
+      "id": "phd_revise_feedback",
+      "title": "Integrate Advisor Feedback on One Section",
+      "subject": "Revision & Submission",
+      "sideTopic": "Feedback Integration",
       "difficulty": "Medium",
-      "xp": 40,
-      "repeatability": "One-time",
+      "xp": 50,
+      "repeatability": "Weekly",
       "estimatedTime": 60,
       "priority": "Critical",
       "energy": "Standard Focus",
       "context": "Writing",
-      "successCriteria": "A short comparison note with pros/cons and a tentative choice.",
-      "failureCondition": "Staying stuck between designs without writing down tradeoffs.",
-      "reward": "Clarity on which design better fits your question.",
-      "recoveryMission": "Write a 5-bullet pros/cons list for each design.",
+      
+      "phase": "Revision",
+      "timeBlock": "Afternoon",
+      "prerequisites": ["phd_write_section"],
+      "outputs": ["revised section", "response memo", "resolved comments"],
+      
+      "successCriteria": "All feedback comments addressed, changes made, and response memo written",
+      "failureCondition": "Reading comments without making any changes",
+      "reward": "+50 XP, +25 coins, advisor satisfaction",
+      "recoveryMission": "Address 3 specific comments only",
+      
       "steps": [
-        { "label": "Name the two designs you’re considering.", "completed": false },
-        { "label": "List strengths and weaknesses for each.", "completed": false },
-        { "label": "Check alignment with your research question and data access.", "completed": false },
-        { "label": "Write a short paragraph recommending one design.", "completed": false },
-        { "label": "Save this note for advisor discussion.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open the draft and advisor's feedback document side by side",
+          "duration": "2 min",
+          "measurable": "Both documents open"
+        },
+        {
+          "number": 2,
+          "action": "Read through all feedback once without making changes (just understanding)",
+          "duration": "10 min",
+          "measurable": "All comments read"
+        },
+        {
+          "number": 3,
+          "action": "Categorize feedback into: content, structure, clarity, citation (5 min)",
+          "duration": "5 min",
+          "measurable": "Categories identified"
+        },
+        {
+          "number": 4,
+          "action": "Start with easiest fixes: typos, grammar, formatting (10 min)",
+          "duration": "10 min",
+          "measurable": "5-10 small fixes made"
+        },
+        {
+          "number": 5,
+          "action": "Address medium-difficulty feedback: clarify unclear passages, add transitions (15 min)",
+          "duration": "15 min",
+          "measurable": "3-5 passages clarified"
+        },
+        {
+          "number": 6,
+          "action": "Tackle hard feedback: restructure arguments, add new evidence (15 min)",
+          "duration": "15 min",
+          "measurable": "Structural changes made"
+        },
+        {
+          "number": 7,
+          "action": "Write a response memo: what you changed and why (3 min)",
+          "duration": "3 min",
+          "measurable": "Response memo saved"
+        },
+        {
+          "number": 8,
+          "action": "Save new version and highlight changes for easy review (2 min)",
+          "duration": "2 min",
+          "measurable": "Version saved with tracked changes"
+        }
       ],
-      "tags": ["methodology", "design", "decision"],
-      "notes": "Use this before committing to your final method section."
+      
+      "tags": ["revision", "feedback", "advisor", "weekly"],
+      "notes": "Don't take feedback personally. Each comment is making your work stronger. If you disagree with feedback, note why and schedule a conversation."
     },
 
-    /* =========================
-       DATA COLLECTION
-    ========================== */
-
     {
-      "id": "phd_data_recruitment_push",
-      "title": "Run One Recruitment Push",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Data Collection",
-      "sideTopic": "recruitment",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Weekly",
-      "estimatedTime": 45,
-      "priority": "Critical",
-      "energy": "Standard Focus",
-      "context": "Online",
-      "successCriteria": "At least one concrete recruitment action completed (emails sent, posts published, or invitations delivered).",
-      "failureCondition": "Planning recruitment without actually sending anything.",
-      "reward": "Increased chance of new participants.",
-      "recoveryMission": "Send at least 2 invitations or one reminder message.",
-      "steps": [
-        { "label": "Review your target participant list or channels.", "completed": false },
-        { "label": "Draft or refine your recruitment message.", "completed": false },
-        { "label": "Send emails, messages, or post in agreed channels.", "completed": false },
-        { "label": "Log who you contacted and when.", "completed": false },
-        { "label": "Schedule a follow-up reminder if needed.", "completed": false }
-      ],
-      "tags": ["data-collection", "recruitment"],
-      "notes": "Keep a simple spreadsheet of recruitment attempts and responses."
-    },
-
-    /* =========================
-       DATA ANALYSIS
-    ========================== */
-
-    {
-      "id": "phd_analysis_code_batch",
-      "title": "Code One Transcript Batch",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Data Analysis",
-      "sideTopic": "coding",
-      "missionType": "Deep Work Mission",
-      "difficulty": "Hard",
-      "xp": 80,
-      "repeatability": "Repeatable",
-      "estimatedTime": 90,
-      "priority": "Critical",
-      "energy": "Deep Focus",
-      "context": "Library",
-      "successCriteria": "One transcript batch coded with a short memo.",
-      "failureCondition": "Reading transcripts without applying codes.",
-      "reward": "Concrete progress toward thematic analysis.",
-      "recoveryMission": "Code just 1–2 pages and write a 3-bullet memo.",
-      "steps": [
-        { "label": "Open the transcript batch and your codebook.", "completed": false },
-        { "label": "Code the first section carefully, checking definitions.", "completed": false },
-        { "label": "Continue coding through the batch, marking uncertainties.", "completed": false },
-        { "label": "Write a memo on emerging patterns or surprises.", "completed": false },
-        { "label": "Save coded file + memo in your analysis folder.", "completed": false }
-      ],
-      "tags": ["analysis", "coding", "qualitative"],
-      "notes": "Use consistent memo headings: patterns, tensions, questions."
-    },
-
-    /* =========================
-       ACADEMIC WRITING
-    ========================== */
-
-    {
-      "id": "phd_write_500_lit",
-      "title": "Draft 500 Words of Literature Review",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Academic Writing",
-      "sideTopic": "section drafting",
-      "missionType": "Deep Work Mission",
-      "difficulty": "Hard",
-      "xp": 85,
-      "repeatability": "Repeatable",
-      "estimatedTime": 90,
-      "priority": "Critical",
-      "energy": "Deep Focus",
-      "context": "Writing",
-      "successCriteria": "At least 500 usable words added to the literature review.",
-      "failureCondition": "Only editing existing text without adding new content.",
-      "reward": "Visible progress toward chapter completion.",
-      "recoveryMission": "Write 150 words based on one subsection outline.",
-      "steps": [
-        { "label": "Open your literature review outline.", "completed": false },
-        { "label": "Choose one subsection to focus on.", "completed": false },
-        { "label": "Gather relevant article notes for that subsection.", "completed": false },
-        { "label": "Write a topic sentence and 2–3 evidence paragraphs.", "completed": false },
-        { "label": "Add a synthesis sentence and transition.", "completed": false },
-        { "label": "Save version and note word count.", "completed": false }
-      ],
-      "tags": ["writing", "literature", "deep-work"],
-      "notes": "Use a timer and protect this block from interruptions."
-    },
-
-    /* =========================
-       REVISION & SUBMISSION
-    ========================== */
-
-    {
-      "id": "phd_revision_pass",
-      "title": "Run One Focused Revision Pass",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Revision & Submission",
-      "sideTopic": "feedback integration",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 40,
-      "repeatability": "Repeatable",
-      "estimatedTime": 45,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "One section revised with feedback addressed.",
-      "failureCondition": "Skimming comments without making changes.",
-      "reward": "Cleaner draft and reduced revision backlog.",
-      "recoveryMission": "Resolve 3 comments only.",
-      "steps": [
-        { "label": "Open the draft and feedback document.", "completed": false },
-        { "label": "Choose one section or cluster of comments.", "completed": false },
-        { "label": "Address comments one by one, updating the text.", "completed": false },
-        { "label": "Mark resolved comments as done.", "completed": false },
-        { "label": "Write a short note summarizing what changed.", "completed": false }
-      ],
-      "tags": ["revision", "feedback"],
-      "notes": "Use this mission repeatedly instead of trying to revise everything at once."
-    },
-
-    /* =========================
-       ADVISOR COMMUNICATION
-    ========================== */
-
-    {
-      "id": "phd_advisor_update_scroll",
+      "id": "phd_advisor_update",
       "title": "Prepare Advisor Update Scroll",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
       "subject": "Advisor Communication",
-      "sideTopic": "meeting prep",
-      "missionType": "Standard Mission",
+      "sideTopic": "Meeting Prep",
       "difficulty": "Easy",
       "xp": 20,
       "repeatability": "Weekly",
       "estimatedTime": 15,
       "priority": "Critical",
       "energy": "Low Energy",
-      "context": "Admin",
-      "successCriteria": "Short update with wins, blockers, and questions ready.",
-      "failureCondition": "Going into meeting without structure.",
-      "reward": "Clearer advisor conversations and better guidance.",
-      "recoveryMission": "Write a 3-bullet email draft summarizing progress.",
+      "context": "Writing",
+      
+      "phase": "Communication",
+      "timeBlock": "Flexible",
+      "prerequisites": [],
+      "outputs": ["update document", "question list", "agenda"],
+      
+      "successCriteria": "Update document with wins, blockers, and 3 specific questions ready",
+      "failureCondition": "Meeting attended without preparation",
+      "reward": "+20 XP, +10 coins, advisor clarity",
+      "recoveryMission": "Send 3-bullet recap email draft only",
+      
       "steps": [
-        { "label": "List progress since last advisor contact.", "completed": false },
-        { "label": "List current blockers or decisions needed.", "completed": false },
-        { "label": "Write 2–3 specific questions you want answered.", "completed": false },
-        { "label": "Attach any relevant draft or notes.", "completed": false },
-        { "label": "Save this as your meeting agenda or email draft.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open your advisor update template (Google Doc/Word)",
+          "duration": "1 min",
+          "measurable": "Template open"
+        },
+        {
+          "number": 2,
+          "action": "List 3-5 concrete accomplishments since last meeting (3 min)",
+          "duration": "3 min",
+          "measurable": "Accomplishments bulleted"
+        },
+        {
+          "number": 3,
+          "action": "List 2-3 current blockers or stuck points (2 min)",
+          "duration": "2 min",
+          "measurable": "Blockers clearly described"
+        },
+        {
+          "number": 4,
+          "action": "Write 3 specific questions you need advisor input on (3 min)",
+          "duration": "3 min",
+          "measurable": "3 questions written"
+        },
+        {
+          "number": 5,
+          "action": "Attach any relevant drafts, data, or figures (2 min)",
+          "duration": "2 min",
+          "measurable": "Files attached"
+        },
+        {
+          "number": 6,
+          "action": "Review for clarity and professionalism (2 min)",
+          "duration": "2 min",
+          "measurable": "Document proofread"
+        },
+        {
+          "number": 7,
+          "action": "Save agenda and send to advisor 24 hours before meeting (2 min)",
+          "duration": "2 min",
+          "measurable": "Email sent"
+        }
       ],
-      "tags": ["advisor", "communication", "admin"],
-      "notes": "Use the same structure every time to make meetings efficient."
-    },
-
-    /* =========================
-       ACADEMIC IDENTITY
-    ========================== */
-
-    {
-      "id": "phd_identity_bio_pass",
-      "title": "Refine Your Academic Bio",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "subject": "Academic Identity Building",
-      "sideTopic": "bios",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Monthly",
-      "estimatedTime": 20,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Home",
-      "successCriteria": "One updated bio version saved (short or long).",
-      "failureCondition": "Using outdated or vague bios for talks or profiles.",
-      "reward": "Stronger sense of your scholarly identity.",
-      "recoveryMission": "Write a 3-sentence version of your current research focus.",
-      "steps": [
-        { "label": "Open your current bio (short or long).", "completed": false },
-        { "label": "Highlight outdated phrases or missing elements.", "completed": false },
-        { "label": "Update research focus, methods, and key interests.", "completed": false },
-        { "label": "Save a short (2–3 sentence) and longer (1 paragraph) version.", "completed": false },
-        { "label": "Store them in a quick-access folder.", "completed": false }
-      ],
-      "tags": ["identity", "bio", "positioning"],
-      "notes": "Use this before conferences, applications, or new profiles."
+      
+      "tags": ["advisor", "communication", "meeting", "weekly"],
+      "notes": "Send your update 24 hours before the meeting. Advisors appreciate preparation and it makes meetings more productive."
     }
-
   ]
 }
