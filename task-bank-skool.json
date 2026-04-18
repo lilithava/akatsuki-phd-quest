@@ -1,39 +1,19 @@
 {
   "meta": {
-    "name": "Akatsuki Skool Task Bank – Clan Leadership Missions",
-    "version": "1.0.0",
+    "name": "Clan Leadership & Skool Community",
+    "version": "2.0.0",
     "domain": "Skool",
     "theme": "Clan Leadership & Skool Community",
-    "description": "Complete mission bank for Skool community leadership, content creation, engagement, onboarding, retention, growth, moderation, and challenge cycles."
+    "description": "Community building, engagement, moderation, and member value missions for Skool platform management.",
+    "lastUpdated": "2026-04-18"
   },
 
-  "subjects": [
-    "Member Onboarding",
-    "Content Creation",
-    "Engagement Systems",
-    "Moderation",
-    "Weekly Challenges",
-    "Lesson Building",
-    "Retention & Value",
-    "Growth Tasks",
-    "Community Documentation",
-    "Offer Refinement"
-  ],
-
   "tasks": [
-
-    /* ============================================================
-       MEMBER ONBOARDING
-    ============================================================ */
-
     {
-      "id": "skool_onboard_welcome_flow",
-      "title": "Create or Update the Member Welcome Flow",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
+      "id": "skool_onboarding_flow",
+      "title": "Create or Update Member Welcome Flow",
       "subject": "Member Onboarding",
-      "sideTopic": "welcome flows",
-      "missionType": "Standard Mission",
+      "sideTopic": "Welcome Flows",
       "difficulty": "Medium",
       "xp": 40,
       "repeatability": "Monthly",
@@ -41,63 +21,71 @@
       "priority": "Important",
       "energy": "Standard Focus",
       "context": "Skool",
-      "successCriteria": "A clear welcome flow with steps, links, and first-win tasks.",
-      "failureCondition": "New members join without knowing what to do.",
-      "reward": "Higher activation and early engagement.",
-      "recoveryMission": "Write a 5-step welcome checklist only.",
+      
+      "phase": "Onboarding",
+      "timeBlock": "Morning",
+      "prerequisites": [],
+      "outputs": ["welcome post", "starter kit", "first-win task"],
+      
+      "successCriteria": "5-step welcome flow published with links and first-win task",
+      "failureCondition": "New members join without knowing what to do",
+      "reward": "+40 XP, +20 coins, higher activation rates",
+      "recoveryMission": "Write a 5-step welcome checklist only",
+      
       "steps": [
-        { "label": "Review current onboarding experience.", "completed": false },
-        { "label": "Write a simple 5-step welcome flow.", "completed": false },
-        { "label": "Add links to key posts, lessons, or resources.", "completed": false },
-        { "label": "Create a 'First Win' task for new members.", "completed": false },
-        { "label": "Publish or update the welcome post.", "completed": false }
+        {
+          "number": 1,
+          "action": "Review your current onboarding experience as a new member would see it",
+          "duration": "5 min",
+          "measurable": "Onboarding audit notes written"
+        },
+        {
+          "number": 2,
+          "action": "Write a simple 5-step welcome checklist (join → intro → first task → resources → ask)",
+          "duration": "10 min",
+          "measurable": "5 steps documented"
+        },
+        {
+          "number": 3,
+          "action": "Create a 'First Win' task that takes under 5 minutes to complete",
+          "duration": "10 min",
+          "measurable": "First-win task published"
+        },
+        {
+          "number": 4,
+          "action": "Add links to 3 key posts, lessons, or resources for new members",
+          "duration": "10 min",
+          "measurable": "3 links with descriptions added"
+        },
+        {
+          "number": 5,
+          "action": "Create a pinned welcome post with all onboarding information",
+          "duration": "5 min",
+          "measurable": "Welcome post pinned"
+        },
+        {
+          "number": 6,
+          "action": "Test the flow by asking a new or test member to go through it (3 min)",
+          "duration": "3 min",
+          "measurable": "Test completed with feedback"
+        },
+        {
+          "number": 7,
+          "action": "Add an auto-response for new members with welcome message (2 min)",
+          "duration": "2 min",
+          "measurable": "Auto-response configured"
+        }
       ],
-      "tags": ["onboarding", "community", "activation"],
-      "notes": "Keep the welcome flow short and action-oriented."
+      
+      "tags": ["onboarding", "welcome", "activation"],
+      "notes": "Keep the welcome flow short and action-oriented. New members should know their first 3 actions within 60 seconds of joining."
     },
-
-    {
-      "id": "skool_onboard_starter_kit",
-      "title": "Build a Starter Kit for New Members",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Member Onboarding",
-      "sideTopic": "starter kits",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Quarterly",
-      "estimatedTime": 40,
-      "priority": "Maintenance",
-      "energy": "Standard Focus",
-      "context": "Skool",
-      "successCriteria": "Starter kit with 3–5 essential resources.",
-      "failureCondition": "New members must search for everything manually.",
-      "reward": "Smoother onboarding and fewer repeated questions.",
-      "recoveryMission": "Add 2 essential links to a temporary starter kit.",
-      "steps": [
-        { "label": "Identify the top 3 things new members need.", "completed": false },
-        { "label": "Collect links, PDFs, or posts.", "completed": false },
-        { "label": "Write a short intro explaining how to use the kit.", "completed": false },
-        { "label": "Publish the kit as a pinned post.", "completed": false },
-        { "label": "Add it to the welcome flow.", "completed": false }
-      ],
-      "tags": ["onboarding", "starter-kit"],
-      "notes": "Starter kits reduce friction and confusion."
-    },
-
-    /* ============================================================
-       CONTENT CREATION
-    ============================================================ */
 
     {
       "id": "skool_daily_lesson",
-      "title": "Publish One High-Value Daily Lesson",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
+      "title": "Publish One High-Value Daily Lesson Post",
       "subject": "Content Creation",
-      "sideTopic": "daily lessons",
-      "missionType": "Standard Mission",
+      "sideTopic": "Daily Lessons",
       "difficulty": "Medium",
       "xp": 35,
       "repeatability": "Daily",
@@ -105,161 +93,143 @@
       "priority": "Critical",
       "energy": "Standard Focus",
       "context": "Skool",
-      "successCriteria": "One actionable lesson with a clear teaching point.",
-      "failureCondition": "Posting vague or filler content.",
-      "reward": "Daily engagement and consistent value delivery.",
-      "recoveryMission": "Publish a 3-bullet takeaway post.",
+      
+      "phase": "Content",
+      "timeBlock": "Morning",
+      "prerequisites": [],
+      "outputs": ["lesson post", "engagement prompt", "resource link"],
+      
+      "successCriteria": "Post with hook, 3 teaching points, action prompt, and reply to first comment",
+      "failureCondition": "Posting vague or filler content",
+      "reward": "+35 XP, +15 coins, daily engagement",
+      "recoveryMission": "Publish a 3-bullet takeaway post only",
+      
       "steps": [
-        { "label": "Pick one concrete lesson or insight.", "completed": false },
-        { "label": "Write a hook sentence.", "completed": false },
-        { "label": "Add 3 teaching bullets.", "completed": false },
-        { "label": "Add one action prompt.", "completed": false },
-        { "label": "Publish and reply to first comment.", "completed": false }
+        {
+          "number": 1,
+          "action": "Choose one concrete, actionable lesson from your expertise (3 min)",
+          "duration": "3 min",
+          "measurable": "Lesson topic selected"
+        },
+        {
+          "number": 2,
+          "action": "Write a hook sentence that creates curiosity or addresses a pain point (3 min)",
+          "duration": "3 min",
+          "measurable": "Hook written"
+        },
+        {
+          "number": 3,
+          "action": "Add 3 teaching bullets, each with a specific example (10 min)",
+          "duration": "10 min",
+          "measurable": "3 bullets with examples written"
+        },
+        {
+          "number": 4,
+          "action": "Include 1 actionable prompt for members to apply the lesson (3 min)",
+          "duration": "3 min",
+          "measurable": "Action prompt written"
+        },
+        {
+          "number": 5,
+          "action": "Add a call-to-action asking for comments or questions (2 min)",
+          "duration": "2 min",
+          "measurable": "CTA written"
+        },
+        {
+          "number": 6,
+          "action": "Tag relevant members or use relevant hashtags (2 min)",
+          "duration": "2 min",
+          "measurable": "Tags added"
+        },
+        {
+          "number": 7,
+          "action": "Publish and immediately reply to the first comment (5 min)",
+          "duration": "5 min",
+          "measurable": "Post published, first reply sent"
+        },
+        {
+          "number": 8,
+          "action": "Schedule a reminder to check back for comments in 2 hours (2 min)",
+          "duration": "2 min",
+          "measurable": "Reminder set"
+        }
       ],
-      "tags": ["content", "daily", "teaching"],
-      "notes": "Daily lessons build trust and rhythm."
+      
+      "tags": ["content", "daily", "teaching", "engagement"],
+      "notes": "Daily lessons build trust and rhythm. Consistency beats perfection. If you miss a day, post a 'best of' recap instead."
     },
 
     {
-      "id": "skool_clip_repurpose",
-      "title": "Repurpose One Clip into a Skool Post",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Content Creation",
-      "sideTopic": "clip repurposing",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Repeatable",
-      "estimatedTime": 20,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Online",
-      "successCriteria": "One clip turned into a clear, valuable post.",
-      "failureCondition": "Posting the clip without context or teaching.",
-      "reward": "More content with less effort.",
-      "recoveryMission": "Write a 3-sentence summary of the clip.",
-      "steps": [
-        { "label": "Choose a clip with a strong insight.", "completed": false },
-        { "label": "Write a short intro explaining the context.", "completed": false },
-        { "label": "Add 2–3 teaching bullets.", "completed": false },
-        { "label": "Add a question or CTA.", "completed": false },
-        { "label": "Publish and tag appropriately.", "completed": false }
-      ],
-      "tags": ["content", "repurposing"],
-      "notes": "Repurposing keeps your content engine efficient."
-    },
-
-    /* ============================================================
-       ENGAGEMENT SYSTEMS
-    ============================================================ */
-
-    {
-      "id": "skool_engagement_checkin",
-      "title": "Run a Weekly Momentum Check-In Thread",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Engagement Systems",
-      "sideTopic": "accountability loops",
-      "missionType": "Standard Mission",
+      "id": "skool_moderation_morning",
+      "title": "Morning Moderation Check (15 min)",
+      "subject": "Moderation",
+      "sideTopic": "Cleanup",
       "difficulty": "Easy",
       "xp": 15,
-      "repeatability": "Weekly",
-      "estimatedTime": 10,
+      "repeatability": "Daily",
+      "estimatedTime": 15,
       "priority": "Important",
       "energy": "Low Energy",
       "context": "Skool",
-      "successCriteria": "One active accountability thread posted.",
-      "failureCondition": "No engagement prompt posted.",
-      "reward": "Higher member consistency and visibility.",
-      "recoveryMission": "Reply to 3 existing member posts.",
+      
+      "phase": "Moderation",
+      "timeBlock": "Morning",
+      "prerequisites": [],
+      "outputs": ["clean feed", "responded posts", "flagged content"],
+      
+      "successCriteria": "All new posts reviewed, spam removed, unanswered questions addressed",
+      "failureCondition": "Leaving spam or unanswered questions in feed",
+      "reward": "+15 XP, +8 coins, clean community",
+      "recoveryMission": "Review 5 most recent posts only",
+      
       "steps": [
-        { "label": "Choose a focus question.", "completed": false },
-        { "label": "Write a simple prompt.", "completed": false },
-        { "label": "Invite wins + blockers.", "completed": false },
-        { "label": "Post thread.", "completed": false },
-        { "label": "Return later to respond.", "completed": false }
+        {
+          "number": 1,
+          "action": "Scan all new posts from last 24 hours (5 min)",
+          "duration": "5 min",
+          "measurable": "All new posts viewed"
+        },
+        {
+          "number": 2,
+          "action": "Remove or report any spam, self-promotion, or rule violations (2 min)",
+          "duration": "2 min",
+          "measurable": "Violating content handled"
+        },
+        {
+          "number": 3,
+          "action": "Identify posts with 0 replies and prioritize them (2 min)",
+          "duration": "2 min",
+          "measurable": "Unanswered posts identified"
+        },
+        {
+          "number": 4,
+          "action": "Reply to at least 3 unanswered questions with helpful answers (4 min)",
+          "duration": "4 min",
+          "measurable": "3 replies posted"
+        },
+        {
+          "number": 5,
+          "action": "Pin or highlight 1 high-value post from yesterday (1 min)",
+          "duration": "1 min",
+          "measurable": "Post pinned"
+        },
+        {
+          "number": 6,
+          "action": "Log any recurring issues or member concerns (1 min)",
+          "duration": "1 min",
+          "measurable": "Issues documented"
+        }
       ],
-      "tags": ["engagement", "accountability"],
-      "notes": "Check-ins create community rhythm."
+      
+      "tags": ["moderation", "morning", "daily"],
+      "notes": "Morning moderation sets the tone for the day. Members should wake up to a clean, engaged community."
     },
-
-    {
-      "id": "skool_engagement_poll",
-      "title": "Create a Member Poll",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Engagement Systems",
-      "sideTopic": "polls",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Repeatable",
-      "estimatedTime": 15,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Skool",
-      "successCriteria": "Poll posted with at least 3 meaningful options.",
-      "failureCondition": "Poll too vague or irrelevant.",
-      "reward": "Insight into member needs.",
-      "recoveryMission": "Post a simple yes/no poll.",
-      "steps": [
-        { "label": "Choose a topic worth measuring.", "completed": false },
-        { "label": "Write 3–5 clear options.", "completed": false },
-        { "label": "Add a short intro explaining why you're asking.", "completed": false },
-        { "label": "Publish poll.", "completed": false },
-        { "label": "Review results after 24 hours.", "completed": false }
-      ],
-      "tags": ["engagement", "poll"],
-      "notes": "Polls help you steer content and challenges."
-    },
-
-    /* ============================================================
-       MODERATION
-    ============================================================ */
-
-    {
-      "id": "skool_mod_cleanup",
-      "title": "Run a Community Cleanup Pass",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Moderation",
-      "sideTopic": "cleanup",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Weekly",
-      "estimatedTime": 20,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Skool",
-      "successCriteria": "Old posts cleaned, duplicates removed, and threads organized.",
-      "failureCondition": "Letting clutter accumulate.",
-      "reward": "Cleaner community experience.",
-      "recoveryMission": "Archive 3 outdated posts.",
-      "steps": [
-        { "label": "Scan recent posts for duplicates or clutter.", "completed": false },
-        { "label": "Archive or merge low-value threads.", "completed": false },
-        { "label": "Pin or highlight high-value posts.", "completed": false },
-        { "label": "Respond to unanswered questions.", "completed": false },
-        { "label": "Log any issues for later.", "completed": false }
-      ],
-      "tags": ["moderation", "cleanup"],
-      "notes": "A clean community feels alive and intentional."
-    },
-
-    /* ============================================================
-       WEEKLY CHALLENGES
-    ============================================================ */
 
     {
       "id": "skool_challenge_cycle",
       "title": "Run a Full Weekly Challenge Cycle",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
       "subject": "Weekly Challenges",
-      "sideTopic": "challenge cycles",
-      "missionType": "Standard Mission",
+      "sideTopic": "Challenge Cycles",
       "difficulty": "Hard",
       "xp": 90,
       "repeatability": "Weekly",
@@ -267,156 +237,148 @@
       "priority": "Critical",
       "energy": "Deep Focus",
       "context": "Skool",
-      "successCriteria": "Challenge launched, monitored, and closed with recap.",
-      "failureCondition": "Challenge posted without follow-up.",
-      "reward": "High engagement and member wins.",
-      "recoveryMission": "Launch a mini-challenge with 1 checkpoint.",
+      
+      "phase": "Engagement",
+      "timeBlock": "Flexible",
+      "prerequisites": ["skool_daily_lesson"],
+      "outputs": ["challenge post", "checkpoint updates", "recap post", "member wins"],
+      
+      "successCriteria": "Challenge launched Monday, 3 checkpoints, Friday recap with participant engagement",
+      "failureCondition": "Challenge posted without follow-up or engagement",
+      "reward": "+90 XP, +45 coins, high engagement spike",
+      "recoveryMission": "Launch a 3-day mini-challenge with 1 checkpoint",
+      
       "steps": [
-        { "label": "Define challenge goal + promise.", "completed": false },
-        { "label": "Write instructions + checkpoints.", "completed": false },
-        { "label": "Publish challenge post.", "completed": false },
-        { "label": "Engage with participant updates.", "completed": false },
-        { "label": "Post end-of-week recap + wins.", "completed": false }
+        {
+          "number": 1,
+          "action": "Monday 9am: Define challenge goal, outcome, and daily prompts (20 min)",
+          "duration": "20 min",
+          "measurable": "Challenge framework documented"
+        },
+        {
+          "number": 2,
+          "action": "Monday 10am: Write clear instructions, rules, and submission format (15 min)",
+          "duration": "15 min",
+          "measurable": "Instructions published"
+        },
+        {
+          "number": 3,
+          "action": "Monday 11am: Publish challenge post and pin to top (5 min)",
+          "duration": "5 min",
+          "measurable": "Post pinned"
+        },
+        {
+          "number": 4,
+          "action": "Tuesday 10am: Post first checkpoint with progress prompts (10 min)",
+          "duration": "10 min",
+          "measurable": "Checkpoint 1 posted"
+        },
+        {
+          "number": 5,
+          "action": "Wednesday 10am: Post second checkpoint with encouragement (10 min)",
+          "duration": "10 min",
+          "measurable": "Checkpoint 2 posted"
+        },
+        {
+          "number": 6,
+          "action": "Thursday 10am: Post final checkpoint with submission reminder (10 min)",
+          "duration": "10 min",
+          "measurable": "Checkpoint 3 posted"
+        },
+        {
+          "number": 7,
+          "action": "Engage with participant updates daily (20 min total across week)",
+          "duration": "20 min",
+          "measurable": "At least 1 reply per participant"
+        },
+        {
+          "number": 8,
+          "action": "Friday 3pm: Compile wins, highlights, and lessons learned (15 min)",
+          "duration": "15 min",
+          "measurable": "Recap content prepared"
+        },
+        {
+          "number": 9,
+          "action": "Friday 4pm: Post end-of-week recap celebrating all participants (10 min)",
+          "duration": "10 min",
+          "measurable": "Recap post published"
+        },
+        {
+          "number": 10,
+          "action": "Friday 5pm: Announce next week's challenge theme (5 min)",
+          "duration": "5 min",
+          "measurable": "Teaser posted"
+        }
       ],
-      "tags": ["challenge", "engagement", "leadership"],
-      "notes": "Challenges create momentum and community identity."
+      
+      "tags": ["challenge", "engagement", "weekly", "leadership"],
+      "notes": "Challenges create momentum and community identity. The recap is as important as the launch - celebrate every participant."
     },
 
-    /* ============================================================
-       LESSON BUILDING
-    ============================================================ */
-
     {
-      "id": "skool_lesson_outline",
-      "title": "Outline One L2 Weekly Master Class",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Lesson Building",
-      "sideTopic": "master classes",
-      "missionType": "Deep Work Mission",
-      "difficulty": "Hard",
-      "xp": 90,
-      "repeatability": "Weekly",
-      "estimatedTime": 120,
-      "priority": "Critical",
-      "energy": "Deep Focus",
-      "context": "Writing",
-      "successCriteria": "Session has title, objective, flow, and examples.",
-      "failureCondition": "Only rough ideas without structure.",
-      "reward": "High-value weekly content.",
-      "recoveryMission": "Define title, promise, and 3-part outline only.",
-      "steps": [
-        { "label": "Define session outcome.", "completed": false },
-        { "label": "Name the master class.", "completed": false },
-        { "label": "Draft intro hook.", "completed": false },
-        { "label": "Create 3 teaching sections.", "completed": false },
-        { "label": "Add one example to each section.", "completed": false },
-        { "label": "Add recap + next step.", "completed": false }
-      ],
-      "tags": ["lesson", "teaching", "deep-work"],
-      "notes": "Master classes anchor your weekly rhythm."
-    },
-
-    /* ============================================================
-       RETENTION & VALUE
-    ============================================================ */
-
-    {
-      "id": "skool_retention_wins",
+      "id": "skool_member_spotlight",
       "title": "Spotlight One Member Win",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
       "subject": "Retention & Value",
-      "sideTopic": "member wins",
-      "missionType": "Standard Mission",
+      "sideTopic": "Member Wins",
       "difficulty": "Easy",
       "xp": 20,
-      "repeatability": "Weekly",
+      "repeatability": "Daily",
       "estimatedTime": 15,
       "priority": "Important",
       "energy": "Low Energy",
       "context": "Skool",
-      "successCriteria": "One member win highlighted publicly.",
-      "failureCondition": "Wins go unnoticed.",
-      "reward": "Higher retention and morale.",
-      "recoveryMission": "Comment on 3 member posts with encouragement.",
+      
+      "phase": "Retention",
+      "timeBlock": "Afternoon",
+      "prerequisites": [],
+      "outputs": ["spotlight post", "member tag", "encouragement"],
+      
+      "successCriteria": "One member win highlighted publicly with specific achievement",
+      "failureCondition": "Wins go unnoticed or spotlight is too vague",
+      "reward": "+20 XP, +10 coins, higher retention and morale",
+      "recoveryMission": "Comment on 3 member posts with encouragement",
+      
       "steps": [
-        { "label": "Identify a genuine member win.", "completed": false },
-        { "label": "Write a short spotlight post.", "completed": false },
-        { "label": "Tag the member (if appropriate).", "completed": false },
-        { "label": "Invite others to share wins.", "completed": false },
-        { "label": "Pin or highlight the post.", "completed": false }
+        {
+          "number": 1,
+          "action": "Review recent member posts, comments, and challenge submissions (5 min)",
+          "duration": "5 min",
+          "measurable": "5-10 member activities reviewed"
+        },
+        {
+          "number": 2,
+          "action": "Identify one specific, genuine win (progress, insight, completion) (2 min)",
+          "duration": "2 min",
+          "measurable": "Win identified with evidence"
+        },
+        {
+          "number": 3,
+          "action": "Write a short spotlight post describing what they accomplished (4 min)",
+          "duration": "4 min",
+          "measurable": "Spotlight draft written"
+        },
+        {
+          "number": 4,
+          "action": "Tag the member and explain WHY their win matters (2 min)",
+          "duration": "2 min",
+          "measurable": "Tag added with explanation"
+        },
+        {
+          "number": 5,
+          "action": "Invite others to share their wins or congratulate in comments (1 min)",
+          "duration": "1 min",
+          "measurable": "Invitation added"
+        },
+        {
+          "number": 6,
+          "action": "Pin or highlight the spotlight post for visibility (1 min)",
+          "duration": "1 min",
+          "measurable": "Post pinned"
+        }
       ],
-      "tags": ["retention", "wins"],
-      "notes": "Spotlights build community culture."
-    },
-
-    /* ============================================================
-       GROWTH TASKS
-    ============================================================ */
-
-    {
-      "id": "skool_growth_testimonial",
-      "title": "Request One Testimonial",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Growth Tasks",
-      "sideTopic": "testimonials",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Weekly",
-      "estimatedTime": 15,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Online",
-      "successCriteria": "One testimonial requested or collected.",
-      "failureCondition": "Letting testimonials pile up unrequested.",
-      "reward": "Social proof for growth.",
-      "recoveryMission": "Ask one member privately for a short quote.",
-      "steps": [
-        { "label": "Identify a member with a recent win.", "completed": false },
-        { "label": "Send a short testimonial request.", "completed": false },
-        { "label": "Collect or save the response.", "completed": false },
-        { "label": "Store it in your testimonial folder.", "completed": false },
-        { "label": "Thank the member.", "completed": false }
-      ],
-      "tags": ["growth", "testimonials"],
-      "notes": "Testimonials fuel organic growth."
-    },
-
-    /* ============================================================
-       COMMUNITY DOCUMENTATION
-    ============================================================ */
-
-    {
-      "id": "skool_docs_insight_log",
-      "title": "Update the Community Insight Log",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "subject": "Community Documentation",
-      "sideTopic": "insight logs",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 30,
-      "repeatability": "Weekly",
-      "estimatedTime": 30,
-      "priority": "Maintenance",
-      "energy": "Standard Focus",
-      "context": "Skool",
-      "successCriteria": "Insight log updated with patterns or member needs.",
-      "failureCondition": "Letting insights disappear into the feed.",
-      "reward": "Better content and challenge design.",
-      "recoveryMission": "Write 3 bullets summarizing this week’s patterns.",
-      "steps": [
-        { "label": "Review recent posts and comments.", "completed": false },
-        { "label": "Identify recurring questions or themes.", "completed": false },
-        { "label": "Write 3–5 insights in your log.", "completed": false },
-        { "label": "Tag insights by topic.", "completed": false },
-        { "label": "Save and date the entry.", "completed": false }
-      ],
-      "tags": ["documentation", "insights"],
-      "notes": "Insight logs help you evolve the community intelligently."
-    },
-
-    /*
+      
+      "tags": ["retention", "wins", "recognition", "daily"],
+      "notes": "Spotlights build community culture. Specific praise ('You connected X and Y brilliantly') beats generic ('Great job')."
+    }
+  ]
+}
