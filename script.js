@@ -1,15 +1,13 @@
 /**
- * Akatsuki PhD Quest - Main Application
- * Simplified Working Version
+ * Akatsuki PhD Quest - Working with Event Delegation
  */
 
-// Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM ready, starting app...');
-    
-    // Initialize the app after a short delay to ensure all elements exist
-    setTimeout(initApp, 100);
-});
+// Wait for DOM to be fully loaded with proper readyState check
+if (document.readyState !== 'loading') {
+    initApp();
+} else {
+    document.addEventListener('DOMContentLoaded', initApp);
+}
 
 // Global state
 let state = {
@@ -249,6 +247,8 @@ function renderActiveMissions() {
         return;
     }
     
+    // Use insertAdjacentHTML instead of innerHTML to preserve parent event listeners
+    // This is better for performance and prevents event listener loss[citation:3][citation:8]
     container.innerHTML = activeTasks.map(task => `
         <div class="mission-item" data-task-id="${task.id}">
             <div class="mission-header">
@@ -276,94 +276,12 @@ function renderActiveMissions() {
             </div>
         </div>
     `).join('');
-    
-    // Attach event listeners
-    document.querySelectorAll('.step-checkbox').forEach(cb => {
-        cb.addEventListener('change', function(e) {
-            e.stopPropagation();
-            const li = this.closest('.step-item');
-            const stepIndex = parseInt(li.dataset.stepIndex);
-            const missionDiv = li.closest('.mission-item');
-            const taskId = missionDiv.dataset.taskId;
-            
-            const task = state.activeTasks.find(t => t.id === taskId);
-            if (task && task.steps[stepIndex]) {
-                task.steps[stepIndex].completed = this.checked;
-                if (this.checked) {
-                    li.classList.add('completed');
-                } else {
-                    li.classList.remove('completed');
-                }
-                updateTaskCompletion(task);
-                saveState();
-                renderDashboard();
-                renderHeader();
-            }
-        });
-    });
-    
-    document.querySelectorAll('.view-task-details').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const taskId = this.dataset.taskId;
-            openTaskModal(taskId);
-        });
-    });
-}
-
-function openTaskModal(taskId) {
-    const task = state.activeTasks.find(t => t.id === taskId);
-    if (!task) return;
-    
-    const modal = document.getElementById('taskModal');
-    if (!modal) return;
-    
-    document.getElementById('modalTitle').innerText = task.title;
-    document.getElementById('modalBody').innerHTML = `
-        <p><strong>Domain:</strong> ${task.domain}</p>
-        <p><strong>Difficulty:</strong> ${task.difficulty}</p>
-        <p><strong>XP Reward:</strong> ${task.xp}</p>
-        <p><strong>Repeatability:</strong> ${task.repeatability}</p>
-        <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
-        <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
-    `;
-    document.getElementById('taskNotes').value = task.notes || '';
-    
-    const saveBtn = document.getElementById('saveTaskNotes');
-    const newSaveBtn = saveBtn.cloneNode(true);
-    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-    newSaveBtn.onclick = () => {
-        task.notes = document.getElementById('taskNotes').value;
-        saveState();
-        modal.style.display = 'none';
-        showToast('Notes saved!');
-    };
-    
-    const deleteBtn = document.getElementById('deleteTaskBtn');
-    if (deleteBtn) {
-        const newDeleteBtn = deleteBtn.cloneNode(true);
-        deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
-        newDeleteBtn.onclick = () => {
-            if (confirm(`Delete task "${task.title}"?`)) {
-                state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
-                saveState();
-                modal.style.display = 'none';
-                renderAll();
-                showToast(`Deleted: ${task.title}`);
-            }
-        };
-    }
-    
-    modal.style.display = 'flex';
-    const closeBtn = modal.querySelector('.close');
-    if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
 }
 
 function renderTaskBank() {
     const container = document.getElementById('taskBankList');
     if (!container) return;
     
-    // Sample tasks for the bank
     const sampleTasks = [
         { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
         { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
@@ -388,29 +306,6 @@ function renderTaskBank() {
             </div>
         </div>
     `).join('');
-    
-    document.querySelectorAll('.add-from-bank').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const stepsArray = JSON.parse(this.dataset.steps);
-            const newTask = {
-                id: Date.now() + '_' + Math.random(),
-                title: this.dataset.title,
-                domain: this.dataset.domain,
-                difficulty: this.dataset.difficulty,
-                xp: parseInt(this.dataset.xp),
-                repeatability: 'One-time',
-                priority: 'Important',
-                steps: stepsArray.map(text => ({ text, completed: false })),
-                notes: '',
-                startedAt: new Date().toISOString(),
-                completed: false
-            };
-            state.activeTasks.push(newTask);
-            saveState();
-            renderAll();
-            showToast(`Added: ${newTask.title}`);
-        });
-    });
 }
 
 function renderAvatar() {
@@ -440,15 +335,6 @@ function renderAvatar() {
                 return `<div class="gear-item">${itemId} 
                     <button class="unequip-btn" data-item="${itemId}">✖</button></div>`;
             }).join('');
-            
-            document.querySelectorAll('.unequip-btn').forEach(btn => {
-                btn.onclick = () => {
-                    state.avatar.equipped = state.avatar.equipped.filter(i => i !== btn.dataset.item);
-                    saveState();
-                    renderAvatar();
-                    showToast('Item unequipped');
-                };
-            });
         }
     }
     
@@ -462,18 +348,6 @@ function renderAvatar() {
                 return `<div class="gear-item">${itemId} 
                     <button class="equip-btn" data-item="${itemId}">⚔️ Equip</button></div>`;
             }).join('');
-            
-            document.querySelectorAll('.equip-btn').forEach(btn => {
-                btn.onclick = () => {
-                    const itemId = btn.dataset.item;
-                    if (!state.avatar.equipped.includes(itemId)) {
-                        state.avatar.equipped.push(itemId);
-                        saveState();
-                        renderAvatar();
-                        showToast(`Equipped ${itemId}`);
-                    }
-                };
-            });
         }
     }
 }
@@ -503,26 +377,6 @@ function renderShop() {
             </div>
         `;
     }).join('');
-    
-    document.querySelectorAll('.buy-btn[data-id]').forEach(btn => {
-        btn.onclick = () => {
-            const itemId = btn.dataset.id;
-            const cost = parseInt(btn.dataset.cost);
-            
-            if (state.coins >= cost) {
-                state.coins -= cost;
-                if (!state.avatar.inventory) state.avatar.inventory = [];
-                state.avatar.inventory.push(itemId);
-                showToast(`Purchased: ${itemId}`);
-                saveState();
-                renderShop();
-                renderAvatar();
-                renderHeader();
-            } else {
-                showToast(`Not enough coins! Need ${cost - state.coins} more`);
-            }
-        };
-    });
 }
 
 function renderHistory() {
@@ -601,6 +455,167 @@ function generateReport() {
     }
 }
 
+// ============================================================
+// EVENT DELEGATION - ONE LISTENER TO RULE THEM ALL!
+// This is the key fix - events bubble up to the container[citation:2][citation:4]
+// ============================================================
+
+function setupGlobalEventDelegation() {
+    // Single event listener on the entire main content area
+    const mainContent = document.querySelector('.ak-content');
+    if (!mainContent) {
+        console.warn('Main content not found');
+        return;
+    }
+    
+    // Handle ALL checkbox clicks via delegation[citation:2][citation:9]
+    mainContent.addEventListener('change', function(e) {
+        // Check if the clicked element is a step checkbox
+        if (e.target && e.target.classList.contains('step-checkbox')) {
+            const checkbox = e.target;
+            const li = checkbox.closest('.step-item');
+            const stepIndex = parseInt(li.dataset.stepIndex);
+            const missionDiv = li.closest('.mission-item');
+            const taskId = missionDiv.dataset.taskId;
+            
+            const task = state.activeTasks.find(t => t.id === taskId);
+            if (task && task.steps[stepIndex]) {
+                task.steps[stepIndex].completed = checkbox.checked;
+                if (checkbox.checked) {
+                    li.classList.add('completed');
+                } else {
+                    li.classList.remove('completed');
+                }
+                updateTaskCompletion(task);
+                saveState();
+                renderDashboard();
+                renderHeader();
+            }
+        }
+    });
+    
+    // Handle ALL button clicks via delegation
+    mainContent.addEventListener('click', function(e) {
+        const target = e.target;
+        
+        // Add from bank buttons
+        if (target.classList.contains('add-from-bank')) {
+            const stepsArray = JSON.parse(target.dataset.steps);
+            const newTask = {
+                id: Date.now() + '_' + Math.random(),
+                title: target.dataset.title,
+                domain: target.dataset.domain,
+                difficulty: target.dataset.difficulty,
+                xp: parseInt(target.dataset.xp),
+                repeatability: 'One-time',
+                priority: 'Important',
+                steps: stepsArray.map(text => ({ text, completed: false })),
+                notes: '',
+                startedAt: new Date().toISOString(),
+                completed: false
+            };
+            state.activeTasks.push(newTask);
+            saveState();
+            renderAll();
+            showToast(`Added: ${newTask.title}`);
+        }
+        
+        // View task details buttons
+        if (target.classList.contains('view-task-details')) {
+            const taskId = target.dataset.taskId;
+            openTaskModal(taskId);
+        }
+        
+        // Buy buttons in shop
+        if (target.classList.contains('buy-btn') && target.dataset.id) {
+            const itemId = target.dataset.id;
+            const cost = parseInt(target.dataset.cost);
+            
+            if (state.coins >= cost) {
+                state.coins -= cost;
+                if (!state.avatar.inventory) state.avatar.inventory = [];
+                state.avatar.inventory.push(itemId);
+                showToast(`Purchased: ${itemId}`);
+                saveState();
+                renderShop();
+                renderAvatar();
+                renderHeader();
+            } else {
+                showToast(`Not enough coins! Need ${cost - state.coins} more`);
+            }
+        }
+        
+        // Equip buttons
+        if (target.classList.contains('equip-btn')) {
+            const itemId = target.dataset.item;
+            if (!state.avatar.equipped.includes(itemId)) {
+                state.avatar.equipped.push(itemId);
+                saveState();
+                renderAvatar();
+                showToast(`Equipped ${itemId}`);
+            }
+        }
+        
+        // Unequip buttons
+        if (target.classList.contains('unequip-btn')) {
+            const itemId = target.dataset.item;
+            state.avatar.equipped = state.avatar.equipped.filter(i => i !== itemId);
+            saveState();
+            renderAvatar();
+            showToast('Item unequipped');
+        }
+    });
+}
+
+function openTaskModal(taskId) {
+    const task = state.activeTasks.find(t => t.id === taskId);
+    if (!task) return;
+    
+    const modal = document.getElementById('taskModal');
+    if (!modal) return;
+    
+    document.getElementById('modalTitle').innerText = task.title;
+    document.getElementById('modalBody').innerHTML = `
+        <p><strong>Domain:</strong> ${task.domain}</p>
+        <p><strong>Difficulty:</strong> ${task.difficulty}</p>
+        <p><strong>XP Reward:</strong> ${task.xp}</p>
+        <p><strong>Repeatability:</strong> ${task.repeatability}</p>
+        <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
+        <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
+    `;
+    document.getElementById('taskNotes').value = task.notes || '';
+    
+    const saveBtn = document.getElementById('saveTaskNotes');
+    const newSaveBtn = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    newSaveBtn.onclick = () => {
+        task.notes = document.getElementById('taskNotes').value;
+        saveState();
+        modal.style.display = 'none';
+        showToast('Notes saved!');
+    };
+    
+    const deleteBtn = document.getElementById('deleteTaskBtn');
+    if (deleteBtn) {
+        const newDeleteBtn = deleteBtn.cloneNode(true);
+        deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
+        newDeleteBtn.onclick = () => {
+            if (confirm(`Delete task "${task.title}"?`)) {
+                state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
+                saveState();
+                modal.style.display = 'none';
+                renderAll();
+                showToast(`Deleted: ${task.title}`);
+            }
+        };
+    }
+    
+    modal.style.display = 'flex';
+    const closeBtn = modal.querySelector('.close');
+    if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+}
+
 function setupEventListeners() {
     // Tab switching
     document.querySelectorAll('.ak-tab-btn').forEach(btn => {
@@ -614,7 +629,7 @@ function setupEventListeners() {
         });
     });
     
-    // Undo/Redo (simple version)
+    // Undo/Redo
     document.getElementById('undoBtn')?.addEventListener('click', () => {
         showToast('Undo feature coming soon');
     });
@@ -824,6 +839,7 @@ function initApp() {
     
     loadState();
     setupEventListeners();
+    setupGlobalEventDelegation(); // CRITICAL: This handles all dynamic element clicks
     renderAll();
     
     console.log('🎯 Akatsuki Quest Ready!', { 
