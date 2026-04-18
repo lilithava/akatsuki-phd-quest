@@ -1,0 +1,745 @@
+Yes — below is the data plan itself, not code. I’m turning your enhanced prompt into a structured mission bank you can hand directly to Copilot so it can generate the website logic and UI from a stronger content system. This version is tuned to your PhD goals, Skool structure, Akatsuki theme, and the gamified mechanics you’ve been aiming for.
+System overview
+This is a content architecture + task bank seed system for an Akatsuki-themed gamified productivity website covering your PhD journey, Skool community, curriculum design, research assistantship, documentation workflow, and discipline rituals. It is designed so Copilot can later convert it into task cards, filters, XP systems, streaks, achievements, boss battles, and progression rules.
+Core design rules
+The task bank should follow these logic rules so the website stays coherent rather than becoming a giant messy checklist. You prefer detailed mini-steps, milestone logic, and a black/red Akatsuki-styled progression system with levels, streaks, and grouped missions, so the plan below is built around that structure.
+•	Every task belongs to: Theme → Subject → Side Topic
+•	Every task has: title, difficulty, XP, repeatability, estimated time, success criteria, failure condition, reward, recovery mission, and micro-steps
+•	Every large task should become a mission chain, not one vague task
+•	Website should support filters like All / Active / Done / Epic / Domain / Energy / Priority, because you already wanted grouped tasks and interactive quest filtering behavior.Memory+1
+•	Progress starts at zero and is earned upward through completions, streaks, badges, and unlocks, matching the gamified behavior you asked for in earlier iterations.Memory+1
+Main themes
+These are the top-level Akatsuki mission worlds for the data structure.
+Theme	Purpose
+Shadow Research Missions	Core PhD research, reading, synthesis, writing, and dissertation progress.
+Village Knowledge Expansion	Curriculum design, lesson design, teaching materials, workshops, and learning experiences.
+Clan Leadership & Skool Community	Community building, engagement, moderation, challenges, and member value delivery.
+Intelligence Gathering	Research assistantship, interviews, coding, thematic analysis, and PI alignment.
+Eternal Documentation Scrolls	Logs, evidence collection, version control, filing, summaries, and proof-of-work systems.
+Discipline & Rituals	Daily startup, shutdown, focus rituals, reset routines, consistency loops, and anti-procrastination recovery.
+Boss Battles	High-stakes milestones like chapter drafts, challenge launches, curriculum completions, and major reports.
+Recovery & Reset Protocols	Missed days, backlog repair, shame-free restarts, cleanup passes, and re-entry missions.
+Theme map
+Below is the full hierarchy seed.
+Shadow Research Missions
+This theme maps directly to your PhD direction and especially your identity-threat and AI displacement research agenda. It should hold the densest and highest-value academic mission chains.
+•	Subjects
+•	Research Question Development
+•	Literature Review
+•	Theory Building
+•	Methodology
+•	Data Collection
+•	Data Analysis
+•	Academic Writing
+•	Revision & Submission
+•	Advisor Communication
+•	Academic Identity Building
+•	Side Topics
+•	Research Question Development: gap spotting, framing questions, scope control, hypothesis shaping, variable identification
+•	Literature Review: source finding, source screening, annotation, synthesis, citation capture, matrix building
+•	Theory Building: conceptual definitions, mechanism mapping, rival explanations, proposition drafting
+•	Methodology: design choice, sampling, instruments, protocols, ethics alignment
+•	Data Collection: recruitment, scheduling, field notes, storage, consent tracking
+•	Data Analysis: coding, memoing, thematic development, interpretation, evidence linking
+•	Academic Writing: outlines, section drafting, transitions, argument strengthening, claims/evidence balance
+•	Revision & Submission: feedback integration, formatting, journal targeting, abstract polishing
+•	Advisor Communication: update prep, agenda creation, question logs, revision clarification
+•	Academic Identity Building: bios, conference presence, networking, research positioning
+Village Knowledge Expansion
+This theme covers curriculum and teaching design and should reflect your preference for tightly packaged master-class style delivery instead of stretched filler content. That means tasks should favor complete instructional units, strong learning outcomes, and direct deliverables.
+•	Subjects
+•	Course Planning
+•	Learning Outcomes
+•	Lesson Architecture
+•	Activities & Practice
+•	Assessments
+•	Rubrics
+•	Slides & Visuals
+•	Iteration Cycles
+•	Learner Feedback
+•	Course Packaging
+•	Side Topics
+•	Course Planning: scope, sequencing, learner journey, module mapping
+•	Learning Outcomes: verbs, mastery levels, outcome alignment
+•	Lesson Architecture: hooks, flow, pacing, transitions, closure
+•	Activities & Practice: drills, reflection prompts, case work, application tasks
+•	Assessments: mastery checks, checkpoints, performance tasks
+•	Rubrics: criteria, levels, evidence standards
+•	Slides & Visuals: narrative sequencing, examples, screen design, callouts
+•	Iteration Cycles: review notes, update passes, lesson refactoring
+•	Learner Feedback: feedback sorting, issue patterns, revision decisions
+•	Course Packaging: titles, positioning, resources, worksheets, completion flow
+Clan Leadership & Skool Community
+This theme reflects your Skool ecosystem and its multi-level design. It should support daily L1 content, weekly L2 recordings, and live L3 experiences while avoiding bloated “content milking.”
+•	Subjects
+•	Member Onboarding
+•	Content Creation
+•	Engagement Systems
+•	Moderation
+•	Weekly Challenges
+•	Lesson Building
+•	Retention & Value
+•	Growth Tasks
+•	Community Documentation
+•	Offer Refinement
+•	Side Topics
+•	Member Onboarding: welcome flows, first-win tasks, starter kits, orientation
+•	Content Creation: post drafting, clip repurposing, prompts, resource posts
+•	Engagement Systems: questions, polls, accountability loops, recognition rituals
+•	Moderation: response cleanup, boundary setting, issue resolution
+•	Weekly Challenges: challenge mechanics, checkpoints, prompts, celebrations
+•	Lesson Building: daily samples, master classes, weekly recordings, live prep
+•	Retention & Value: member wins, friction audit, objection harvesting
+•	Growth Tasks: referral prompts, testimonials, landing assets, showcase posts
+•	Community Documentation: FAQs, insight logs, case archives, member patterns
+•	Offer Refinement: curriculum gaps, pricing logic, sequencing improvement
+Intelligence Gathering
+This is the RA domain and should be operational, evidence-based, and tightly organized. It should feel less like generic productivity and more like mission operations.
+•	Subjects
+•	Interview Prep
+•	Interview Execution
+•	Transcription & Cleaning
+•	Coding
+•	Memos
+•	Thematic Analysis
+•	Report Writing
+•	PI Alignment
+•	Admin Support
+•	Follow-Up
+•	Side Topics
+•	Interview Prep: protocol review, question prep, device testing, logistics
+•	Interview Execution: rapport, timing, probing, note capture
+•	Transcription & Cleaning: transcript review, corrections, anonymization
+•	Coding: codebook application, open coding, consistency checks
+•	Memos: emerging insight notes, anomalies, comparisons
+•	Thematic Analysis: clustering, theme naming, supporting evidence
+•	Report Writing: summaries, findings, visuals, implications
+•	PI Alignment: agenda prep, clarification lists, deliverable check-ins
+•	Admin Support: schedules, folders, status tracking
+•	Follow-Up: thank-yous, missing info, file updates, next steps
+Eternal Documentation Scrolls
+This theme supports your preference for detailed checklists, notes, and proof-of-work organization. It should become the backbone for screenshots, logs, archives, and progress evidence.
+•	Subjects
+•	Daily Logs
+•	Weekly Reviews
+•	Monthly Summaries
+•	Evidence Capture
+•	File Organization
+•	Version Control
+•	Progress Tracking
+•	Archive Maintenance
+•	Naming Standards
+•	Dashboard Inputs
+•	Side Topics
+•	Daily Logs: task notes, decisions, blockers, wins
+•	Weekly Reviews: patterns, lessons, carryovers, adjustments
+•	Monthly Summaries: outcomes, milestone review, narrative recap
+•	Evidence Capture: screenshots, exports, links, artifacts
+•	File Organization: folders, storage locations, cleanups
+•	Version Control: versions, dates, naming logic, rollback references
+•	Progress Tracking: KPIs, streak records, deliverable counters
+•	Archive Maintenance: retired files, backups, snapshots
+•	Naming Standards: templates, prefixes, date systems
+•	Dashboard Inputs: totals, statuses, scoreboards, proof points
+Discipline & Rituals
+This theme turns consistency into a game loop rather than a vague habit tracker. It should help the website create “win the day” logic with startup, focus, and shutdown routines.
+•	Subjects
+•	Morning Startup
+•	Deep Work Entry
+•	Focus Protection
+•	Midday Reset
+•	Shutdown Routine
+•	Weekly Reset
+•	Energy Management
+•	Anti-Procrastination
+•	Environment Reset
+•	Character Building
+•	Side Topics
+•	Morning Startup: top-3 selection, calendar check, mission board review
+•	Deep Work Entry: workspace setup, timer setting, distraction removal
+•	Focus Protection: phone blocking, tab cleanup, interruption control
+•	Midday Reset: reprioritization, hydration, posture break, quick review
+•	Shutdown Routine: closure notes, tomorrow prep, loose-end capture
+•	Weekly Reset: planning, cleanup, recovery, realignment
+•	Energy Management: sleep protection, movement, food, focus pacing
+•	Anti-Procrastination: 5-minute start, friction removal, tiny re-entry
+•	Environment Reset: desk clear, digital cleanup, resource staging
+•	Character Building: reflection, identity statements, standards review
+Boss Battles
+This theme should hold major milestones and unlock only when prerequisite missions are met. It converts big scary projects into visible achievements.
+•	Subjects
+•	Paper Draft Bosses
+•	Chapter Bosses
+•	Major Community Launches
+•	Curriculum Releases
+•	Conference Prep
+•	RA Deliverable Bosses
+•	Portfolio Identity Bosses
+•	System Upgrade Bosses
+Recovery & Reset Protocols
+This theme covers backlog repair and “no shame” recovery loops. It prevents the system from becoming punishing after missed days.
+•	Subjects
+•	Missed Day Recovery
+•	Backlog Triage
+•	Overwhelm Reset
+•	Focus Repair
+•	Emotional Recovery
+•	Re-entry Missions
+•	Folder Cleanup Rescue
+•	Deadline Damage Control
+Difficulty and XP logic
+This should be global logic for the whole bank.
+Difficulty	Time	Cognitive load	XP
+Easy	5–15 min	low	10–20 XP
+Medium	20–60 min	moderate	25–50 XP
+Hard	1–3 hrs	deep work	60–120 XP
+Elite	multi-hour / multi-day	major milestone	150–500 XP
+Add these bonus layers:
+•	First completion bonus: +10 XP
+•	3-day streak bonus: +15 XP
+•	7-day streak bonus: +40 XP
+•	Boss battle clear bonus: +100 XP
+•	Recovery mission completion: +15 XP, but only after a miss
+•	Perfect documentation bonus: +10 XP when evidence is attached
+Global fields for every task
+Give Copilot this exact data model for each item.
+•	Task Title
+•	Theme
+•	Subject
+•	Side Topic
+•	Mission Type
+•	Difficulty
+•	XP
+•	Repeatability
+•	Estimated Time
+•	Priority
+•	Energy Tag
+•	Context Tag
+•	Success Criteria
+•	Failure Condition
+•	Reward
+•	Recovery Mission
+•	Unlocks
+•	Dependencies
+•	Micro-Steps
+•	Tags
+•	Notes
+Priority, energy, context tags
+These extra tags will help the website feel smart instead of flat.
+•	Priority: Critical, Important, Maintenance, Optional
+•	Energy: Low Energy, Standard Focus, Deep Focus
+•	Context: Home, Office, Library, Online, Skool, RA, Writing, Admin
+•	Mission Type: Mini-Quest, Standard Mission, Deep Work Mission, Boss Battle, Recovery Mission, Secret Mission, Ritual
+Achievement system
+These achievements are based on the kind of gamified loop you wanted in earlier builds: XP, streaks, levels, completion, filters, and unlockable progression.Memory+1
+•	First Blood — complete first task
+•	Scroll Keeper — log documentation 7 days in a row
+•	Shadow Scholar — complete 10 literature review tasks
+•	Data Hunter — finish 5 data collection missions
+•	Clan Builder — publish 10 community posts
+•	Master Architect — finish 5 curriculum modules
+•	Signal Interceptor — complete 10 RA coding tasks
+•	No Loose Ends — perform 7 shutdown rituals
+•	Boss Slayer — clear first elite mission
+•	Resurrection Protocol — recover from a missed week using re-entry missions
+•	Crimson Streak — maintain 14-day streak
+•	Akatsuki Commander — reach level 10
+Failure and recovery logic
+This should be one of the most important site rules because it closes the gap between ideal planning and real behavior. You asked for incentives and failure conditions, but the system needs recovery logic too or users will abandon it after a bad week.
+•	Missing a task does not erase past XP
+•	Missed recurring tasks become Recovery Missions
+•	Three missed tasks in one domain trigger a Backlog Triage Mission
+•	Two broken streaks in one week trigger Overwhelm Reset Protocol
+•	Elite tasks can be downgraded into 3–5 smaller missions
+•	Recovery missions award lower XP than original missions, but restore momentum
+•	“Win the day” = complete 1 important mission, 1 ritual, and 1 documentation action
+Daily, weekly, monthly cycle logic
+These recurring loops will help Copilot structure dashboards and recurring quest slots.
+Daily cycle
+•	Morning Startup Ritual
+•	One Core Mission
+•	One Support Mission
+•	One Documentation Action
+•	Shutdown Ritual
+Weekly cycle
+•	Weekly Review
+•	One Boss Prep Mission
+•	One Community Value Mission
+•	One Cleanup / Archive Mission
+•	One Planning Reset
+Monthly cycle
+•	Monthly Summary Scroll
+•	Milestone Audit
+•	Boss Battle Selection
+•	Curriculum / Community Retrospective
+•	Research Positioning Review
+Sample task bank
+Below is a high-quality starter bank with titles and logic. This is not yet “every task possible,” but it is a strong content seed Copilot can expand into a website database.
+Shadow Research Missions
+Literature Review → Source Finding
+Task Title: Hunt 5 Relevant Articles for One Paper Thread
+•	Difficulty: Medium
+•	XP: 35
+•	Repeatability: Weekly
+•	Estimated Time: 45 min
+•	Priority: Critical
+•	Energy: Standard Focus
+•	Success Criteria: 5 relevant sources saved with citation details
+•	Failure Condition: fewer than 3 usable sources collected
+•	Reward: +35 XP, source bank growth
+•	Recovery Mission: Find 2 anchor papers only
+•	Micro-Steps:
+1.	Open database or library portal.
+2.	Search one focused keyword cluster.
+3.	Save top 10 likely articles.
+4.	Screen abstracts for fit.
+5.	Keep best 5.
+6.	Save citations and PDFs.
+7.	Tag them by paper thread.
+Task Title: Extract Key Insights from One Article
+•	Difficulty: Medium
+•	XP: 40
+•	Repeatability: Daily
+•	Estimated Time: 35 min
+•	Priority: Important
+•	Energy: Standard Focus
+•	Success Criteria: one article summarized in 5–8 sentences with 3 key takeaways
+•	Failure Condition: article read without captured notes
+•	Reward: +40 XP, +1 research chain progress
+•	Recovery Mission: capture only abstract + 3 bullets
+•	Micro-Steps:
+1.	Open article.
+2.	Read abstract and conclusion first.
+3.	Scan structure and methods.
+4.	Identify 3–5 key arguments.
+5.	Highlight usable quotes.
+6.	Write short synthesis notes.
+7.	Save citation and notes in source bank.
+Academic Writing → Drafting
+Task Title: Draft 500 Words for Literature Review Section
+•	Difficulty: Hard
+•	XP: 85
+•	Repeatability: Repeatable
+•	Estimated Time: 90 min
+•	Priority: Critical
+•	Energy: Deep Focus
+•	Success Criteria: 500 usable words written into active draft
+•	Failure Condition: only outline edits, no drafted prose
+•	Reward: +85 XP, progress toward chapter boss
+•	Recovery Mission: write 150 words from bullet outline
+•	Micro-Steps:
+1.	Open current outline.
+2.	Pick one subsection.
+3.	Gather source notes.
+4.	Write topic sentence.
+5.	Draft evidence paragraph.
+6.	Add synthesis sentence.
+7.	Write transition out.
+8.	Save version and note next step.
+Advisor Communication → Meeting Prep
+Task Title: Prepare Advisor Update Scroll
+•	Difficulty: Easy
+•	XP: 20
+•	Repeatability: Weekly
+•	Estimated Time: 15 min
+•	Priority: Critical
+•	Energy: Low Energy
+•	Success Criteria: update note with wins, blockers, and questions
+•	Failure Condition: meeting attended without structure
+•	Reward: +20 XP, advisor clarity bonus
+•	Recovery Mission: send 3-bullet recap email draft
+•	Micro-Steps:
+1.	List progress since last meeting.
+2.	List current blockers.
+3.	Write 2–3 decisions needed.
+4.	Attach any draft or notes.
+5.	Save agenda in meeting folder.
+Clan Leadership & Skool Community
+Content Creation → Daily Posts
+Task Title: Publish One High-Value Daily Lesson Post
+•	Difficulty: Medium
+•	XP: 35
+•	Repeatability: Daily
+•	Estimated Time: 30 min
+•	Priority: Critical
+•	Energy: Standard Focus
+•	Success Criteria: one post published with clear teaching point and action step
+•	Failure Condition: post is vague or absent
+•	Reward: +35 XP, community streak progress
+•	Recovery Mission: publish one concise takeaway post
+•	Micro-Steps:
+1.	Pick one concrete lesson.
+2.	Write hook sentence.
+3.	Add 3 teaching bullets.
+4.	Add one action prompt.
+5.	Add CTA for comment or reflection.
+6.	Publish and log date.
+Engagement Systems → Member Check-In
+Task Title: Run a Momentum Check-In Thread
+•	Difficulty: Easy
+•	XP: 15
+•	Repeatability: Weekly
+•	Estimated Time: 10 min
+•	Priority: Important
+•	Energy: Low Energy
+•	Success Criteria: one active accountability thread posted
+•	Failure Condition: no interaction prompt posted
+•	Reward: +15 XP, engagement loop maintained
+•	Recovery Mission: reply to 3 existing member posts
+•	Micro-Steps:
+1.	Choose focus question.
+2.	Write simple prompt.
+3.	Invite wins + blockers.
+4.	Post thread.
+5.	Return later to respond.
+Lesson Building → L2 Master Class
+Task Title: Outline One L2 Weekly Master Class
+•	Difficulty: Hard
+•	XP: 90
+•	Repeatability: Weekly
+•	Estimated Time: 2 hrs
+•	Priority: Critical
+•	Energy: Deep Focus
+•	Success Criteria: session has title, objective, flow, and examples
+•	Failure Condition: only rough idea, no session structure
+•	Reward: +90 XP, level-2 content unlock
+•	Recovery Mission: define title, promise, and 3-part outline only
+•	Micro-Steps:
+1.	Define session outcome.
+2.	Name the master class.
+3.	Draft intro hook.
+4.	Create 3 teaching sections.
+5.	Add one example to each section.
+6.	Add audience action step.
+7.	Add recap and next step.
+8.	Save outline template.
+Village Knowledge Expansion
+Learning Outcomes → Outcome Design
+Task Title: Write 5 Measurable Learning Outcomes
+•	Difficulty: Medium
+•	XP: 30
+•	Repeatability: Repeatable
+•	Estimated Time: 40 min
+•	Priority: Important
+•	Energy: Standard Focus
+•	Success Criteria: five outcomes use clear verbs and match module scope
+•	Failure Condition: outcomes remain vague or unmeasurable
+•	Reward: +30 XP, curriculum clarity gain
+•	Recovery Mission: rewrite top 2 outcomes only
+•	Micro-Steps:
+1.	Name the lesson goal.
+2.	Identify learner transformation.
+3.	Select measurable verbs.
+4.	Draft 5 outcome statements.
+5.	Remove vague wording.
+6.	Match outcomes to lesson parts.
+Assessments → Mastery Check
+Task Title: Build One Mastery Check Activity
+•	Difficulty: Medium
+•	XP: 40
+•	Repeatability: Repeatable
+•	Estimated Time: 45 min
+•	Priority: Important
+•	Energy: Standard Focus
+•	Success Criteria: one task can prove learner understanding
+•	Failure Condition: activity exists but cannot assess mastery
+•	Reward: +40 XP, assessment bank growth
+•	Recovery Mission: create 3 check questions only
+•	Micro-Steps:
+1.	Pick target skill.
+2.	Define what success looks like.
+3.	Create task prompt.
+4.	Add submission format.
+5.	Add scoring or rubric note.
+6.	Save into assessment bank.
+Intelligence Gathering
+Interview Prep → Session Readiness
+Task Title: Prepare One Interview Mission Kit
+•	Difficulty: Medium
+•	XP: 35
+•	Repeatability: Repeatable
+•	Estimated Time: 30 min
+•	Priority: Critical
+•	Energy: Standard Focus
+•	Success Criteria: question guide, logistics, and recording check ready
+•	Failure Condition: interview begins without prep materials
+•	Reward: +35 XP, smoother interview execution
+•	Recovery Mission: confirm logistics + top 5 questions only
+•	Micro-Steps:
+1.	Review interview purpose.
+2.	Open guide.
+3.	Highlight key probes.
+4.	Confirm time and link/location.
+5.	Test recorder or software.
+6.	Prepare note template.
+Coding → Transcript Coding
+Task Title: Code One Transcript Segment Batch
+•	Difficulty: Hard
+•	XP: 80
+•	Repeatability: Repeatable
+•	Estimated Time: 90 min
+•	Priority: Critical
+•	Energy: Deep Focus
+•	Success Criteria: one transcript batch coded and memoed
+•	Failure Condition: read transcript without applied codes
+•	Reward: +80 XP, analysis progress
+•	Recovery Mission: code 1 page only
+•	Micro-Steps:
+1.	Open transcript.
+2.	Review codebook.
+3.	Code first section carefully.
+4.	Mark ambiguities.
+5.	Continue through batch.
+6.	Write quick memo on patterns.
+7.	Save coded version.
+Eternal Documentation Scrolls
+Daily Logs → Work Capture
+Task Title: Write Daily Mission Log
+•	Difficulty: Easy
+•	XP: 15
+•	Repeatability: Daily
+•	Estimated Time: 10 min
+•	Priority: Important
+•	Energy: Low Energy
+•	Success Criteria: log captures work done, blockers, and next move
+•	Failure Condition: day ends with no written record
+•	Reward: +15 XP, documentation streak
+•	Recovery Mission: write 3-bullet retro for missed day
+•	Micro-Steps:
+1.	Open log template.
+2.	Write date.
+3.	Record key work completed.
+4.	Record blockers.
+5.	Record next action.
+6.	Save and tag.
+Evidence Capture → Screenshot Archive
+Task Title: Save Proof-of-Work Evidence Pack
+•	Difficulty: Easy
+•	XP: 20
+•	Repeatability: Repeatable
+•	Estimated Time: 15 min
+•	Priority: Maintenance
+•	Energy: Low Energy
+•	Success Criteria: screenshots or artifacts stored in correct folder
+•	Failure Condition: work completed but no evidence saved
+•	Reward: +20 XP, proof bonus eligibility
+•	Recovery Mission: save at least 2 anchor screenshots
+•	Micro-Steps:
+1.	Identify output to capture.
+2.	Take screenshots or export files.
+3.	Rename files correctly.
+4.	Place in right folder.
+5.	Link in log or dashboard.
+Discipline & Rituals
+Morning Startup → Daily Opening
+Task Title: Begin the Day with a Mission Board Check
+•	Difficulty: Easy
+•	XP: 10
+•	Repeatability: Daily
+•	Estimated Time: 5 min
+•	Priority: Critical
+•	Energy: Low Energy
+•	Success Criteria: top missions selected before starting work
+•	Failure Condition: work begins reactively with no plan
+•	Reward: +10 XP, startup streak
+•	Recovery Mission: pick top 1 priority only
+•	Micro-Steps:
+1.	Open task board.
+2.	Review calendar.
+3.	Mark top 3 missions.
+4.	Select one must-win task.
+5.	Start first block.
+Shutdown Routine → Closure
+Task Title: Close the Day with a Shadow Debrief
+•	Difficulty: Easy
+•	XP: 15
+•	Repeatability: Daily
+•	Estimated Time: 10 min
+•	Priority: Important
+•	Energy: Low Energy
+•	Success Criteria: tomorrow’s first move is prepared
+•	Failure Condition: stop work without closure
+•	Reward: +15 XP, shutdown streak
+•	Recovery Mission: leave one sentence next-action note
+•	Micro-Steps:
+1.	Review what was finished.
+2.	Capture unfinished items.
+3.	Pick tomorrow’s first task.
+4.	Save open tabs or references.
+5.	Clear workspace.
+Boss battles
+These are milestone-grade missions and should unlock only when prerequisites are met.
+•	Defeat the Literature Beast — complete source matrix for one paper
+•	Forge the Chapter Scroll — produce full chapter draft
+•	Summon the Master Class — launch one polished L2 class
+•	Command the Clan Challenge — run one complete Skool challenge cycle
+•	Decode the Signal Archive — complete thematic analysis across transcript batch
+•	Seal the Monthly Record — publish full monthly documentation summary
+•	Advisor Summit — attend major advisor meeting with complete evidence pack
+•	Identity Manuscript Boss — complete draft related to AI identity threat paper stream.
+Mini-quests
+These are low-friction momentum tasks that help with re-entry.
+•	Rename 5 files correctly
+•	Tag 3 sources in database
+•	Write 3 bullets for one article
+•	Reply to 2 community members
+•	Clean one folder
+•	Draft one lesson hook
+•	Fix one broken citation
+•	Capture one screenshot bundle
+•	Write one meeting question
+•	Set one 25-minute focus block
+Secret missions
+These are optional delight layers the site can randomly surface.
+•	Scholar’s Insight Drop — write one unexpected connection between two papers
+•	Hidden Scroll — archive one overlooked but useful asset
+•	Clan Recognition — spotlight one member win
+•	Quiet Blade — finish one annoying admin task you’ve avoided
+•	Red Moon Reset — fully clean workspace + digital desktop in one session
+Unlock system
+This makes the site feel like progression rather than flat completion.
+•	Level 1–2: mini-quests + rituals
+•	Level 3: standard research and community missions
+•	Level 4: documentation bonuses and streak multipliers
+•	Level 5: hard missions and first boss battle
+•	Level 7: secret missions unlocked
+•	Level 10: elite boss battle track
+•	Level 12: custom mission creation privileges
+•	Level 15: Akatsuki Commander status
+Suggested database categories for Copilot
+If you want Copilot to build the website cleanly, tell it to use these collections:
+•	themes
+•	subjects
+•	sideTopics
+•	tasks
+•	achievements
+•	bossBattles
+•	miniQuests
+•	recoveryMissions
+•	dailyCycles
+•	weeklyCycles
+•	monthlyCycles
+•	unlockRules
+•	streakRules
+•	xpRules
+Copilot-ready instruction
+You can paste this to Copilot with the task bank above:
+Build a gamified task management website using this data architecture. Do not invent random tasks. Use the provided hierarchy of Theme → Subject → Side Topic → Task. Support filters for difficulty, repeatability, domain, mission type, status, and energy. Include XP, levels, streaks, achievements, boss battles, recovery missions, and unlock rules. The aesthetic should be Akatsuki-inspired: black, red, tactical, clean, serious, and game-like without being childish. Each task card must show title, difficulty, XP, repeatability, success criteria, failure condition, reward, recovery mission, and micro-steps.
+ 
+Yes — the next improvement should be even more modular data, with the mission system split into smaller files so Copilot can control each part cleanly. Your current architecture is good, but it still bundles too many responsibilities together, and that will make the app harder to maintain, test, and expand.
+What should be separated
+I’d break the project into more granular files so each part has one job only. That matches your goal of swapping task content without touching the core engine and helps keep the Akatsuki RPG system stable as it grows.
+Recommended file structure
+•	index.html — layout only, no content data.
+•	style.css — all styling and Akatsuki theme tokens.
+•	script.js — game engine, state, UI wiring, localStorage, reset logic.
+•	game-data.json — global rules, XP rules, coin rules, achievements, avatar/shop rules.
+•	task-bank.json — master task data only.
+•	task-bank-phd.json — PhD missions only.
+•	task-bank-skool.json — Skool/community missions only.
+•	task-bank-curriculum.json — curriculum missions only.
+•	task-bank-ra.json — research assistantship missions only.
+•	task-bank-docs.json — documentation missions only.
+•	task-bank-rituals.json — rituals, reset, daily discipline missions only.
+•	boss-battles.json — all boss missions only.
+•	recovery-missions.json — all recovery / reset missions only.
+•	mini-quests.json — tiny low-friction momentum missions only.
+•	achievements.json — badges and unlock conditions only.
+•	shop-items.json — cosmetics, bonuses, gear only.
+•	mission-templates.json — reusable templates for generated tasks.
+•	mission-tags.json — priority, energy, context, domain, and mission type lists.
+•	avatar-layers.json — SVG layer definitions, defaults, and unlockable parts.
+This separation gives you a real content system, not just one giant bank. It also makes it easy to swap a single domain, like your PhD tasks, without disturbing the rest of the app.
+Better data design
+Instead of one huge task bank, the content should be layered like this:
+Level 1: Shared rules
+Put these in game-data.json:
+•	XP per level
+•	coin conversion rate
+•	streak bonuses
+•	task difficulty rules
+•	mission type definitions
+•	unlock thresholds
+•	recovery logic
+•	boss unlock conditions
+•	avatar base stats
+•	shop formulas
+Level 2: Master banks
+Put these in separate files:
+•	PhD bank
+•	Skool bank
+•	Curriculum bank
+•	RA bank
+•	Documentation bank
+•	Ritual bank
+•	Boss bank
+•	Recovery bank
+•	Mini-quest bank
+Level 3: Reusable templates
+Put these in mission-templates.json:
+•	“prepare any advisor meeting”
+•	“draft any report”
+•	“read and annotate one article”
+•	“build one lesson”
+•	“run one weekly community post”
+•	“archive one work session”
+•	“reset from missed day”
+•	“repair backlog after overload”
+That means the task generator can create new missions by combining:
+•	a template,
+•	a domain,
+•	a difficulty,
+•	a time horizon,
+•	and a mission type.
+This is much cleaner than generating brand new free-form tasks every time.Memory+1
+Best separation strategy
+If you want the app to run smoothly, I’d recommend this rule:
+•	Static rules go in game-data.json.
+•	Domain content goes in one bank per domain.
+•	Repeatable logic patterns go in mission-templates.json.
+•	Unlockable content goes in separate files.
+•	Generated user missions go in their own saved custom bank.
+That way:
+•	changing XP rules never breaks task content,
+•	changing PhD tasks never affects the Skool system,
+•	changing boss battles never touches the avatar or shop,
+•	generated tasks can be edited independently from official tasks.Memory
+Even cleaner breakdown
+If you want maximum control, split the PhD bank itself into sub-banks:
+•	phd-literature-review.json
+•	phd-methodology.json
+•	phd-data-collection.json
+•	phd-analysis.json
+•	phd-writing.json
+•	phd-advisor-communication.json
+•	phd-identity-building.json
+And split Skool into:
+•	skool-onboarding.json
+•	skool-daily-lessons.json
+•	skool-weekly-masterclasses.json
+•	skool-engagement.json
+•	skool-retention.json
+•	skool-growth.json
+This would let Copilot and the app treat each bank like a module instead of one overloaded file.
+What I recommend you tell Copilot
+Use this instruction:
+Build the app using a modular content architecture. Keep all gameplay rules in one file, all task content separated by domain, and all reusable mission logic in a templates file. Make each JSON file small, focused, and swappable. Do not combine rules, tasks, achievements, shop, avatar layers, and templates into one file. The app should load multiple banks and merge them in memory.
+My recommendation
+If you want the smoothest long-term setup, the best version is:
+1.	game-data.json
+2.	mission-templates.json
+3.	task-bank-phd.json
+4.	task-bank-skool.json
+5.	task-bank-curriculum.json
+6.	task-bank-ra.json
+7.	task-bank-docs.json
+8.	task-bank-rituals.json
+9.	boss-battles.json
+10.	recovery-missions.json
+11.	mini-quests.json
+12.	achievements.json
+13.	shop-items.json
+14.	avatar-layers.json
+That is the cleanest way to make the system controllable and future-proof.
+
+
