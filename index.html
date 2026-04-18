@@ -1,496 +1,1052 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akatsuki PhD Quest - Shadow Missions</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
-</head>
-<body>
-    <div class="ak-app">
-        <!-- Header -->
-        <header class="ak-header">
-            <div class="ak-logo">
-                <span class="ak-logo-icon">🌙</span>
-                <span class="ak-title">AKATSUKI PH.D QUEST</span>
+/**
+ * Akatsuki PhD Quest - Full Working Version
+ * For use with the complete HTML structure
+ */
+
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM ready, initializing Akatsuki Quest...');
+    initApp();
+});
+
+// Global state
+let state = {
+    xp: 0,
+    coins: 150,
+    level: 1,
+    streak: 0,
+    lastResetDate: null,
+    lastWeeklyResetDate: null,
+    activeTasks: [],
+    completedHistory: [],
+    undoStack: [],
+    redoStack: [],
+    unlockedAchievements: [],
+    avatar: {
+        name: 'Shadow Scholar',
+        equipped: [],
+        inventory: []
+    }
+};
+
+// Daily recurring tasks
+const DAILY_TASKS = [
+    { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Critical", energy: "Low Energy",
+      steps: ["Open mission board", "Review today's calendar", "Pick top 3 priorities", "Start first block"] },
+    { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, priority: "Important", energy: "Low Energy",
+      steps: ["Write what you accomplished", "Note any blockers", "Record tomorrow's first task"] },
+    { title: "Shutdown Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Important", energy: "Low Energy",
+      steps: ["Review completed tasks", "Clear workspace", "Set tomorrow's first action"] }
+];
+
+// Helper functions
+function getTodayStr() {
+    return new Date().toISOString().slice(0,10);
+}
+
+function getLastMonday() {
+    const d = new Date();
+    d.setHours(0,0,0,0);
+    const day = d.getDay();
+    const diff = (day === 0 ? 6 : day - 1);
+    d.setDate(d.getDate() - diff);
+    return d.toISOString().slice(0,10);
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+function showToast(message) {
+    const toast = document.getElementById('rewardToast');
+    if (toast) {
+        toast.innerHTML = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+}
+
+function saveState() {
+    localStorage.setItem('akatsuki_state', JSON.stringify(state));
+}
+
+function loadState() {
+    const saved = localStorage.getItem('akatsuki_state');
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            state = { ...state, ...parsed };
+            state.activeTasks = state.activeTasks || [];
+            state.completedHistory = state.completedHistory || [];
+            state.unlockedAchievements = state.unlockedAchievements || [];
+            state.avatar = state.avatar || { name: 'Shadow Scholar', equipped: [], inventory: [] };
+        } catch(e) { console.error(e); }
+    }
+    
+    if (!state.lastResetDate) state.lastResetDate = getTodayStr();
+    if (!state.lastWeeklyResetDate) state.lastWeeklyResetDate = getLastMonday();
+    
+    // Add daily tasks if none exist
+    if (state.activeTasks.length === 0) {
+        DAILY_TASKS.forEach(taskTemplate => {
+            state.activeTasks.push({
+                id: Date.now() + '_' + Math.random(),
+                title: taskTemplate.title,
+                domain: taskTemplate.domain,
+                difficulty: taskTemplate.difficulty,
+                xp: taskTemplate.xp,
+                repeatability: 'Daily',
+                priority: taskTemplate.priority,
+                energy: taskTemplate.energy,
+                steps: taskTemplate.steps.map(text => ({ text, completed: false })),
+                notes: '',
+                startedAt: new Date().toISOString(),
+                completed: false
+            });
+        });
+    }
+    
+    updateXPLevel();
+    saveState();
+}
+
+function updateXPLevel() {
+    const xpPerLevel = 500;
+    const newLevel = Math.floor(state.xp / xpPerLevel) + 1;
+    if (newLevel > state.level) {
+        state.coins += 100;
+        showToast(`✨ Level Up! You reached level ${newLevel}! +100 coins`);
+    }
+    state.level = newLevel;
+    updateXPBar();
+}
+
+function updateXPBar() {
+    const xpPerLevel = 500;
+    const currentLevelXp = (state.level - 1) * xpPerLevel;
+    const nextLevelXp = state.level * xpPerLevel;
+    const progress = ((state.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
+    
+    const xpFill = document.getElementById('xpFill');
+    if (xpFill) xpFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    
+    const xpCurrent = document.getElementById('xpCurrent');
+    const xpNext = document.getElementById('xpNext');
+    const nextLevelSpan = document.getElementById('nextLevel');
+    if (xpCurrent) xpCurrent.innerText = state.xp;
+    if (xpNext) xpNext.innerText = nextLevelXp;
+    if (nextLevelSpan) nextLevelSpan.innerText = state.level + 1;
+}
+
+function updateTaskCompletion(task) {
+    const allStepsDone = task.steps.every(s => s.completed);
+    if (allStepsDone && !task.completed) {
+        completeTask(task.id);
+    }
+}
+
+function completeTask(taskId) {
+    const task = state.activeTasks.find(t => t.id === taskId);
+    if (!task || task.completed) return;
+    
+    const xpGain = task.xp || 15;
+    const coinGain = Math.floor(xpGain * 0.2);
+    
+    task.completed = true;
+    task.finishedAt = new Date().toISOString();
+    state.xp += xpGain;
+    state.coins += coinGain;
+    
+    state.completedHistory.push({
+        taskId: task.id,
+        title: task.title,
+        completedAt: task.finishedAt,
+        xpGained: xpGain,
+        coinsGained: coinGain,
+        notes: task.notes || ''
+    });
+    
+    showToast(`✅ Completed: ${task.title} (+${xpGain} XP, +${coinGain} coins)`);
+    updateXPLevel();
+    saveState();
+    renderAll();
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderAll() {
+    renderHeader();
+    renderDashboard();
+    renderActiveMissions();
+    renderTaskBank();
+    renderHistory();
+    renderAvatar();
+    renderShop();
+    renderAchievements();
+}
+
+function renderHeader() {
+    const levelEl = document.getElementById('level');
+    const xpEl = document.getElementById('xp');
+    const coinsEl = document.getElementById('coins');
+    const streakEl = document.getElementById('streak');
+    if (levelEl) levelEl.innerText = state.level;
+    if (xpEl) xpEl.innerText = state.xp;
+    if (coinsEl) coinsEl.innerText = state.coins;
+    if (streakEl) streakEl.innerText = state.streak;
+}
+
+function renderDashboard() {
+    const activeCount = state.activeTasks.filter(t => !t.completed).length;
+    const completedToday = state.completedHistory.filter(h => 
+        h.completedAt?.slice(0,10) === getTodayStr()
+    ).length;
+    
+    const activeCountEl = document.getElementById('activeCount');
+    const completedTodayEl = document.getElementById('completedToday');
+    const totalXPEl = document.getElementById('totalXP');
+    const streakDisplayEl = document.getElementById('streakDisplay');
+    
+    if (activeCountEl) activeCountEl.innerText = activeCount;
+    if (completedTodayEl) completedTodayEl.innerText = completedToday;
+    if (totalXPEl) totalXPEl.innerText = state.xp;
+    if (streakDisplayEl) streakDisplayEl.innerText = state.streak;
+    
+    const hasImportant = state.activeTasks.some(t => t.completed && (t.priority === 'Critical' || t.priority === 'Important'));
+    const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
+    const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
+    
+    const winImportant = document.getElementById('winImportant');
+    const winRitual = document.getElementById('winRitual');
+    const winDoc = document.getElementById('winDoc');
+    const winResult = document.getElementById('winResult');
+    
+    if (winImportant) winImportant.innerHTML = hasImportant ? '✅' : '⬜';
+    if (winRitual) winRitual.innerHTML = hasRitual ? '✅' : '⬜';
+    if (winDoc) winDoc.innerHTML = hasDoc ? '✅' : '⬜';
+    if (winResult) {
+        winResult.innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅ WIN THE DAY!' : '❌ NOT YET';
+    }
+}
+
+function renderActiveMissions() {
+    const container = document.getElementById('activeMissionsList');
+    if (!container) return;
+    
+    let filteredTasks = state.activeTasks.filter(t => !t.completed);
+    
+    const domainFilter = document.getElementById('filterDomain')?.value || '';
+    const difficultyFilter = document.getElementById('filterDifficulty')?.value || '';
+    const priorityFilter = document.getElementById('filterPriority')?.value || '';
+    
+    if (domainFilter) filteredTasks = filteredTasks.filter(t => t.domain === domainFilter);
+    if (difficultyFilter) filteredTasks = filteredTasks.filter(t => t.difficulty === difficultyFilter);
+    if (priorityFilter) filteredTasks = filteredTasks.filter(t => t.priority === priorityFilter);
+    
+    if (filteredTasks.length === 0) {
+        container.innerHTML = '<div class="ak-card">✨ No active missions. Add some from the Task Bank!</div>';
+        return;
+    }
+    
+    container.innerHTML = filteredTasks.map(task => `
+        <div class="mission-item" data-task-id="${task.id}">
+            <div class="mission-header">
+                <div class="mission-title">${escapeHtml(task.title)}</div>
+                <div class="mission-badge">
+                    <span class="badge ${task.difficulty.toLowerCase()}">${task.difficulty}</span>
+                    <span class="badge ${task.priority.toLowerCase()}">${task.priority}</span>
+                </div>
             </div>
-            <div class="ak-header-stats">
-                <div class="stat-box">LVL <span id="level">1</span></div>
-                <div class="stat-box">⭐ <span id="xp">0</span> XP</div>
-                <div class="stat-box">💰 <span id="coins">150</span></div>
-                <div class="stat-box">🔥 <span id="streak">0</span></div>
+            <div class="mission-meta">
+                <span>📁 ${task.domain}</span>
+                <span>🔄 ${task.repeatability}</span>
+                <span>⭐ ${task.xp} XP</span>
             </div>
-        </header>
-
-        <!-- XP Bar -->
-        <div class="ak-xp-container">
-            <div class="ak-xp-bar">
-                <div class="ak-xp-fill" id="xpFill" style="width: 0%"></div>
-            </div>
-            <div class="ak-xp-text">
-                <span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span>
-            </div>
-        </div>
-
-        <div class="ak-layout">
-            <!-- Sidebar -->
-            <aside class="ak-sidebar">
-                <button class="ak-tab-btn active" data-tab="dashboard">📊 DASHBOARD</button>
-                <button class="ak-tab-btn" data-tab="active">📋 ACTIVE MISSIONS</button>
-                <button class="ak-tab-btn" data-tab="generator">⚙️ TASK GENERATOR</button>
-                <button class="ak-tab-btn" data-tab="bank">📚 TASK BANK</button>
-                <button class="ak-tab-btn" data-tab="bosses">👹 BOSS BATTLES</button>
-                <button class="ak-tab-btn" data-tab="miniquests">⚡ MINI-QUESTS</button>
-                <button class="ak-tab-btn" data-tab="recovery">🔄 RECOVERY</button>
-                <button class="ak-tab-btn" data-tab="avatar">🎭 AVATAR</button>
-                <button class="ak-tab-btn" data-tab="shop">🛒 SHOP</button>
-                <button class="ak-tab-btn" data-tab="history">📜 HISTORY</button>
-                <button class="ak-tab-btn" data-tab="achievements">🏆 ACHIEVEMENTS</button>
-                <button class="ak-tab-btn" data-tab="settings">⚙️ SETTINGS</button>
-                <div class="ak-undo-redo">
-                    <button id="undoBtn" title="Undo last action">↩️ UNDO</button>
-                    <button id="redoBtn" title="Redo last action">↪️ REDO</button>
-                </div>
-            </aside>
-
-            <main class="ak-content">
-                <!-- DASHBOARD TAB -->
-                <div id="dashboard" class="ak-tab active">
-                    <h2>⚡ SHADOW DASHBOARD</h2>
-                    <div class="ak-dashboard-grid">
-                        <div class="ak-card">
-                            <h3>🎯 WIN THE DAY</h3>
-                            <div class="win-condition">
-                                <div class="win-item">
-                                    <span class="win-check" id="winImportant">⬜</span> 
-                                    <span>Critical/Important Mission</span>
-                                </div>
-                                <div class="win-item">
-                                    <span class="win-check" id="winRitual">⬜</span> 
-                                    <span>Ritual Mission</span>
-                                </div>
-                                <div class="win-item">
-                                    <span class="win-check" id="winDoc">⬜</span> 
-                                    <span>Documentation Mission</span>
-                                </div>
-                                <div class="win-result" id="winResult">❌ NOT ACHIEVED</div>
-                            </div>
-                        </div>
-                        <div class="ak-card">
-                            <h3>📊 PROGRESS</h3>
-                            <p>Active Missions: <strong><span id="activeCount">0</span></strong></p>
-                            <p>Completed Today: <strong><span id="completedToday">0</span></strong></p>
-                            <p>Total XP Earned: <strong><span id="totalXP">0</span></strong></p>
-                            <p>Current Streak: <strong><span id="streakDisplay">0</span> days</strong></p>
-                        </div>
-                        <div class="ak-card">
-                            <h3>⚡ QUICK ACTIONS</h3>
-                            <button id="genQuickBtn">✨ Quick Generate</button>
-                            <button id="batchImportBtn">📦 Batch Import</button>
-                            <button id="exportReportBtn">📄 Export Report</button>
-                        </div>
-                    </div>
-                    <div class="ak-card">
-                        <h3>🏆 RECENT ACHIEVEMENTS</h3>
-                        <div id="recentAchievements">
-                            <p style="color: #888;">Complete missions to unlock achievements!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTIVE MISSIONS TAB -->
-                <div id="active" class="ak-tab">
-                    <h2>📋 ACTIVE MISSIONS</h2>
-                    <div class="ak-filters">
-                        <select id="filterDomain">
-                            <option value="">All Domains</option>
-                            <option value="PhD">PhD</option>
-                            <option value="Skool">Skool</option>
-                            <option value="Curriculum">Curriculum</option>
-                            <option value="Research Assistantship">Research Assistantship</option>
-                            <option value="Documentation">Documentation</option>
-                            <option value="Rituals">Rituals</option>
-                        </select>
-                        <select id="filterDifficulty">
-                            <option value="">All Difficulties</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                            <option value="Elite">Elite</option>
-                        </select>
-                        <select id="filterPriority">
-                            <option value="">All Priorities</option>
-                            <option value="Critical">Critical</option>
-                            <option value="Important">Important</option>
-                            <option value="Maintenance">Maintenance</option>
-                        </select>
-                        <select id="filterStatus">
-                            <option value="active">Active Only</option>
-                            <option value="all">All Tasks</option>
-                        </select>
-                    </div>
-                    <div id="activeMissionsList" class="ak-mission-list"></div>
-                </div>
-
-                <!-- TASK GENERATOR TAB -->
-                <div id="generator" class="ak-tab">
-                    <h2>⚙️ TASK GENERATOR</h2>
-                    <div class="ak-card">
-                        <label><strong>🎯 GOAL / MISSION INTENT</strong></label>
-                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review section on AI displacement..."></textarea>
-                        
-                        <div class="ak-form-row">
-                            <label>
-                                📁 THEME: 
-                                <select id="genTheme">
-                                    <option value="phd">🎓 Shadow Research Missions</option>
-                                    <option value="skool">👥 Clan Leadership & Skool</option>
-                                    <option value="curriculum">📖 Village Knowledge Expansion</option>
-                                    <option value="ra">🔬 Intelligence Gathering</option>
-                                    <option value="docs">📝 Eternal Documentation</option>
-                                    <option value="rituals">🌙 Discipline & Rituals</option>
-                                </select>
-                            </label>
-                            <label>
-                                📂 SUBJECT: 
-                                <select id="genSubject" disabled>
-                                    <option>Select Theme First</option>
-                                </select>
-                            </label>
-                            <label>
-                                🏷️ SIDE TOPIC: 
-                                <select id="genSideTopic" disabled>
-                                    <option>Select Subject First</option>
-                                </select>
-                            </label>
-                        </div>
-                        
-                        <div class="ak-form-row">
-                            <label>
-                                ⚔️ DIFFICULTY: 
-                                <select id="genDifficulty">
-                                    <option value="Easy">Easy (10-25 XP)</option>
-                                    <option value="Medium" selected>Medium (25-55 XP)</option>
-                                    <option value="Hard">Hard (60-130 XP)</option>
-                                    <option value="Elite">Elite (150-500 XP)</option>
-                                </select>
-                            </label>
-                            <label>
-                                🔄 REPEATABILITY: 
-                                <select id="genRepeatability">
-                                    <option value="One-time" selected>One-time</option>
-                                    <option value="Daily">Daily</option>
-                                    <option value="Weekly">Weekly</option>
-                                    <option value="Monthly">Monthly</option>
-                                </select>
-                            </label>
-                            <label>
-                                ⚡ PRIORITY: 
-                                <select id="genPriority">
-                                    <option value="Critical">🔥 Critical</option>
-                                    <option value="Important" selected>⚠️ Important</option>
-                                    <option value="Maintenance">🛠️ Maintenance</option>
-                                </select>
-                            </label>
-                        </div>
-                        
-                        <div class="ak-form-row">
-                            <label>
-                                🔋 ENERGY: 
-                                <select id="genEnergy">
-                                    <option value="Low Energy">😴 Low Energy</option>
-                                    <option value="Standard Focus" selected>😐 Standard Focus</option>
-                                    <option value="Deep Focus">🧠 Deep Focus</option>
-                                </select>
-                            </label>
-                            <label>
-                                📍 CONTEXT: 
-                                <select id="genContext">
-                                    <option value="Home">🏠 Home</option>
-                                    <option value="Office">🏢 Office</option>
-                                    <option value="Library">📚 Library</option>
-                                    <option value="Online" selected>🌐 Online</option>
-                                </select>
-                            </label>
-                            <label>
-                                📅 HORIZON: 
-                                <select id="genHorizon">
-                                    <option value="today">Today (2 tasks)</option>
-                                    <option value="week" selected>This Week (4 tasks)</option>
-                                    <option value="month">This Month (6 tasks)</option>
-                                </select>
-                            </label>
-                        </div>
-                        
-                        <div class="ak-form-actions">
-                            <button id="generateSingleBtn">✨ Generate Single Task</button>
-                            <button id="generateChainBtn">🔗 Generate Mission Chain</button>
-                        </div>
-                        
-                        <div id="generatedPreview" class="generated-preview"></div>
-                        <button id="addGeneratedBtn" style="display:none;">➕ ADD TO ACTIVE MISSIONS</button>
-                    </div>
-                    
-                    <div class="ak-card">
-                        <h3>📦 BATCH IMPORT</h3>
-                        <p style="font-size: 0.9rem; color: #888;">Paste multiple tasks, one per line. Format: <code>Title | Domain | Difficulty | XP | Step1, Step2, Step3</code></p>
-                        <textarea id="batchImport" rows="6" placeholder="Example:
-Write Lit Review | PhD | Hard | 85 | Find sources, Read articles, Write synthesis, Add citations
-Create Skool Post | Skool | Medium | 35 | Choose topic, Write hook, Add tips, Publish"></textarea>
-                        <button id="batchImportExecute">📥 IMPORT TASKS</button>
-                    </div>
-                </div>
-
-                <!-- TASK BANK TAB -->
-                <div id="bank" class="ak-tab">
-                    <h2>📚 TASK BANK</h2>
-                    <input type="text" id="bankSearch" placeholder="🔍 Search tasks..." class="ak-search">
-                    <div class="ak-filters">
-                        <select id="bankDomainFilter">
-                            <option value="">All Themes</option>
-                            <option value="PhD">PhD</option>
-                            <option value="Skool">Skool</option>
-                            <option value="Curriculum">Curriculum</option>
-                        </select>
-                        <select id="bankDifficultyFilter">
-                            <option value="">All Difficulties</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                        </select>
-                    </div>
-                    <div id="taskBankList" class="ak-mission-list"></div>
-                </div>
-
-                <!-- BOSS BATTLES TAB -->
-                <div id="bosses" class="ak-tab">
-                    <h2>👹 BOSS BATTLES</h2>
-                    <div class="ak-card">
-                        <p><strong>Epic multi-phase challenges representing major milestones.</strong></p>
-                        <p>Boss battles unlock at level 5 and test your mastery across domains.</p>
-                    </div>
-                    <div id="bossBattlesList" class="ak-mission-list">
-                        <div class="boss-item locked">
-                            <div class="boss-header">
-                                <h3>🐉 The Literature Hydra</h3>
-                                <span class="badge elite">Elite</span>
-                            </div>
-                            <p>A multi-headed beast of endless PDFs and contradictory theories.</p>
-                            <p><strong>Reward:</strong> 300 XP, 150 coins, Hydra Fang item</p>
-                            <p><strong>Unlock:</strong> Level 5 + Complete literature review foundation</p>
-                            <button disabled>🔒 LOCKED</button>
-                        </div>
-                        <div class="boss-item locked">
-                            <div class="boss-header">
-                                <h3>🗿 The Methodology Golem</h3>
-                                <span class="badge elite">Elite</span>
-                            </div>
-                            <p>A stone guardian blocking the path until your research design is unshakeable.</p>
-                            <p><strong>Reward:</strong> 350 XP, 175 coins, Golem Core item</p>
-                            <p><strong>Unlock:</strong> Level 7 + Defeat Literature Hydra</p>
-                            <button disabled>🔒 LOCKED</button>
-                        </div>
-                        <div class="boss-item locked">
-                            <div class="boss-header">
-                                <h3>😈 The Burnout Demon</h3>
-                                <span class="badge elite">Elite</span>
-                            </div>
-                            <p>Feeds on exhaustion and guilt. Requires real recovery, not just productivity.</p>
-                            <p><strong>Reward:</strong> 400 XP, 200 coins, Resilience Aura</p>
-                            <p><strong>Unlock:</strong> Auto-triggers after 3 missed days</p>
-                            <button disabled>🔒 LOCKED</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MINI-QUESTS TAB -->
-                <div id="miniquests" class="ak-tab">
-                    <h2>⚡ MINI-QUESTS</h2>
-                    <div class="ak-card">
-                        <p><strong>Quick 2-10 minute missions for momentum and micro-progress.</strong></p>
-                        <p>Perfect for when you're stuck, tired, or need a quick win.</p>
-                    </div>
-                    <div id="miniQuestsList" class="ak-mission-list">
-                        <div class="mission-item mini">
-                            <div class="mission-header">
-                                <div class="mission-title">⏱️ Start for 30 Seconds</div>
-                                <span class="badge easy">Very Easy</span>
-                            </div>
-                            <p>Work on anything for just 30 seconds. That's it.</p>
-                            <p><strong>Reward:</strong> 5 XP - Momentum spark</p>
-                            <button class="add-miniquest">+ Add to Active</button>
-                        </div>
-                        <div class="mission-item mini">
-                            <div class="mission-header">
-                                <div class="mission-title">✍️ Write One Line</div>
-                                <span class="badge easy">Very Easy</span>
-                            </div>
-                            <p>Write exactly one complete sentence. Save and celebrate.</p>
-                            <p><strong>Reward:</strong> 5 XP - Writer's block broken</p>
-                            <button class="add-miniquest">+ Add to Active</button>
-                        </div>
-                        <div class="mission-item mini">
-                            <div class="mission-header">
-                                <div class="mission-title">🖥️ Clear Desktop Clutter</div>
-                                <span class="badge easy">Very Easy</span>
-                            </div>
-                            <p>Delete 3 files, move 3 files, close 3 tabs.</p>
-                            <p><strong>Reward:</strong> 10 XP - Clean workspace</p>
-                            <button class="add-miniquest">+ Add to Active</button>
-                        </div>
-                        <div class="mission-item mini">
-                            <div class="mission-header">
-                                <div class="mission-title">💧 Drink Water</div>
-                                <span class="badge easy">Very Easy</span>
-                            </div>
-                            <p>Stand up, drink a full glass of water, take 3 deep breaths.</p>
-                            <p><strong>Reward:</strong> 5 XP - Energy boost</p>
-                            <button class="add-miniquest">+ Add to Active</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RECOVERY TAB -->
-                <div id="recovery" class="ak-tab">
-                    <h2>🔄 RECOVERY MISSIONS</h2>
-                    <div class="ak-card">
-                        <p><strong>Low-energy missions for getting back on track.</strong></p>
-                        <p>Use these when you've missed days, feel overwhelmed, or need to rebuild momentum.</p>
-                    </div>
-                    <div id="recoveryMissionsList" class="ak-mission-list">
-                        <div class="mission-item recovery">
-                            <div class="mission-header">
-                                <div class="mission-title">⏱️ 2-Minute Re-Entry</div>
-                                <span class="badge easy">Easy</span>
-                            </div>
-                            <p>Just open the task and work for 2 minutes. Stop when timer ends.</p>
-                            <p><strong>Trigger:</strong> After missing 1+ days</p>
-                            <p><strong>Reward:</strong> 10 XP - Momentum restored</p>
-                            <button class="add-recovery">+ Add to Active</button>
-                        </div>
-                        <div class="mission-item recovery">
-                            <div class="mission-header">
-                                <div class="mission-title">📝 List 3 Things Only</div>
-                                <span class="badge easy">Easy</span>
-                            </div>
-                            <p>Write down exactly 3 things on your mind. No more.</p>
-                            <p><strong>Trigger:</strong> When overwhelmed (10+ active tasks)</p>
-                            <p><strong>Reward:</strong> 10 XP - Mental clarity</p>
-                            <button class="add-recovery">+ Add to Active</button>
-                        </div>
-                        <div class="mission-item recovery">
-                            <div class="mission-header">
-                                <div class="mission-title">🧘 Grounding Ritual</div>
-                                <span class="badge easy">Easy</span>
-                            </div>
-                            <p>Stop. Breathe 5 times. Relax shoulders. Drink water.</p>
-                            <p><strong>Trigger:</strong> Burnout detected</p>
-                            <p><strong>Reward:</strong> 10 XP - Energy stabilized</p>
-                            <button class="add-recovery">+ Add to Active</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AVATAR TAB -->
-                <div id="avatar" class="ak-tab">
-                    <h2>🎭 AVATAR CUSTOMIZATION</h2>
-                    <div class="ak-avatar-container">
-                        <div class="ak-avatar-display" id="avatarContainer">
-                            <div style="width: 200px; height: 200px; background: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; border: 3px solid #d62828;">
-                                🌙
-                            </div>
-                        </div>
-                        <div class="ak-avatar-info">
-                            <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="30" value="Shadow Scholar">
-                            <div class="avatar-stats">
-                                <p>⚔️ XP MULTIPLIER: <span id="xpMult">1.00</span>x</p>
-                                <p>💰 COIN MULTIPLIER: <span id="coinMult">1.00</span>x</p>
-                                <p>🏆 TOTAL XP EARNED: <span id="totalXPEarned">0</span></p>
-                                <p>📜 MISSIONS COMPLETED: <span id="missionsCompleted">0</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ak-equipped-gear">
-                        <h3>⚔️ EQUIPPED GEAR</h3>
-                        <div id="equippedList" class="gear-list"></div>
-                    </div>
-                    <div class="ak-owned-gear">
-                        <h3>📦 INVENTORY</h3>
-                        <div id="inventoryList" class="gear-list"></div>
-                    </div>
-                </div>
-
-                <!-- SHOP TAB -->
-                <div id="shop" class="ak-tab">
-                    <h2>🛒 FORBIDDEN MARKET</h2>
-                    <p>Your coins: <strong id="shopCoins">150</strong> 💰</p>
-                    <div id="shopItemsList" class="ak-shop-grid"></div>
-                </div>
-
-                <!-- HISTORY TAB -->
-                <div id="history" class="ak-tab">
-                    <h2>📜 MISSION HISTORY</h2>
-                    <div id="weeklyHistory"></div>
-                    <button id="generateReportBtn">📄 GENERATE FULL REPORT</button>
-                    <pre id="reportOutput"></pre>
-                </div>
-
-                <!-- ACHIEVEMENTS TAB -->
-                <div id="achievements" class="ak-tab">
-                    <h2>🏆 ACHIEVEMENTS</h2>
-                    <div id="achievementsList" class="ak-achievements-grid"></div>
-                </div>
-
-                <!-- SETTINGS TAB -->
-                <div id="settings" class="ak-tab">
-                    <h2>⚙️ SYSTEM SETTINGS</h2>
-                    <div class="ak-card">
-                        <h3>🔄 RESET OPTIONS</h3>
-                        <button id="forceResetBtn">Force Daily Reset</button>
-                        <button id="forceWeeklyResetBtn">Force Weekly Reset</button>
-                        <button id="clearAllBtn" class="danger">⚠️ WIPE ALL PROGRESS</button>
-                    </div>
-                    <div class="ak-card">
-                        <h3>💾 DATA MANAGEMENT</h3>
-                        <button id="exportDataBtn">📥 Export Save Data</button>
-                        <input type="file" id="importDataInput" accept=".json" style="display:none">
-                        <button id="importDataBtn">📤 Import Save Data</button>
-                    </div>
-                    <div class="ak-card">
-                        <h3>ℹ️ ABOUT</h3>
-                        <p><strong>Akatsuki PhD Quest</strong></p>
-                        <p>Version 2.1.0</p>
-                        <p>A gamified productivity system for PhD research, community building, and discipline.</p>
-                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #2a2a2d;">
-                            <a href="https://github.com/lilithava/akatsuki-phd-quest" target="_blank" style="color: #d62828;">GitHub Repository</a>
-                        </p>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <!-- Task Edit Modal -->
-    <div id="taskModal" class="ak-modal">
-        <div class="ak-modal-content">
-            <span class="close">&times;</span>
-            <h3 id="modalTitle"></h3>
-            <div id="modalBody"></div>
-            <label>📝 NOTES:</label>
-            <textarea id="taskNotes" rows="3" placeholder="Add your notes here..."></textarea>
-            <div class="modal-actions">
-                <button id="saveTaskNotes">💾 SAVE NOTES</button>
-                <button id="deleteTaskBtn" class="danger">🗑️ DELETE TASK</button>
+            <ul class="step-list">
+                ${task.steps.map((step, idx) => `
+                    <li class="step-item ${step.completed ? 'completed' : ''}" data-step-index="${idx}">
+                        <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}>
+                        <label>${escapeHtml(step.text)}</label>
+                    </li>
+                `).join('')}
+            </ul>
+            <div class="mission-actions">
+                <button class="view-task-details" data-task-id="${task.id}">📝 Details</button>
             </div>
         </div>
-    </div>
+    `).join('');
+    
+    // Attach event listeners for dynamically created checkboxes using delegation
+    attachDelegatedEvents();
+}
 
-    <!-- Reward Toast -->
-    <div id="rewardToast" class="reward-toast"></div>
+function attachDelegatedEvents() {
+    // Use event delegation on the parent container
+    const mainContent = document.querySelector('.ak-content');
+    if (!mainContent) return;
+    
+    // Remove old listener to avoid duplicates, then add new one
+    mainContent.removeEventListener('change', handleCheckboxChange);
+    mainContent.addEventListener('change', handleCheckboxChange);
+    
+    mainContent.removeEventListener('click', handleButtonClick);
+    mainContent.addEventListener('click', handleButtonClick);
+}
 
-    <!-- Scripts -->
-    <script src="script-fixed.js"></script>
-</body>
-</html>
+function handleCheckboxChange(e) {
+    const checkbox = e.target;
+    if (!checkbox.classList.contains('step-checkbox')) return;
+    
+    const li = checkbox.closest('.step-item');
+    const stepIndex = parseInt(li.dataset.stepIndex);
+    const missionDiv = li.closest('.mission-item');
+    const taskId = missionDiv.dataset.taskId;
+    
+    const task = state.activeTasks.find(t => t.id === taskId);
+    if (task && task.steps[stepIndex]) {
+        task.steps[stepIndex].completed = checkbox.checked;
+        if (checkbox.checked) {
+            li.classList.add('completed');
+        } else {
+            li.classList.remove('completed');
+        }
+        updateTaskCompletion(task);
+        saveState();
+        renderDashboard();
+        renderHeader();
+    }
+}
+
+function handleButtonClick(e) {
+    const target = e.target;
+    
+    // Add from bank button
+    if (target.classList.contains('add-from-bank')) {
+        const stepsArray = JSON.parse(target.dataset.steps);
+        const newTask = {
+            id: Date.now() + '_' + Math.random(),
+            title: target.dataset.title,
+            domain: target.dataset.domain,
+            difficulty: target.dataset.difficulty,
+            xp: parseInt(target.dataset.xp),
+            repeatability: 'One-time',
+            priority: 'Important',
+            steps: stepsArray.map(text => ({ text, completed: false })),
+            notes: '',
+            startedAt: new Date().toISOString(),
+            completed: false
+        };
+        state.activeTasks.push(newTask);
+        saveState();
+        renderAll();
+        showToast(`Added: ${newTask.title}`);
+    }
+    
+    // Add mini-quest button
+    if (target.classList.contains('add-miniquest')) {
+        const missionDiv = target.closest('.mission-item');
+        const title = missionDiv.querySelector('.mission-title')?.innerText || 'Mini-Quest';
+        const newTask = {
+            id: Date.now() + '_' + Math.random(),
+            title: title,
+            domain: 'Mini-Quests',
+            difficulty: 'Easy',
+            xp: 10,
+            repeatability: 'One-time',
+            priority: 'Maintenance',
+            steps: [
+                { text: missionDiv.querySelector('p')?.innerText?.split('.')[0] || 'Complete this mini-quest', completed: false }
+            ],
+            notes: '',
+            startedAt: new Date().toISOString(),
+            completed: false
+        };
+        state.activeTasks.push(newTask);
+        saveState();
+        renderAll();
+        showToast(`Added: ${title}`);
+    }
+    
+    // Add recovery button
+    if (target.classList.contains('add-recovery')) {
+        const missionDiv = target.closest('.mission-item');
+        const title = missionDiv.querySelector('.mission-title')?.innerText || 'Recovery Mission';
+        const newTask = {
+            id: Date.now() + '_' + Math.random(),
+            title: title,
+            domain: 'Recovery',
+            difficulty: 'Easy',
+            xp: 10,
+            repeatability: 'One-time',
+            priority: 'Maintenance',
+            steps: [
+                { text: missionDiv.querySelector('p')?.innerText?.split('.')[0] || 'Complete this recovery mission', completed: false }
+            ],
+            notes: '',
+            startedAt: new Date().toISOString(),
+            completed: false
+        };
+        state.activeTasks.push(newTask);
+        saveState();
+        renderAll();
+        showToast(`Added: ${title}`);
+    }
+    
+    // View task details
+    if (target.classList.contains('view-task-details')) {
+        const taskId = target.dataset.taskId;
+        openTaskModal(taskId);
+    }
+    
+    // Buy button
+    if (target.classList.contains('buy-btn') && target.dataset.id) {
+        const itemId = target.dataset.id;
+        const cost = parseInt(target.dataset.cost);
+        
+        if (state.coins >= cost) {
+            state.coins -= cost;
+            if (!state.avatar.inventory) state.avatar.inventory = [];
+            state.avatar.inventory.push(itemId);
+            showToast(`Purchased: ${itemId}`);
+            saveState();
+            renderShop();
+            renderAvatar();
+            renderHeader();
+        } else {
+            showToast(`Not enough coins! Need ${cost - state.coins} more`);
+        }
+    }
+    
+    // Equip button
+    if (target.classList.contains('equip-btn')) {
+        const itemId = target.dataset.item;
+        if (!state.avatar.equipped.includes(itemId)) {
+            state.avatar.equipped.push(itemId);
+            saveState();
+            renderAvatar();
+            showToast(`Equipped ${itemId}`);
+        }
+    }
+    
+    // Unequip button
+    if (target.classList.contains('unequip-btn')) {
+        const itemId = target.dataset.item;
+        state.avatar.equipped = state.avatar.equipped.filter(i => i !== itemId);
+        saveState();
+        renderAvatar();
+        showToast('Item unequipped');
+    }
+}
+
+function renderTaskBank() {
+    const container = document.getElementById('taskBankList');
+    if (!container) return;
+    
+    const sampleTasks = [
+        { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
+        { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
+        { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
+        { title: "Code Interview Transcript", domain: "Research Assistantship", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] },
+        { title: "Write Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, steps: ["Write accomplishments", "Note blockers", "Set next action"] },
+        { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, steps: ["Open board", "Review calendar", "Pick top 3", "Start"] }
+    ];
+    
+    const searchTerm = document.getElementById('bankSearch')?.value.toLowerCase() || '';
+    const domainFilter = document.getElementById('bankDomainFilter')?.value || '';
+    const difficultyFilter = document.getElementById('bankDifficultyFilter')?.value || '';
+    
+    let filtered = sampleTasks.filter(t => t.title.toLowerCase().includes(searchTerm));
+    if (domainFilter) filtered = filtered.filter(t => t.domain === domainFilter);
+    if (difficultyFilter) filtered = filtered.filter(t => t.difficulty === difficultyFilter);
+    
+    container.innerHTML = filtered.map(t => `
+        <div class="mission-item">
+            <div class="mission-header">
+                <div class="mission-title">${escapeHtml(t.title)}</div>
+                <div class="mission-badge">
+                    <span class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</span>
+                </div>
+            </div>
+            <div class="mission-meta">
+                <span>📁 ${t.domain}</span>
+                <span>⭐ ${t.xp} XP</span>
+            </div>
+            <div class="mission-actions">
+                <button class="add-from-bank" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderAvatar() {
+    const nameInput = document.getElementById('avatarName');
+    if (nameInput) {
+        nameInput.value = state.avatar.name;
+        nameInput.onchange = (e) => {
+            state.avatar.name = e.target.value;
+            saveState();
+        };
+    }
+    
+    const totalXPEarned = state.completedHistory.reduce((sum, h) => sum + (h.xpGained || 0), 0);
+    const missionsCompleted = state.completedHistory.length;
+    
+    const totalXPEarnedEl = document.getElementById('totalXPEarned');
+    const missionsCompletedEl = document.getElementById('missionsCompleted');
+    if (totalXPEarnedEl) totalXPEarnedEl.innerText = totalXPEarned;
+    if (missionsCompletedEl) missionsCompletedEl.innerText = missionsCompleted;
+    
+    // Update multipliers (simplified - no actual effect yet)
+    const xpMultEl = document.getElementById('xpMult');
+    const coinMultEl = document.getElementById('coinMult');
+    if (xpMultEl) xpMultEl.innerText = '1.00';
+    if (coinMultEl) coinMultEl.innerText = '1.00';
+    
+    const equippedContainer = document.getElementById('equippedList');
+    if (equippedContainer) {
+        if (!state.avatar.equipped || state.avatar.equipped.length === 0) {
+            equippedContainer.innerHTML = '<div class="gear-item">No gear equipped. Visit the Shop!</div>';
+        } else {
+            equippedContainer.innerHTML = state.avatar.equipped.map(itemId => {
+                return `<div class="gear-item">${itemId} 
+                    <button class="unequip-btn" data-item="${itemId}">✖</button></div>`;
+            }).join('');
+        }
+    }
+    
+    const inventoryContainer = document.getElementById('inventoryList');
+    if (inventoryContainer) {
+        const ownedNotEquipped = (state.avatar.inventory || []).filter(id => !(state.avatar.equipped || []).includes(id));
+        if (ownedNotEquipped.length === 0) {
+            inventoryContainer.innerHTML = '<div class="gear-item">No items in inventory. Buy from Shop!</div>';
+        } else {
+            inventoryContainer.innerHTML = ownedNotEquipped.map(itemId => {
+                return `<div class="gear-item">${itemId} 
+                    <button class="equip-btn" data-item="${itemId}">⚔️ Equip</button></div>`;
+            }).join('');
+        }
+    }
+}
+
+function renderShop() {
+    const container = document.getElementById('shopItemsList');
+    const coinsSpan = document.getElementById('shopCoins');
+    if (coinsSpan) coinsSpan.innerText = state.coins;
+    if (!container) return;
+    
+    const shopItems = [
+        { id: 'cloak_basic', name: 'Akatsuki Cloak', cost: 150, effect: '+5% XP', description: 'Classic black cloak with red clouds' },
+        { id: 'mask_anbu', name: 'ANBU Mask', cost: 100, effect: '+3% XP', description: 'White ANBU-style mask' },
+        { id: 'ring_akatsuki', name: 'Akatsuki Ring', cost: 80, effect: '+2% XP, +2% Coins', description: 'Glowing ring with secret meaning' },
+        { id: 'raven_companion', name: 'Raven Companion', cost: 200, effect: '+10% XP', description: 'Loyal messenger perched on shoulder' },
+        { id: 'crimson_aura', name: 'Crimson Aura', cost: 120, effect: '+10% Coins', description: 'Burning red energy aura' }
+    ];
+    
+    container.innerHTML = shopItems.map(item => {
+        const owned = state.avatar.inventory?.includes(item.id);
+        return `
+            <div class="shop-item">
+                <h4>${item.name}</h4>
+                <p class="price">💰 ${item.cost} coins</p>
+                <p class="effect">${item.description}</p>
+                <p class="effect">${item.effect}</p>
+                ${owned ? `<button class="buy-btn" disabled>✓ Owned</button>` :
+                  `<button class="buy-btn" data-id="${item.id}" data-cost="${item.cost}">Purchase (${item.cost}💰)</button>`}
+            </div>
+        `;
+    }).join('');
+}
+
+function renderHistory() {
+    const container = document.getElementById('weeklyHistory');
+    if (!container) return;
+    
+    const last7Days = [];
+    for (let i = 0; i < 7; i++) {
+        let d = new Date();
+        d.setDate(d.getDate() - i);
+        last7Days.push(d.toISOString().slice(0,10));
+    }
+    
+    let html = '';
+    for (const day of last7Days) {
+        const dayCompletions = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === day);
+        html += `<div class="ak-card"><h3>📅 ${day}</h3><ul>`;
+        if (dayCompletions.length === 0) {
+            html += '<li>✨ No missions completed</li>';
+        } else {
+            dayCompletions.forEach(c => {
+                html += `<li><strong>✅ ${escapeHtml(c.title)}</strong> (+${c.xpGained} XP, +${c.coinsGained || 0} coins)`;
+                if (c.notes) html += `<br><span style="font-size:0.8rem; color:#aaa;">📝 ${escapeHtml(c.notes.substring(0, 100))}</span>`;
+                html += `</li>`;
+            });
+        }
+        html += `</ul></div>`;
+    }
+    container.innerHTML = html;
+}
+
+function renderAchievements() {
+    const container = document.getElementById('achievementsList');
+    if (!container) return;
+    
+    const achievements = [
+        { id: 'first_blood', name: 'First Blood', description: 'Complete your first mission', requirement: 'Complete 1 mission', xpReward: 50 },
+        { id: 'crimson_streak', name: 'Crimson Streak', description: 'Maintain 14-day streak', requirement: '14 day streak', xpReward: 200 }
+    ];
+    
+    container.innerHTML = achievements.map(ach => {
+        const unlocked = state.unlockedAchievements.includes(ach.id);
+        return `
+            <div class="achievement-item ${unlocked ? 'unlocked' : 'locked'}">
+                <div class="achievement-icon">${unlocked ? '🏆' : '🔒'}</div>
+                <h4>${ach.name}</h4>
+                <p>${ach.description}</p>
+                <small>${ach.xpReward} XP</small>
+                ${unlocked ? '<small>✓ Unlocked</small>' : `<small>${ach.requirement}</small>`}
+            </div>
+        `;
+    }).join('');
+}
+
+function openTaskModal(taskId) {
+    const task = state.activeTasks.find(t => t.id === taskId);
+    if (!task) return;
+    
+    const modal = document.getElementById('taskModal');
+    if (!modal) return;
+    
+    document.getElementById('modalTitle').innerText = task.title;
+    document.getElementById('modalBody').innerHTML = `
+        <p><strong>Domain:</strong> ${task.domain}</p>
+        <p><strong>Difficulty:</strong> ${task.difficulty}</p>
+        <p><strong>XP Reward:</strong> ${task.xp}</p>
+        <p><strong>Repeatability:</strong> ${task.repeatability}</p>
+        <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
+        <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
+    `;
+    document.getElementById('taskNotes').value = task.notes || '';
+    
+    const saveBtn = document.getElementById('saveTaskNotes');
+    const newSaveBtn = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    newSaveBtn.onclick = () => {
+        task.notes = document.getElementById('taskNotes').value;
+        saveState();
+        modal.style.display = 'none';
+        showToast('Notes saved!');
+    };
+    
+    const deleteBtn = document.getElementById('deleteTaskBtn');
+    if (deleteBtn) {
+        const newDeleteBtn = deleteBtn.cloneNode(true);
+        deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
+        newDeleteBtn.onclick = () => {
+            if (confirm(`Delete task "${task.title}"?`)) {
+                state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
+                saveState();
+                modal.style.display = 'none';
+                renderAll();
+                showToast(`Deleted: ${task.title}`);
+            }
+        };
+    }
+    
+    modal.style.display = 'flex';
+    const closeBtn = modal.querySelector('.close');
+    if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+}
+
+function generateReport() {
+    const totalXPEarned = state.completedHistory.reduce((sum, h) => sum + (h.xpGained || 0), 0);
+    
+    let report = `═══════════════════════════════════════════\n`;
+    report += `              🌙 AKATSUKI MISSION REPORT\n`;
+    report += `═══════════════════════════════════════════\n\n`;
+    report += `📅 GENERATED: ${new Date().toLocaleString()}\n`;
+    report += `👤 SCHOLAR: ${state.avatar.name}\n`;
+    report += `🏆 LEVEL: ${state.level} | XP: ${state.xp} | STREAK: ${state.streak} days\n`;
+    report += `💰 COINS: ${state.coins}\n\n`;
+    report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    report += `📊 LIFETIME STATISTICS\n`;
+    report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    report += `Total Missions Completed: ${state.completedHistory.length}\n`;
+    report += `Total XP Earned: ${totalXPEarned}\n`;
+    report += `Current Streak: ${state.streak} days\n\n`;
+    report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    report += `📜 COMPLETED MISSIONS\n`;
+    report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    
+    if (state.completedHistory.length === 0) {
+        report += `No missions completed yet.\n\n`;
+    } else {
+        state.completedHistory.forEach((c, idx) => {
+            report += `${idx + 1}. ${c.title}\n`;
+            report += `   📅 Completed: ${new Date(c.completedAt).toLocaleString()}\n`;
+            report += `   🎯 XP Gained: ${c.xpGained} | 💰 Coins: ${c.coinsGained || 0}\n`;
+            if (c.notes) report += `   📝 Notes: ${c.notes}\n`;
+            report += `\n`;
+        });
+    }
+    
+    const reportOutput = document.getElementById('reportOutput');
+    if (reportOutput) {
+        reportOutput.innerText = report;
+        reportOutput.style.display = 'block';
+        
+        const blob = new Blob([report], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `akatsuki_report_${new Date().toISOString().slice(0,10)}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+}
+
+function batchImport() {
+    const textarea = document.getElementById('batchImport');
+    if (!textarea) return;
+    
+    const lines = textarea.value.split('\n');
+    let imported = 0;
+    
+    for (const line of lines) {
+        if (!line.trim()) continue;
+        const parts = line.split('|').map(p => p.trim());
+        if (parts.length >= 2) {
+            const steps = (parts[4] || 'Plan task,Execute work,Review results').split(',').map(s => ({ text: s.trim(), completed: false }));
+            state.activeTasks.push({
+                id: Date.now() + '_' + Math.random(),
+                title: parts[0],
+                domain: parts[1] || 'General',
+                difficulty: parts[2] || 'Medium',
+                xp: parseInt(parts[3]) || 30,
+                repeatability: 'One-time',
+                priority: 'Important',
+                steps: steps,
+                notes: '',
+                startedAt: new Date().toISOString(),
+                completed: false
+            });
+            imported++;
+        }
+    }
+    
+    if (imported > 0) {
+        saveState();
+        renderAll();
+        showToast(`Imported ${imported} tasks!`);
+        textarea.value = '';
+    } else {
+        showToast('No valid tasks found. Format: Title | Domain | Difficulty | XP | Step1, Step2');
+    }
+}
+
+function exportData() {
+    const exportData = {
+        version: '2.1.0',
+        exportDate: new Date().toISOString(),
+        state: {
+            xp: state.xp,
+            coins: state.coins,
+            level: state.level,
+            streak: state.streak,
+            activeTasks: state.activeTasks,
+            completedHistory: state.completedHistory,
+            avatar: state.avatar,
+            unlockedAchievements: state.unlockedAchievements
+        }
+    };
+    
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `akatsuki_save_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Data exported!');
+}
+
+function importData(file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const imported = JSON.parse(event.target.result);
+            if (imported.state) {
+                state = { ...state, ...imported.state };
+                saveState();
+                renderAll();
+                showToast('Data imported successfully!');
+            } else {
+                showToast('Invalid save file format');
+            }
+        } catch(err) {
+            showToast('Error importing data');
+        }
+    };
+    reader.readAsText(file);
+}
+
+function setupEventListeners() {
+    // Tab switching
+    document.querySelectorAll('.ak-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            document.querySelectorAll('.ak-tab').forEach(tab => tab.classList.remove('active'));
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) targetTab.classList.add('active');
+            document.querySelectorAll('.ak-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+    
+    // Undo/Redo (placeholder)
+    document.getElementById('undoBtn')?.addEventListener('click', () => showToast('Undo coming soon'));
+    document.getElementById('redoBtn')?.addEventListener('click', () => showToast('Redo coming soon'));
+    
+    // Reset buttons
+    document.getElementById('forceResetBtn')?.addEventListener('click', () => {
+        state.lastResetDate = getTodayStr();
+        saveState();
+        renderAll();
+        showToast('Daily reset completed!');
+    });
+    
+    document.getElementById('forceWeeklyResetBtn')?.addEventListener('click', () => {
+        state.lastWeeklyResetDate = getLastMonday();
+        saveState();
+        renderAll();
+        showToast('Weekly reset completed!');
+    });
+    
+    document.getElementById('clearAllBtn')?.addEventListener('click', () => {
+        if (confirm('⚠️ WIPE ALL PROGRESS? This cannot be undone.')) {
+            localStorage.clear();
+            location.reload();
+        }
+    });
+    
+    // Report buttons
+    document.getElementById('exportReportBtn')?.addEventListener('click', generateReport);
+    document.getElementById('generateReportBtn')?.addEventListener('click', generateReport);
+    
+    // Quick generate
+    document.getElementById('genQuickBtn')?.addEventListener('click', () => {
+        document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
+    });
+    
+    // Batch import
+    document.getElementById('batchImportBtn')?.addEventListener('click', () => {
+        document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
+    });
+    document.getElementById('batchImportExecute')?.addEventListener('click', batchImport);
+    
+    // Data export/import
+    document.getElementById('exportDataBtn')?.addEventListener('click', exportData);
+    document.getElementById('importDataBtn')?.addEventListener('click', () => {
+        document.getElementById('importDataInput')?.click();
+    });
+    document.getElementById('importDataInput')?.addEventListener('change', (e) => {
+        if (e.target.files[0]) importData(e.target.files[0]);
+    });
+    
+    // Task Generator - Single Task
+    const generateSingleBtn = document.getElementById('generateSingleBtn');
+    if (generateSingleBtn) {
+        generateSingleBtn.addEventListener('click', () => {
+            const goal = document.getElementById('genGoal')?.value;
+            if (!goal) {
+                showToast('Enter a goal first');
+                return;
+            }
+            
+            const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
+            const priority = document.getElementById('genPriority')?.value || 'Important';
+            const xpValue = difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : 80;
+            const themeSelect = document.getElementById('genTheme');
+            const themeMap = {
+                'phd': 'PhD', 'skool': 'Skool', 'curriculum': 'Curriculum',
+                'ra': 'Research Assistantship', 'docs': 'Documentation', 'rituals': 'Rituals'
+            };
+            const domain = themeMap[themeSelect?.value] || 'General';
+            
+            const newTask = {
+                id: Date.now() + '_' + Math.random(),
+                title: goal,
+                domain: domain,
+                difficulty: difficulty,
+                xp: xpValue,
+                repeatability: document.getElementById('genRepeatability')?.value || 'One-time',
+                priority: priority,
+                steps: [
+                    { text: `Clarify scope: ${goal.substring(0, 50)}`, completed: false },
+                    { text: 'Break down into sub-tasks', completed: false },
+                    { text: 'Execute main work', completed: false },
+                    { text: 'Review and document results', completed: false }
+                ],
+                notes: '',
+                startedAt: new Date().toISOString(),
+                completed: false
+            };
+            
+            const previewDiv = document.getElementById('generatedPreview');
+            if (previewDiv) {
+                previewDiv.innerHTML = `
+                    <div class="mission-item">
+                        <div class="mission-header">
+                            <strong>📋 ${escapeHtml(goal)}</strong>
+                            <div class="mission-badge">
+                                <span class="badge ${difficulty.toLowerCase()}">${difficulty}</span>
+                                <span class="badge ${priority.toLowerCase()}">${priority}</span>
+                            </div>
+                        </div>
+                        <div class="mission-meta">
+                            <span>📁 ${domain}</span>
+                            <span>⭐ ${xpValue} XP</span>
+                        </div>
+                        <ul><li>Clarify scope</li><li>Break down into sub-tasks</li><li>Execute main work</li><li>Review results</li></ul>
+                    </div>
+                `;
+            }
+            
+            const addBtn = document.getElementById('addGeneratedBtn');
+            if (addBtn) {
+                addBtn.style.display = 'inline-block';
+                const newAddBtn = addBtn.cloneNode(true);
+                addBtn.parentNode.replaceChild(newAddBtn, addBtn);
+                newAddBtn.onclick = () => {
+                    state.activeTasks.push(newTask);
+                    saveState();
+                    if (previewDiv) previewDiv.innerHTML = '';
+                    newAddBtn.style.display = 'none';
+                    renderAll();
+                    showToast(`Generated: ${newTask.title}`);
+                    document.querySelector('.ak-tab-btn[data-tab="active"]')?.click();
+                };
+            }
+        });
+    }
+    
+    // Generate Chain (simplified - just generates 3 tasks)
+    const generateChainBtn = document.getElementById('generateChainBtn');
+    if (generateChainBtn) {
+        generateChainBtn.addEventListener('click', () => {
+            const goal = document.getElementById('genGoal')?.value;
+            if (!goal) {
+                showToast('Enter a goal first');
+                return;
+            }
+            
+            const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
+            const themeSelect = document.getElementById('genTheme');
+            const themeMap = {
+                'phd': 'PhD', 'skool': 'Skool', 'curriculum': 'Curriculum',
+                'ra': 'Research Assistantship', 'docs': 'Documentation', 'rituals': 'Rituals'
+            };
+            const domain = themeMap[themeSelect?.value] || 'General';
+            const xpValue = difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : 80;
+            
+            const tasks = [];
+            for (let i = 1; i <= 3; i++) {
+                tasks.push({
+                    id: Date.now() + '_' + Math.random() + '_' + i,
+                    title: i === 1 ? goal : `${goal} (Part ${i} of 3)`,
+                    domain: domain,
+                    difficulty: difficulty,
+                    xp: xpValue,
+                    repeatability: 'One-time',
+                    priority: i === 1 ? 'Critical' : 'Important',
+                    steps: [
+                        { text: `Step 1 for: ${goal.substring(0, 40)}`, completed: false },
+                        { text: 'Step 2', completed: false },
+                        { text: 'Step 3', completed: false }
+                    ],
+                    notes: '',
+                    startedAt: new Date().toISOString(),
+                    completed: false
+                });
+            }
+            
+            const previewDiv = document.getElementById('generatedPreview');
+            if (previewDiv) {
+                previewDiv.innerHTML = `
+                    <div class="mission-item">
+                        <div class="mission-header">
+                            <strong>🔗 Chain: ${escapeHtml(goal)}</strong>
+                            <div class="mission-badge">
+                                <span class="badge">3 tasks</span>
+                            </div>
+                        </div>
+                        <div class="mission-meta">
+                            <span>📁 ${domain}</span>
+                            <span>⭐ Total XP: ${xpValue * 3}</span>
+                        </div>
+                        <ul>${tasks.map(t => `<li>${escapeHtml(t.title)}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+            
+            const addBtn = document.getElementById('addGeneratedBtn');
+            if (addBtn) {
+                addBtn.style.display = 'inline-block';
+                const newAddBtn = addBtn.cloneNode(true);
+                addBtn.parentNode.replaceChild(newAddBtn, addBtn);
+                newAddBtn.onclick = () => {
+                    tasks.forEach(task => state.activeTasks.push(task));
+                    saveState();
+                    if (previewDiv) previewDiv.innerHTML = '';
+                    newAddBtn.style.display = 'none';
+                    renderAll();
+                    showToast(`Added chain: ${goal} (3 tasks)`);
+                    document.querySelector('.ak-tab-btn[data-tab="active"]')?.click();
+                };
+            }
+        });
+    }
+    
+    // Filters
+    const filterDomain = document.getElementById('filterDomain');
+    const filterDifficulty = document.getElementById('filterDifficulty');
+    const filterPriority = document.getElementById('filterPriority');
+    if (filterDomain) filterDomain.addEventListener('change', () => renderActiveMissions());
+    if (filterDifficulty) filterDifficulty.addEventListener('change', () => renderActiveMissions());
+    if (filterPriority) filterPriority.addEventListener('change', () => renderActiveMissions());
+    
+    // Bank search/filters
+    const bankSearch = document.getElementById('bankSearch');
+    const bankDomainFilter = document.getElementById('bankDomainFilter');
+    const bankDifficultyFilter = document.getElementById('bankDifficultyFilter');
+    if (bankSearch) bankSearch.addEventListener('input', () => renderTaskBank());
+    if (bankDomainFilter) bankDomainFilter.addEventListener('change', () => renderTaskBank());
+    if (bankDifficultyFilter) bankDifficultyFilter.addEventListener('change', () => renderTaskBank());
+}
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+
+function initApp() {
+    console.log('Initializing Akatsuki Quest...');
+    
+    loadState();
+    setupEventListeners();
+    attachDelegatedEvents();
+    renderAll();
+    
+    console.log('🎯 Akatsuki Quest Ready!', { 
+        tasks: state.activeTasks.filter(t => !t.completed).length,
+        coins: state.coins,
+        level: state.level
+    });
+}
