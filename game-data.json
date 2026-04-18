@@ -1,148 +1,54 @@
 {
   "meta": {
-    "name": "Akatsuki PhD Quest – Core Rules",
-    "version": "1.1.0",
-    "description": "Global rules, XP logic, streak logic, mission types, difficulty definitions, unlocks, reset rules, generator logic, and tag enums for the Akatsuki PhD Quest RPG.",
-    "author": "Lilith / Akatsuki System",
-    "lastUpdated": "2026-04-17"
+    "name": "Akatsuki PhD Quest - Core Game Rules",
+    "version": "2.0.0",
+    "description": "Master configuration file for XP progression, leveling, difficulty curves, and game mechanics",
+    "author": "Akatsuki System",
+    "lastUpdated": "2026-04-18"
   },
 
-  "xpRules": {
+  "xpSystem": {
+    "enabled": true,
     "xpPerLevel": 500,
     "maxLevel": 99,
-    "coinRatio": 0.20,
-    "levelUpBonusCoins": 100,
-    "levelUpEffects": {
+    "xpCurve": "linear",
+    "curveFormula": "xpForLevel = baseXP * level",
+    "notes": "Linear progression: each level requires 500 more XP than the previous",
+    
+    "levelUpBonuses": {
+      "coins": 100,
       "showAnimation": true,
-      "animationType": "pulse-glow",
-      "playSound": false
+      "playSound": false,
+      "unlockNewContent": true
     },
-
-    "difficultyXpRanges": {
-      "Easy": { "min": 10, "max": 20 },
-      "Medium": { "min": 25, "max": 50 },
-      "Hard": { "min": 60, "max": 120 },
-      "Elite": { "min": 150, "max": 500 }
+    
+    "coinSystem": {
+      "enabled": true,
+      "coinRatio": 0.2,
+      "description": "Each XP earned gives 0.2 coins (20% conversion)",
+      "startingCoins": 150
     },
-
-    "bonuses": {
-      "firstCompletion": {
-        "xp": 10,
-        "description": "First time you complete a mission."
-      },
-      "streak3Days": {
-        "xp": 15,
-        "description": "Maintain a 3-day completion streak."
-      },
-      "streak7Days": {
-        "xp": 40,
-        "description": "Maintain a 7-day completion streak."
-      },
-      "bossClear": {
-        "xp": 100,
-        "description": "Clear a boss battle mission."
-      },
-      "recoveryMission": {
-        "xp": 15,
-        "description": "Complete a recovery mission after a miss."
-      },
-      "perfectDocumentation": {
-        "xp": 10,
-        "description": "Attach evidence or log to a mission."
-      }
+    
+    "streakBonuses": {
+      "3days": { "xpBonus": 15, "coinBonus": 10 },
+      "7days": { "xpBonus": 40, "coinBonus": 25 },
+      "14days": { "xpBonus": 100, "coinBonus": 50 },
+      "30days": { "xpBonus": 300, "coinBonus": 150 }
     }
   },
-
-  "streakRules": {
-    "dayCompletedCondition": {
-      "description": "A day counts as completed when at least one repeatable mission is finished.",
-      "requiresRepeatableTask": true,
-      "allowedRepeatability": ["Daily", "Weekly", "Monthly", "Repeatable"]
-    },
-
-    "resetTime": "local-midnight",
-
-    "onReset": {
-      "regenerateRepeatableTasks": true,
-      "clearStepStateForRepeatables": true,
-      "preserveOneTimeCompletion": true
-    },
-
-    "streakBreakLogic": {
-      "ifYesterdayCompleted": "increment",
-      "ifYesterdayNotCompleted": "resetToZero",
-      "maxStreakTracked": 365
-    },
-
-    "winTheDay": {
-      "description": "1 important mission + 1 ritual + 1 documentation action.",
-      "requirements": {
-        "importantMissions": 1,
-        "ritualMissions": 1,
-        "documentationMissions": 1
-      },
-      "tags": {
-        "importantPriority": ["Critical", "Important"],
-        "ritualMissionTypes": ["Ritual"],
-        "documentationDomains": ["Documentation"]
-      }
-    }
-  },
-
-  "missionTypes": [
-    {
-      "id": "Mini-Quest",
-      "description": "Tiny, low-friction missions for momentum and re-entry.",
-      "defaultDifficulty": "Easy",
-      "isRepeatable": true
-    },
-    {
-      "id": "Standard Mission",
-      "description": "Normal work units with clear outcomes.",
-      "defaultDifficulty": "Medium",
-      "isRepeatable": true
-    },
-    {
-      "id": "Deep Work Mission",
-      "description": "Focused blocks for research, writing, or analysis.",
-      "defaultDifficulty": "Hard",
-      "isRepeatable": true
-    },
-    {
-      "id": "Boss Battle",
-      "description": "High-stakes milestones and major deliverables.",
-      "defaultDifficulty": "Elite",
-      "isRepeatable": false
-    },
-    {
-      "id": "Recovery Mission",
-      "description": "Repair, reset, and re-entry missions after failure or backlog.",
-      "defaultDifficulty": "Easy",
-      "isRepeatable": true
-    },
-    {
-      "id": "Secret Mission",
-      "description": "Optional surprise missions surfaced occasionally.",
-      "defaultDifficulty": "Medium",
-      "isRepeatable": true
-    },
-    {
-      "id": "Ritual",
-      "description": "Startup, shutdown, and consistency rituals.",
-      "defaultDifficulty": "Easy",
-      "isRepeatable": true
-    }
-  ],
 
   "difficulties": [
     {
       "id": "Easy",
       "label": "Easy",
-      "timeRangeMinutes": { "min": 5, "max": 15 },
+      "icon": "⭐",
+      "timeRangeMinutes": { "min": 5, "max": 20 },
       "cognitiveLoad": "Low",
       "defaultXp": 15,
+      "xpRange": { "min": 10, "max": 25 },
+      "color": "#2d6a4f",
       "examples": [
-        "Write daily log",
+        "Write daily mission log",
         "Rename 5 files",
         "Check mission board"
       ]
@@ -150,9 +56,12 @@
     {
       "id": "Medium",
       "label": "Medium",
+      "icon": "⭐⭐",
       "timeRangeMinutes": { "min": 20, "max": 60 },
       "cognitiveLoad": "Moderate",
       "defaultXp": 35,
+      "xpRange": { "min": 25, "max": 55 },
+      "color": "#e9c46a",
       "examples": [
         "Summarize one article",
         "Build one mastery check",
@@ -162,9 +71,12 @@
     {
       "id": "Hard",
       "label": "Hard",
+      "icon": "⭐⭐⭐",
       "timeRangeMinutes": { "min": 60, "max": 180 },
       "cognitiveLoad": "Deep Work",
       "defaultXp": 90,
+      "xpRange": { "min": 60, "max": 130 },
+      "color": "#e76f51",
       "examples": [
         "Draft 500+ words of a chapter",
         "Code one transcript batch",
@@ -174,9 +86,12 @@
     {
       "id": "Elite",
       "label": "Elite",
+      "icon": "💀",
       "timeRangeMinutes": { "min": 180, "max": 999 },
       "cognitiveLoad": "High Stakes",
       "defaultXp": 250,
+      "xpRange": { "min": 150, "max": 500 },
+      "color": "#d62828",
       "examples": [
         "Complete full chapter draft",
         "Run full Skool challenge cycle",
@@ -185,220 +100,148 @@
     }
   ],
 
-  "repeatabilityOptions": [
-    "One-time",
-    "Repeatable",
-    "Daily",
-    "Weekly",
-    "Monthly",
-    "Quarterly"
+  "missionTypes": [
+    {
+      "id": "Mini-Quest",
+      "label": "Mini-Quest",
+      "icon": "⚡",
+      "description": "Tiny, low-friction missions for momentum and re-entry",
+      "defaultDifficulty": "Easy",
+      "isRepeatable": true,
+      "xpMultiplier": 0.8
+    },
+    {
+      "id": "Standard Mission",
+      "label": "Standard Mission",
+      "icon": "📋",
+      "description": "Normal work units with clear outcomes",
+      "defaultDifficulty": "Medium",
+      "isRepeatable": true,
+      "xpMultiplier": 1.0
+    },
+    {
+      "id": "Deep Work Mission",
+      "label": "Deep Work",
+      "icon": "🎯",
+      "description": "Focused blocks for research, writing, or analysis",
+      "defaultDifficulty": "Hard",
+      "isRepeatable": true,
+      "xpMultiplier": 1.2
+    },
+    {
+      "id": "Boss Battle",
+      "label": "Boss Battle",
+      "icon": "👹",
+      "description": "High-stakes milestones and major deliverables",
+      "defaultDifficulty": "Elite",
+      "isRepeatable": false,
+      "xpMultiplier": 1.5,
+      "unlockCondition": "Level 5"
+    },
+    {
+      "id": "Recovery Mission",
+      "label": "Recovery",
+      "icon": "🔄",
+      "description": "Repair, reset, and re-entry missions after failure",
+      "defaultDifficulty": "Easy",
+      "isRepeatable": true,
+      "xpMultiplier": 0.6,
+      "triggerCondition": "missed_day"
+    },
+    {
+      "id": "Ritual",
+      "label": "Ritual",
+      "icon": "🌙",
+      "description": "Startup, shutdown, and consistency rituals",
+      "defaultDifficulty": "Easy",
+      "isRepeatable": true,
+      "xpMultiplier": 0.7,
+      "streakBonus": true
+    }
   ],
 
   "priorityTags": [
-    {
-      "id": "Critical",
-      "description": "High-impact, time-sensitive, or advisor/PI-facing work."
-    },
-    {
-      "id": "Important",
-      "description": "Moves core arcs forward but not on fire."
-    },
-    {
-      "id": "Maintenance",
-      "description": "Keeps systems clean, organized, and stable."
-    },
-    {
-      "id": "Optional",
-      "description": "Nice-to-have, can be skipped without damage."
-    }
+    { "id": "Critical", "label": "Critical", "icon": "🔥", "color": "#d62828", "weight": 4 },
+    { "id": "Important", "label": "Important", "icon": "⚠️", "color": "#ff8c00", "weight": 3 },
+    { "id": "Maintenance", "label": "Maintenance", "icon": "🛠️", "color": "#4a9eff", "weight": 2 },
+    { "id": "Optional", "label": "Optional", "icon": "📌", "color": "#888", "weight": 1 }
   ],
 
   "energyTags": [
-    {
-      "id": "Low Energy",
-      "description": "Can be done when tired or mentally drained."
-    },
-    {
-      "id": "Standard Focus",
-      "description": "Normal working state, moderate focus required."
-    },
-    {
-      "id": "Deep Focus",
-      "description": "Requires uninterrupted, high-focus blocks."
-    }
+    { "id": "Low Energy", "label": "Low Energy", "icon": "😴", "description": "Can be done when tired or mentally drained" },
+    { "id": "Standard Focus", "label": "Standard Focus", "icon": "😐", "description": "Normal working state, moderate focus required" },
+    { "id": "Deep Focus", "label": "Deep Focus", "icon": "🧠", "description": "Requires uninterrupted, high-focus blocks" }
   ],
 
   "contextTags": [
-    { "id": "Home", "description": "Home environment tasks." },
-    { "id": "Office", "description": "Office or campus office tasks." },
-    { "id": "Library", "description": "Library or quiet study space tasks." },
-    { "id": "Online", "description": "Browser-based or remote tasks." },
-    { "id": "Skool", "description": "Skool platform and community tasks." },
-    { "id": "RA", "description": "Research assistantship tasks." },
-    { "id": "Writing", "description": "Drafting, revising, or outlining tasks." },
-    { "id": "Admin", "description": "Administrative, filing, or logistics tasks." }
+    { "id": "Home", "label": "Home", "icon": "🏠" },
+    { "id": "Office", "label": "Office", "icon": "🏢" },
+    { "id": "Library", "label": "Library", "icon": "📚" },
+    { "id": "Online", "label": "Online", "icon": "🌐" },
+    { "id": "Skool", "label": "Skool", "icon": "🎓" },
+    { "id": "RA", "label": "Research Assistant", "icon": "🔬" },
+    { "id": "Writing", "label": "Writing", "icon": "✍️" },
+    { "id": "Admin", "label": "Admin", "icon": "📁" }
+  ],
+
+  "repeatabilityOptions": [
+    { "id": "One-time", "label": "One-time", "icon": "🎯", "resetOn": null },
+    { "id": "Daily", "label": "Daily", "icon": "🌅", "resetOn": "midnight" },
+    { "id": "Weekly", "label": "Weekly", "icon": "📅", "resetOn": "monday" },
+    { "id": "Monthly", "label": "Monthly", "icon": "🌙", "resetOn": "first_day" },
+    { "id": "Quarterly", "label": "Quarterly", "icon": "🍂", "resetOn": "quarter_start" }
   ],
 
   "domains": [
     {
       "id": "PhD",
       "label": "PhD Journey",
-      "defaultTheme": "Shadow Research Missions",
-      "description": "Research, reading, writing, analysis, advisor communication, and academic identity."
+      "icon": "🎓",
+      "theme": "Shadow Research Missions",
+      "color": "#9b59b6",
+      "description": "Research, reading, writing, analysis, and dissertation progress"
     },
     {
       "id": "Skool",
       "label": "Skool Community",
-      "defaultTheme": "Clan Leadership & Skool Community",
-      "description": "Community building, content, engagement, challenges, and retention."
+      "icon": "👥",
+      "theme": "Clan Leadership & Skool Community",
+      "color": "#3498db",
+      "description": "Community building, content, engagement, and retention"
     },
     {
       "id": "Curriculum",
       "label": "Curriculum Design",
-      "defaultTheme": "Village Knowledge Expansion",
-      "description": "Course design, learning outcomes, assessments, and teaching materials."
+      "icon": "📖",
+      "theme": "Village Knowledge Expansion",
+      "color": "#2ecc71",
+      "description": "Course design, learning outcomes, and teaching materials"
     },
     {
       "id": "Research Assistantship",
-      "label": "Research Assistantship",
-      "defaultTheme": "Intelligence Gathering",
-      "description": "Interviews, coding, analysis, PI alignment, and deliverables."
+      "label": "Research Assistant",
+      "icon": "🔬",
+      "theme": "Intelligence Gathering",
+      "color": "#e67e22",
+      "description": "Interviews, coding, analysis, and PI alignment"
     },
     {
       "id": "Documentation",
-      "label": "Documentation Workflow",
-      "defaultTheme": "Eternal Documentation Scrolls",
-      "description": "Logs, evidence capture, version control, and archives."
+      "label": "Documentation",
+      "icon": "📝",
+      "theme": "Eternal Documentation Scrolls",
+      "color": "#1abc9c",
+      "description": "Logs, evidence capture, version control, and archives"
     },
     {
       "id": "Rituals",
       "label": "Discipline & Rituals",
-      "defaultTheme": "Discipline & Rituals",
-      "description": "Startup, shutdown, focus, and reset rituals."
-    },
-    {
-      "id": "Boss",
-      "label": "Boss Battles",
-      "defaultTheme": "Boss Battles",
-      "description": "Major milestones and high-stakes missions."
-    },
-    {
-      "id": "Recovery",
-      "label": "Recovery & Reset",
-      "defaultTheme": "Recovery & Reset Protocols",
-      "description": "Backlog repair, re-entry, and shame-free resets."
+      "icon": "🌙",
+      "theme": "Discipline & Rituals",
+      "color": "#f39c12",
+      "description": "Startup, shutdown, focus, and reset rituals"
     }
   ],
-
-  "themes": [
-    {
-      "id": "Shadow Research Missions",
-      "purpose": "Core PhD research, reading, synthesis, writing, and dissertation progress.",
-      "progressDefinition": "XP from research tasks, completed chains, and chapter milestones.",
-      "unlocksOnMastery": [
-        "Advanced boss battles for chapters",
-        "Higher-level research templates"
-      ]
-    },
-    {
-      "id": "Village Knowledge Expansion",
-      "purpose": "Curriculum design, lesson design, teaching materials, and workshops.",
-      "progressDefinition": "Completed modules, assessments, and refined lessons.",
-      "unlocksOnMastery": [
-        "Curriculum boss battles",
-        "Advanced teaching templates"
-      ]
-    },
-    {
-      "id": "Clan Leadership & Skool Community",
-      "purpose": "Community building, engagement, moderation, and member value.",
-      "progressDefinition": "Consistent posts, challenges, and member wins.",
-      "unlocksOnMastery": [
-        "Community challenge bosses",
-        "Secret community missions"
-      ]
-    },
-    {
-      "id": "Intelligence Gathering",
-      "purpose": "RA work: interviews, coding, analysis, and PI alignment.",
-      "progressDefinition": "Coded transcripts, memos, and RA deliverables.",
-      "unlocksOnMastery": [
-        "Advanced RA boss missions",
-        "Signal analysis templates"
-      ]
-    },
-    {
-      "id": "Eternal Documentation Scrolls",
-      "purpose": "Logs, evidence, version control, and proof-of-work.",
-      "progressDefinition": "Documentation streaks and complete monthly summaries.",
-      "unlocksOnMastery": [
-        "Documentation bonuses",
-        "Archive boss missions"
-      ]
-    },
-    {
-      "id": "Discipline & Rituals",
-      "purpose": "Consistency loops, startup/shutdown, and anti-procrastination.",
-      "progressDefinition": "Ritual streaks and completed weekly resets.",
-      "unlocksOnMastery": [
-        "Streak protection bonuses",
-        "Elite ritual missions"
-      ]
-    },
-    {
-      "id": "Boss Battles",
-      "purpose": "High-stakes milestones across all domains.",
-      "progressDefinition": "Cleared boss missions and milestone completions.",
-      "unlocksOnMastery": [
-        "Elite boss track",
-        "Akatsuki Commander status"
-      ]
-    },
-    {
-      "id": "Recovery & Reset Protocols",
-      "purpose": "Backlog repair, re-entry, and shame-free restarts.",
-      "progressDefinition": "Completed recovery missions and successful resets.",
-      "unlocksOnMastery": [
-        "Advanced recovery templates",
-        "Overwhelm-proof workflows"
-      ]
-    }
-  ],
-
-  "resetRules": {
-    "localStorageKeys": {
-      "xp": "ak_xp",
-      "level": "ak_level",
-      "coins": "ak_coins",
-      "streak": "ak_streak",
-      "sections": "ak_sections",
-      "shop": "ak_shop",
-      "avatar": "ak_avatar",
-      "bank": "ak_bank",
-      "undo": "ak_undo",
-      "sidebarHidden": "ak_sidebar_hidden",
-      "lastResetDate": "ak_last_reset_date",
-      "dayCompletedPrefix": "ak_day_completed_",
-      "stepsPrefix": "ak_steps_"
-    },
-
-    "antiOverwhelmRules": {
-      "maxActiveEliteMissions": 3,
-      "backlogTriageTrigger": {
-        "missedTasksInDomain": 3,
-        "createsMissionType": "Backlog Triage"
-      },
-      "overwhelmResetTrigger": {
-        "brokenStreaksInWeek": 2,
-        "createsMissionType": "Overwhelm Reset Protocol"
-      },
-      "catchUpMode": {
-        "enabled": true,
-        "description": "Convert heavy missions into smaller recovery missions when behind.",
-        "conversionRule": "Split Hard/Elite missions into 3–5 smaller Recovery Missions."
-      }
-    }
-  },
 
   "unlockRules": {
     "levels": [
@@ -410,90 +253,60 @@
       { "level": 10, "unlocks": ["Elite Boss Track"] },
       { "level": 12, "unlocks": ["Custom Mission Creation"] },
       { "level": 15, "unlocks": ["Akatsuki Commander Status"] }
-    ]
-  },
-
-  "achievementRefs": {
-    "file": "achievements.json",
-    "ids": [
-      "first_blood",
-      "scroll_keeper",
-      "shadow_scholar",
-      "data_hunter",
-      "clan_builder",
-      "master_architect",
-      "signal_interceptor",
-      "no_loose_ends",
-      "boss_slayer",
-      "resurrection_protocol",
-      "crimson_streak",
-      "akatsuki_commander"
-    ]
-  },
-
-  "shopRules": {
-    "itemsFile": "shop-items.json",
-    "maxEquippedPerType": 1,
-    "bonusTypes": [
-      "xpMultiplier",
-      "coinMultiplier",
-      "streakProtection",
-      "documentationBonus",
-      "bossXpBoost"
     ],
-    "defaultCosts": {
-      "cosmetic": 150,
-      "minorBonus": 250,
-      "majorBonus": 400
+    "bossUnlockConditions": {
+      "Literature Hydra": { "level": 5, "prerequisiteMissions": ["complete_lit_matrix"] },
+      "Methodology Golem": { "level": 7, "prerequisiteMissions": ["complete_method_design"] },
+      "Burnout Demon": { "level": 3, "triggerOn": "streak_break" }
     }
   },
 
-  "avatarRules": {
-    "layersFile": "avatar-layers.json",
-    "editableName": true,
-    "defaultName": "Shadow Scholar",
-    "baseStats": {
-      "xpMultiplier": 1.0,
-      "coinMultiplier": 1.0
+  "winTheDay": {
+    "description": "Daily win condition: complete 1 important mission + 1 ritual + 1 documentation action",
+    "requirements": {
+      "importantMissions": 1,
+      "ritualMissions": 1,
+      "documentationMissions": 1
     },
-    "maxEquippedPerLayer": 1,
-    "layers": [
-      "skin",
-      "hair",
-      "outfit",
-      "mask",
-      "accessory",
-      "handItem",
-      "companion"
-    ]
+    "reward": {
+      "xpBonus": 25,
+      "coinBonus": 15,
+      "streakBonus": 1
+    },
+    "tags": {
+      "importantPriority": ["Critical", "Important"],
+      "ritualMissionTypes": ["Ritual"],
+      "documentationDomains": ["Documentation"]
+    }
   },
 
-  "generatorRules": {
-    "defaultChainLengths": {
-      "today": 2,
-      "week": 3,
-      "month": 4
+  "recoveryRules": {
+    "missedDayGrace": 1,
+    "backlogTriageTrigger": {
+      "missedTasksInDomain": 3,
+      "createsMissionType": "Backlog Triage"
     },
-    "defaultMissionTypeByDomain": {
-      "PhD": "Deep Work Mission",
-      "Skool": "Standard Mission",
-      "Curriculum": "Standard Mission",
-      "Research Assistantship": "Deep Work Mission",
-      "Documentation": "Ritual",
-      "Rituals": "Ritual",
-      "Boss": "Boss Battle",
-      "Recovery": "Recovery Mission"
+    "overwhelmResetTrigger": {
+      "brokenStreaksInWeek": 2,
+      "createsMissionType": "Overwhelm Reset Protocol"
     },
-    "defaultPriorityByHorizon": {
-      "today": "Critical",
-      "week": "Important",
-      "month": "Maintenance"
-    },
-    "defaultEnergyByDifficulty": {
-      "Easy": "Low Energy",
-      "Medium": "Standard Focus",
-      "Hard": "Deep Focus",
-      "Elite": "Deep Focus"
+    "catchUpMode": {
+      "enabled": true,
+      "description": "Convert heavy missions into smaller recovery missions when behind",
+      "conversionRule": "Split Hard/Elite missions into 3-5 smaller Recovery Missions"
     }
+  },
+
+  "localStorageKeys": {
+    "xp": "ak_xp",
+    "level": "ak_level",
+    "coins": "ak_coins",
+    "streak": "ak_streak",
+    "activeTasks": "ak_active_tasks",
+    "completedHistory": "ak_history",
+    "avatar": "ak_avatar",
+    "unlockedAchievements": "ak_achievements",
+    "lastResetDate": "ak_last_reset",
+    "lastWeeklyReset": "ak_weekly_reset"
   }
 }
