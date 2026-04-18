@@ -42,7 +42,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         .ak-header {
             background: var(--card);
             padding: 0.8rem 2rem;
@@ -55,28 +54,19 @@
             z-index: 100;
         }
 
-        .ak-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
+        .ak-logo { display: flex; align-items: center; gap: 0.8rem; }
         .ak-logo-icon { font-size: 1.8rem; }
         .ak-title { font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; color: var(--red); }
-
         .ak-header-stats { display: flex; gap: 1.5rem; }
         .stat-box { background: #1a1a1e; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
 
-        /* XP Bar */
         .ak-xp-container { background: var(--card); padding: 0.5rem 2rem; border-bottom: 1px solid var(--border); }
         .ak-xp-bar { height: 8px; background: #1a1a1e; border-radius: 4px; overflow: hidden; }
         .ak-xp-fill { height: 100%; background: linear-gradient(90deg, var(--red), #ff4444); width: 0%; transition: width 0.3s ease; }
         .ak-xp-text { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.3rem; text-align: right; }
 
-        /* Layout */
         .ak-layout { display: flex; flex: 1; }
 
-        /* Sidebar */
         .ak-sidebar {
             width: 260px;
             background: var(--card);
@@ -114,8 +104,8 @@
             border-top: 1px solid var(--border);
         }
         .ak-undo-redo button { flex: 1; background: #1a1a1e; border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 6px; cursor: pointer; }
+        .ak-undo-redo button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Content */
         .ak-content { flex: 1; padding: 1.5rem; overflow-y: auto; }
         .ak-tab { display: none; }
         .ak-tab.active { display: block; animation: fadeIn 0.3s; }
@@ -124,11 +114,9 @@
         h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--red); border-left: 4px solid var(--red); padding-left: 1rem; }
         h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--text); }
 
-        /* Cards */
         .ak-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.2rem; }
         .ak-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem; }
 
-        /* Mission Items */
         .ak-mission-list { display: flex; flex-direction: column; gap: 1rem; }
         .mission-item {
             background: var(--card);
@@ -161,25 +149,68 @@
         .step-checkbox { width: 18px; height: 18px; accent-color: var(--red); cursor: pointer; }
         .step-item.completed label { text-decoration: line-through; color: var(--text-dim); }
 
+        /* Step Editing Styles */
+        .editable-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            background: var(--card);
+            margin-bottom: 0.25rem;
+        }
+        .editable-step:hover { background: var(--card-hover); }
+        .step-text { flex: 1; font-size: 0.9rem; }
+        .step-controls { display: flex; gap: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+        .editable-step:hover .step-controls { opacity: 1; }
+        .step-controls button {
+            background: none; border: none; color: var(--text-dim); cursor: pointer;
+            padding: 0.2rem 0.4rem; font-size: 0.7rem; border-radius: 4px;
+        }
+        .step-controls button:hover { background: var(--red); color: white; transform: none; }
+        .step-inline-editor { flex: 1; display: flex; gap: 0.5rem; align-items: center; }
+        .step-edit-input {
+            flex: 1; background: #1a1a1e; border: 1px solid var(--border);
+            color: var(--text); padding: 0.3rem 0.5rem; border-radius: 4px; font-size: 0.9rem;
+        }
+        .step-edit-actions button { background: #1a1a1e; border: 1px solid var(--border); padding: 0.2rem 0.5rem; font-size: 0.7rem; color: var(--text); }
+        .step-edit-actions .step-save-btn:hover { background: var(--success); color: black; }
+        .step-add-dialog {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .step-add-content {
+            background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 1.5rem; width: 400px; max-width: 90%;
+        }
+        .step-add-content h4 { margin-bottom: 1rem; color: var(--red); }
+        .step-add-textarea {
+            width: 100%; background: #1a1a1e; border: 1px solid var(--border);
+            color: var(--text); padding: 0.5rem; border-radius: 6px; margin-bottom: 1rem; resize: vertical;
+        }
+        .step-add-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+        .add-step-item { list-style: none; margin-top: 0.5rem; padding: 0.5rem; text-align: center; }
+        .step-add-btn {
+            background: none; border: 1px dashed var(--border); color: var(--text-dim);
+            padding: 0.3rem 0.8rem; width: 100%;
+        }
+        .step-add-btn:hover { border-color: var(--red); color: var(--red); background: none; transform: none; }
+
         .mission-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
         .mission-actions button { background: #1a1a1e; border: 1px solid var(--border); padding: 0.3rem 0.8rem; font-size: 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text); }
         .mission-actions button:hover { background: var(--red); border-color: var(--red); }
 
-        /* Filters */
         .ak-filters { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.2rem; }
         .ak-filters select, .ak-search { background: #1a1a1e; border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
         .ak-search { width: 100%; margin-bottom: 1rem; }
 
-        /* Form */
         .ak-form-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
         .ak-form-row label { flex: 1; min-width: 150px; }
         textarea, select, input { background: #1a1a1e; border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 6px; width: 100%; margin-top: 0.3rem; }
         button { background: var(--red); border: none; color: white; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
         button:hover { background: var(--red-dark); transform: translateY(-1px); }
         button.danger { background: #8b0000; }
-        .ak-form-actions { display: flex; gap: 1rem; margin-top: 1rem; }
 
-        /* Shop */
         .ak-shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .shop-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; text-align: center; transition: all 0.2s; }
         .shop-item:hover { transform: translateY(-3px); border-color: var(--red); }
@@ -188,7 +219,6 @@
         .buy-btn { width: 100%; margin-top: 0.5rem; }
         .buy-btn:disabled { background: #444; cursor: not-allowed; transform: none; }
 
-        /* Avatar */
         .ak-avatar-container { display: flex; gap: 2rem; background: var(--card); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .ak-avatar-display { background: #0a0a0c; border-radius: 50%; padding: 0.5rem; border: 2px solid var(--red); }
         .ak-avatar-info { flex: 1; min-width: 200px; }
@@ -197,34 +227,72 @@
         .gear-item { background: #1a1a1e; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
         .equip-btn, .unequip-btn { background: none; border: none; color: var(--red); cursor: pointer; padding: 0; margin: 0; }
 
-        /* Achievements */
         .ak-achievements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
         .achievement-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
         .achievement-item.locked { opacity: 0.5; }
         .achievement-item.unlocked { border-color: var(--gold); background: linear-gradient(135deg, var(--card), #1a1a2e); }
         .achievement-icon { font-size: 2rem; margin-bottom: 0.5rem; }
 
-        /* Win Condition */
         .win-condition { display: flex; flex-direction: column; gap: 0.5rem; }
         .win-item { display: flex; align-items: center; gap: 0.5rem; }
         .win-check { font-size: 1.2rem; }
         .win-result { margin-top: 0.8rem; padding: 0.5rem; background: #1a1a1e; border-radius: 6px; text-align: center; font-weight: bold; }
 
-        /* Modal */
         .ak-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 1000; }
         .ak-modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 500px; max-width: 90%; padding: 1.5rem; }
         .ak-modal-content .close { float: right; font-size: 1.5rem; cursor: pointer; color: var(--text-dim); }
         .modal-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
 
-        /* Toast */
         .reward-toast { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, var(--red), #8b0000); color: white; padding: 0.8rem 1.5rem; border-radius: 8px; transform: translateX(400px); transition: transform 0.3s; z-index: 2000; font-weight: bold; }
         .reward-toast.show { transform: translateX(0); }
 
-        /* Report */
         #reportOutput { background: #0a0a0c; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; margin-top: 1rem; display: none; max-height: 500px; overflow-y: auto; }
         .generated-preview { margin-top: 1rem; }
 
-        /* Responsive */
+        /* Task Bank Styles */
+        .task-bank-filters {
+            display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
+            padding: 1rem; background: var(--card); border-radius: 12px;
+        }
+        .task-bank-filters .search-input {
+            flex: 2; min-width: 200px; background: #1a1a1e;
+            border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 8px;
+        }
+        .task-bank-filters select { flex: 1; min-width: 130px; }
+        .task-bank-item {
+            background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 1rem; transition: all 0.2s;
+        }
+        .task-bank-item:hover { transform: translateX(4px); border-color: var(--red); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .task-header h4 { margin: 0; color: var(--red); }
+        .task-description { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .task-meta { display: flex; gap: 1rem; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.5rem; }
+        .task-preview-steps details { margin: 0.5rem 0; }
+        .task-preview-steps summary { cursor: pointer; color: var(--text-dim); font-size: 0.8rem; }
+        .task-preview-steps ul { margin: 0.5rem 0 0 1.5rem; font-size: 0.8rem; }
+        .add-task-btn { margin-top: 0.5rem; width: 100%; }
+
+        /* Boss Battle Styles */
+        .boss-status { background: var(--card); border-radius: 12px; padding: 1rem; }
+        .boss-battle-active {
+            background: linear-gradient(135deg, var(--card), #1a0a0a);
+            border: 2px solid var(--red); border-radius: 16px; padding: 1.5rem;
+            animation: bossPulse 2s infinite;
+        }
+        @keyframes bossPulse { 0%, 100% { box-shadow: 0 0 0 0 var(--red-glow); } 50% { box-shadow: 0 0 20px 5px var(--red-glow); } }
+        .boss-header h2 { color: var(--red); text-align: center; margin-bottom: 0.5rem; }
+        .boss-header p { text-align: center; color: var(--text-dim); margin-bottom: 1.5rem; }
+        .boss-hp-bar { background: #2a2a2e; border-radius: 20px; height: 30px; position: relative; overflow: hidden; margin-bottom: 1rem; }
+        .boss-hp-fill { background: linear-gradient(90deg, var(--red), #ff6666); height: 100%; transition: width 0.3s ease; }
+        .boss-hp-bar span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: bold; text-shadow: 0 0 3px black; }
+        .phase-bar { background: #2a2a2e; border-radius: 10px; height: 12px; overflow: hidden; margin: 0.5rem 0; }
+        .phase-fill { background: var(--gold); height: 100%; transition: width 0.3s ease; }
+        .boss-damage-log { background: #1a1a1e; border-radius: 8px; padding: 0.75rem; margin: 1rem 0; max-height: 150px; overflow-y: auto; }
+        .boss-damage-log ul { margin: 0.5rem 0 0 1rem; font-size: 0.8rem; }
+        .boss-tips { background: #1a1a2e; border-radius: 8px; padding: 0.75rem; margin-top: 0.5rem; }
+        .boss-tips ul { margin: 0.5rem 0 0 1rem; font-size: 0.8rem; color: var(--gold); }
+
         @media (max-width: 768px) {
             .ak-sidebar { width: 200px; }
             .ak-header-stats { gap: 0.5rem; font-size: 0.7rem; }
@@ -236,7 +304,6 @@
 </head>
 <body>
     <div class="ak-app">
-        <!-- Header -->
         <header class="ak-header">
             <div class="ak-logo">
                 <span class="ak-logo-icon">🌙</span>
@@ -250,18 +317,12 @@
             </div>
         </header>
 
-        <!-- XP Bar -->
         <div class="ak-xp-container">
-            <div class="ak-xp-bar">
-                <div class="ak-xp-fill" id="xpFill" style="width: 0%"></div>
-            </div>
-            <div class="ak-xp-text">
-                <span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span>
-            </div>
+            <div class="ak-xp-bar"><div class="ak-xp-fill" id="xpFill" style="width: 0%"></div></div>
+            <div class="ak-xp-text"><span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span></div>
         </div>
 
         <div class="ak-layout">
-            <!-- Sidebar -->
             <aside class="ak-sidebar">
                 <button class="ak-tab-btn active" data-tab="dashboard">📊 DASHBOARD</button>
                 <button class="ak-tab-btn" data-tab="active">📋 ACTIVE MISSIONS</button>
@@ -276,8 +337,8 @@
                 <button class="ak-tab-btn" data-tab="achievements">🏆 ACHIEVEMENTS</button>
                 <button class="ak-tab-btn" data-tab="settings">⚙️ SETTINGS</button>
                 <div class="ak-undo-redo">
-                    <button id="undoBtn">↩️ UNDO</button>
-                    <button id="redoBtn">↪️ REDO</button>
+                    <button id="undoBtn" disabled>↩️ UNDO</button>
+                    <button id="redoBtn" disabled>↪️ REDO</button>
                 </div>
             </aside>
 
@@ -309,6 +370,7 @@
                             <button id="exportReportBtn">📄 Export Report</button>
                         </div>
                     </div>
+                    <div id="bossBattleContainer" class="boss-status"></div>
                 </div>
 
                 <!-- ACTIVE MISSIONS TAB -->
@@ -348,97 +410,64 @@
                     </div>
                 </div>
 
-                <!-- TASK BANK TAB -->
+                <!-- TASK BANK TAB (MASTER WITH ALL TASKS) -->
                 <div id="bank" class="ak-tab">
-                    <h2>📚 TASK BANK</h2>
-                    <input type="text" id="bankSearch" placeholder="🔍 Search tasks..." class="ak-search">
-                    <div class="ak-filters">
-                        <select id="bankDomainFilter"><option value="">All Themes</option><option value="PhD">PhD</option><option value="Skool">Skool</option><option value="Curriculum">Curriculum</option></select>
-                        <select id="bankDifficultyFilter"><option value="">All Difficulties</option><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option></select>
+                    <h2>📚 MASTER TASK BANK</h2>
+                    <div class="task-bank-filters">
+                        <input type="text" id="taskBankSearch" placeholder="🔍 Search tasks..." class="search-input">
+                        <select id="taskBankTheme">
+                            <option value="">All Themes</option>
+                            <option value="PhD">🎓 PhD Research</option>
+                            <option value="Skool">👥 Skool Community</option>
+                            <option value="Curriculum">📖 Curriculum Design</option>
+                            <option value="RA">🔬 Research Assistantship</option>
+                            <option value="Rituals">🌙 Rituals</option>
+                            <option value="Documentation">📝 Documentation</option>
+                            <option value="MiniQuest">⚡ Mini-Quests</option>
+                            <option value="Recovery">🔄 Recovery</option>
+                        </select>
+                        <select id="taskBankDifficulty">
+                            <option value="">All Difficulties</option>
+                            <option value="Very Easy">Very Easy</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                            <option value="Elite">Elite</option>
+                        </select>
+                        <select id="taskBankTime">
+                            <option value="">Any Time</option>
+                            <option value="15">Under 15 min</option>
+                            <option value="30">Under 30 min</option>
+                            <option value="60">Under 60 min</option>
+                            <option value="120">Under 2 hours</option>
+                        </select>
                     </div>
-                    <div id="taskBankList" class="ak-mission-list"></div>
+                    <div id="taskBankList" class="task-bank-list"></div>
                 </div>
 
                 <!-- BOSS BATTLES TAB -->
                 <div id="bosses" class="ak-tab">
                     <h2>👹 BOSS BATTLES</h2>
-                    <div class="ak-card">
-                        <p><strong>Epic multi-phase challenges representing major milestones.</strong></p>
-                        <p>Boss battles unlock at level 5 and test your mastery across domains.</p>
-                    </div>
-                    <div id="bossBattlesList" class="ak-mission-list">
-                        <div class="mission-item">
-                            <div class="mission-header"><h3>🐉 The Literature Hydra</h3><span class="badge elite">Elite</span></div>
-                            <p>A multi-headed beast of endless PDFs and contradictory theories.</p>
-                            <p><strong>Reward:</strong> 300 XP, 150 coins, Hydra Fang</p>
-                            <button class="add-boss" data-title="The Literature Hydra" data-domain="Boss" data-difficulty="Elite" data-xp="300" data-steps='["Phase 1: Organize sources","Phase 2: Resolve contradictions","Phase 3: Write synthesis"]'>⚔️ Start Boss Battle</button>
-                        </div>
-                        <div class="mission-item">
-                            <div class="mission-header"><h3>🗿 The Methodology Golem</h3><span class="badge elite">Elite</span></div>
-                            <p>A stone guardian blocking the path until your research design is unshakeable.</p>
-                            <p><strong>Reward:</strong> 350 XP, 175 coins, Golem Core</p>
-                            <button class="add-boss" data-title="The Methodology Golem" data-domain="Boss" data-difficulty="Elite" data-xp="350" data-steps='["Phase 1: Clarify paradigm","Phase 2: Choose design","Phase 3: Write methodology"]'>⚔️ Start Boss Battle</button>
-                        </div>
-                    </div>
+                    <div id="bossesList" class="ak-mission-list"></div>
                 </div>
 
                 <!-- MINI-QUESTS TAB -->
                 <div id="miniquests" class="ak-tab">
                     <h2>⚡ MINI-QUESTS</h2>
-                    <div class="ak-card">
-                        <p><strong>Quick 2-10 minute missions for momentum and micro-progress.</strong></p>
-                    </div>
-                    <div id="miniQuestsList" class="ak-mission-list">
-                        <div class="mission-item">
-                            <div class="mission-header"><div class="mission-title">⏱️ Start for 30 Seconds</div><span class="badge easy">Very Easy</span></div>
-                            <p>Work on anything for just 30 seconds. That's it.</p>
-                            <p><strong>Reward:</strong> 5 XP</p>
-                            <button class="add-miniquest" data-title="Start for 30 Seconds" data-domain="Mini-Quests" data-difficulty="Easy" data-xp="5" data-steps='["Open any task","Set 30-second timer","Work without pressure","Stop when timer ends"]'>+ Add Mini-Quest</button>
-                        </div>
-                        <div class="mission-item">
-                            <div class="mission-header"><div class="mission-title">✍️ Write One Line</div><span class="badge easy">Very Easy</span></div>
-                            <p>Write exactly one complete sentence. Save and celebrate.</p>
-                            <p><strong>Reward:</strong> 5 XP</p>
-                            <button class="add-miniquest" data-title="Write One Line" data-domain="Mini-Quests" data-difficulty="Easy" data-xp="5" data-steps='["Open document","Write one sentence","Save and close","Celebrate"]'>+ Add Mini-Quest</button>
-                        </div>
-                        <div class="mission-item">
-                            <div class="mission-header"><div class="mission-title">💧 Drink Water</div><span class="badge easy">Very Easy</span></div>
-                            <p>Stand up, drink a full glass of water, take 3 deep breaths.</p>
-                            <p><strong>Reward:</strong> 5 XP</p>
-                            <button class="add-miniquest" data-title="Drink Water" data-domain="Mini-Quests" data-difficulty="Easy" data-xp="5" data-steps='["Stand up","Get water","Drink full glass","Take 3 deep breaths"]'>+ Add Mini-Quest</button>
-                        </div>
-                    </div>
+                    <div id="miniQuestsList" class="ak-mission-list"></div>
                 </div>
 
                 <!-- RECOVERY TAB -->
                 <div id="recovery" class="ak-tab">
                     <h2>🔄 RECOVERY MISSIONS</h2>
-                    <div class="ak-card">
-                        <p><strong>Low-energy missions for getting back on track.</strong></p>
-                    </div>
-                    <div id="recoveryMissionsList" class="ak-mission-list">
-                        <div class="mission-item">
-                            <div class="mission-header"><div class="mission-title">⏱️ 2-Minute Re-Entry</div><span class="badge easy">Easy</span></div>
-                            <p>Just open the task and work for 2 minutes. Stop when timer ends.</p>
-                            <p><strong>Reward:</strong> 10 XP</p>
-                            <button class="add-recovery" data-title="2-Minute Re-Entry" data-domain="Recovery" data-difficulty="Easy" data-xp="10" data-steps='["Open stalled task","Set 2-minute timer","Work gently","Stop when timer ends"]'>+ Add Recovery</button>
-                        </div>
-                        <div class="mission-item">
-                            <div class="mission-header"><div class="mission-title">📝 List 3 Things Only</div><span class="badge easy">Easy</span></div>
-                            <p>Write down exactly 3 things on your mind. No more.</p>
-                            <p><strong>Reward:</strong> 10 XP</p>
-                            <button class="add-recovery" data-title="List 3 Things Only" data-domain="Recovery" data-difficulty="Easy" data-xp="10" data-steps='["Write 3 things on your mind","Circle the easiest one","Stop - no more items"]'>+ Add Recovery</button>
-                        </div>
-                    </div>
+                    <div id="recoveryMissionsList" class="ak-mission-list"></div>
                 </div>
 
                 <!-- AVATAR TAB -->
                 <div id="avatar" class="ak-tab">
                     <h2>🎭 AVATAR CUSTOMIZATION</h2>
                     <div class="ak-avatar-container">
-                        <div class="ak-avatar-display" id="avatarContainer">
-                            <div style="width: 150px; height: 150px; background: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; border: 3px solid #d62828;">🌙</div>
-                        </div>
+                        <div class="ak-avatar-display" id="avatarContainer"><div style="width: 150px; height: 150px; background: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; border: 3px solid #d62828;">🌙</div></div>
                         <div class="ak-avatar-info">
                             <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="20" value="Shadow Scholar">
                             <div class="avatar-stats">
@@ -490,7 +519,6 @@
         </div>
     </div>
 
-    <!-- Task Modal -->
     <div id="taskModal" class="ak-modal">
         <div class="ak-modal-content">
             <span class="close">&times;</span>
@@ -514,21 +542,85 @@
         
         console.log('Script loaded!');
         
+        // ============================================================
+        // UNDO/REDO MANAGER (Inline Implementation)
+        // ============================================================
+        
+        class UndoRedoManager {
+            constructor(maxHistory = 50) {
+                this.undoStack = [];
+                this.redoStack = [];
+                this.maxHistory = maxHistory;
+                this.isExecuting = false;
+            }
+            execute(command) {
+                if (this.isExecuting) return;
+                this.isExecuting = true;
+                try {
+                    if (command.execute) command.execute();
+                    this.undoStack.push(command);
+                    this.redoStack = [];
+                    while (this.undoStack.length > this.maxHistory) this.undoStack.shift();
+                    this._notifyChange();
+                } finally { this.isExecuting = false; }
+            }
+            undo() {
+                const command = this.undoStack.pop();
+                if (!command) { this._showToast('Nothing to undo'); return false; }
+                this.isExecuting = true;
+                try {
+                    if (command.undo) command.undo();
+                    this.redoStack.push(command);
+                    this._notifyChange();
+                    this._showToast(`Undo: ${command.description || 'Action undone'}`);
+                    return true;
+                } finally { this.isExecuting = false; }
+            }
+            redo() {
+                const command = this.redoStack.pop();
+                if (!command) { this._showToast('Nothing to redo'); return false; }
+                this.isExecuting = true;
+                try {
+                    if (command.execute) command.execute();
+                    this.undoStack.push(command);
+                    this._notifyChange();
+                    this._showToast(`Redo: ${command.description || 'Action redone'}`);
+                    return true;
+                } finally { this.isExecuting = false; }
+            }
+            canUndo() { return this.undoStack.length > 0; }
+            canRedo() { return this.redoStack.length > 0; }
+            _notifyChange() {
+                const undoBtn = document.getElementById('undoBtn');
+                const redoBtn = document.getElementById('redoBtn');
+                if (undoBtn) undoBtn.disabled = !this.canUndo();
+                if (redoBtn) redoBtn.disabled = !this.canRedo();
+            }
+            _showToast(msg) {
+                const toast = document.getElementById('rewardToast');
+                if (toast) { toast.textContent = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000); }
+            }
+        }
+        
+        const TaskCommands = {
+            addTask: (task, opt) => ({ description: `Add task: ${task.title}`, execute: () => { opt.state.activeTasks.push(task); opt.saveState(); opt.renderAll(); }, undo: () => { opt.state.activeTasks = opt.state.activeTasks.filter(t => t.id !== task.id); opt.saveState(); opt.renderAll(); } }),
+            deleteTask: (taskId, taskData, opt) => ({ description: `Delete task`, execute: () => { opt.state.activeTasks = opt.state.activeTasks.filter(t => t.id !== taskId); opt.saveState(); opt.renderAll(); }, undo: () => { if(taskData) opt.state.activeTasks.push(taskData); opt.saveState(); opt.renderAll(); } }),
+            toggleStep: (taskId, stepIndex, oldCompleted, opt) => ({ description: `Toggle step`, execute: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t && t.steps[stepIndex]) { t.steps[stepIndex].completed = !oldCompleted; opt.saveState(); opt.renderAll(); const allDone = t.steps.every(s => s.completed); if(allDone && !t.completed && opt.completeTask) opt.completeTask(taskId); } }, undo: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t && t.steps[stepIndex]) { t.steps[stepIndex].completed = oldCompleted; opt.saveState(); opt.renderAll(); } } }),
+            editStep: (taskId, stepIndex, oldText, newText, opt) => ({ description: `Edit step`, execute: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t && t.steps[stepIndex]) { t.steps[stepIndex].text = newText; opt.saveState(); opt.renderAll(); } }, undo: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t && t.steps[stepIndex]) { t.steps[stepIndex].text = oldText; opt.saveState(); opt.renderAll(); } } }),
+            addStep: (taskId, stepIndex, stepText, opt) => ({ description: `Add step`, execute: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t) { const newStep = { text: stepText, completed: false }; if(stepIndex !== undefined) t.steps.splice(stepIndex, 0, newStep); else t.steps.push(newStep); opt.saveState(); opt.renderAll(); } }, undo: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t) { if(stepIndex !== undefined) t.steps.splice(stepIndex, 1); else t.steps.pop(); opt.saveState(); opt.renderAll(); } } }),
+            deleteStep: (taskId, stepIndex, stepData, opt) => ({ description: `Delete step`, execute: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t && t.steps[stepIndex]) { t.steps.splice(stepIndex, 1); opt.saveState(); opt.renderAll(); } }, undo: () => { const t = opt.state.activeTasks.find(t => t.id === taskId); if(t && stepData) { t.steps.splice(stepIndex, 0, stepData); opt.saveState(); opt.renderAll(); } } })
+        };
+        
         // Global state
         let state = {
-            xp: 0,
-            coins: 150,
-            level: 1,
-            streak: 0,
-            lastResetDate: null,
-            activeTasks: [],
-            completedHistory: [],
-            avatar: {
-                name: 'Shadow Scholar',
-                equipped: [],
-                inventory: []
-            }
+            xp: 0, coins: 150, level: 1, streak: 0, lastResetDate: null,
+            activeTasks: [], completedHistory: [], unlockedAchievements: [],
+            avatar: { name: 'Shadow Scholar', equipped: [], inventory: [] },
+            bossProgress: null
         };
+        
+        let undoManager = null;
+        let currentModalTaskId = null;
         
         // Daily tasks
         const DAILY_TASKS = [
@@ -539,71 +631,164 @@
         
         // Shop items
         const SHOP_ITEMS = [
-            { id: 'cloak_basic', name: 'Akatsuki Cloak', cost: 150, effect: '+5% XP', desc: 'Classic black cloak with red clouds' },
-            { id: 'mask_anbu', name: 'ANBU Mask', cost: 100, effect: '+3% XP', desc: 'White ANBU-style mask' },
-            { id: 'ring_akatsuki', name: 'Akatsuki Ring', cost: 80, effect: '+2% XP, +2% Coins', desc: 'Glowing ring with secret meaning' },
-            { id: 'raven_companion', name: 'Raven Companion', cost: 200, effect: '+10% XP', desc: 'Loyal messenger perched on shoulder' },
-            { id: 'crimson_aura', name: 'Crimson Aura', cost: 120, effect: '+10% Coins', desc: 'Burning red energy aura' }
+            { id: 'cloak_basic', name: 'Akatsuki Cloak', cost: 150, effect: '+5% XP', slot: 'cloak', description: 'Classic black cloak with red clouds' },
+            { id: 'mask_anbu', name: 'ANBU Mask', cost: 100, effect: '+3% XP', slot: 'mask', description: 'White ANBU-style mask' },
+            { id: 'ring_akatsuki', name: 'Akatsuki Ring', cost: 80, effect: '+2% XP, +2% Coins', slot: 'accessory', description: 'Glowing ring with secret meaning' },
+            { id: 'raven_companion', name: 'Raven Companion', cost: 200, effect: '+10% XP', slot: 'companion', description: 'Loyal messenger perched on shoulder' },
+            { id: 'crimson_aura', name: 'Crimson Aura', cost: 120, effect: '+10% Coins', slot: 'aura', description: 'Burning red energy aura' }
         ];
+        
+        // ============================================================
+        // MASTER TASK BANK - All tasks in one place (PhD, Skool, Curriculum, RA, Rituals, Documentation, MiniQuests, Recovery)
+        // ============================================================
+        
+        const MASTER_TASK_BANK = {
+            PhD: [
+                { id: "phd_lit_search", title: "Hunt 5 Relevant Articles for Literature Review", difficulty: "Medium", xp: 35, estimatedTime: 45, steps: ["Open university library portal", "Write 3 keyword combinations", "Run searches and save top 10 results", "Screen abstracts", "Select best 5 articles", "Export citations"] },
+                { id: "phd_lit_annotate", title: "Extract Key Insights from One Article", difficulty: "Medium", xp: 40, estimatedTime: 35, steps: ["Read title, abstract, conclusion first", "Identify research question", "Scan methodology", "Highlight 3-5 key findings", "Write 2-3 connection insights", "Save annotated PDF"] },
+                { id: "phd_lit_matrix", title: "Update Literature Matrix for One Theme", difficulty: "Medium", xp: 45, estimatedTime: 50, steps: ["Open literature matrix", "Review column headers", "Add rows for 5 new articles", "Fill all 7 columns", "Identify patterns", "Write synthesis paragraph"] },
+                { id: "phd_write_section", title: "Draft 500 Words for a Chapter Section", difficulty: "Hard", xp: 85, estimatedTime: 90, steps: ["Choose subsection to draft", "Gather relevant sources", "Write topic sentence", "Draft evidence paragraphs", "Add citations", "Write synthesis sentence", "Save version"] },
+                { id: "phd_revise_feedback", title: "Integrate Advisor Feedback on One Section", difficulty: "Medium", xp: 50, estimatedTime: 60, steps: ["Open draft and feedback side by side", "Read all feedback once", "Categorize feedback", "Start with easiest fixes", "Address medium feedback", "Tackle hard feedback", "Write response memo"] }
+            ],
+            Skool: [
+                { id: "skool_onboarding", title: "Create or Update Member Welcome Flow", difficulty: "Medium", xp: 40, estimatedTime: 45, steps: ["Review current onboarding", "Write 5-step welcome checklist", "Create first-win task", "Add links to 3 key resources", "Create pinned welcome post", "Test the flow"] },
+                { id: "skool_daily_lesson", title: "Publish One High-Value Daily Lesson Post", difficulty: "Medium", xp: 35, estimatedTime: 30, steps: ["Choose actionable lesson", "Write hook sentence", "Add 3 teaching bullets", "Include action prompt", "Add call-to-action", "Publish and reply to first comment"] },
+                { id: "skool_moderation", title: "Morning Moderation Check (15 min)", difficulty: "Easy", xp: 15, estimatedTime: 15, steps: ["Scan all new posts", "Remove spam or violations", "Identify posts with 0 replies", "Reply to 3 unanswered questions", "Pin high-value post", "Log recurring issues"] },
+                { id: "skool_challenge", title: "Run a Full Weekly Challenge Cycle", difficulty: "Hard", xp: 90, estimatedTime: 120, steps: ["Define challenge goal", "Write instructions", "Publish challenge post", "Post checkpoints (Tue/Wed/Thu)", "Engage with participants", "Compile wins", "Post recap", "Announce next theme"] },
+                { id: "skool_spotlight", title: "Spotlight One Member Win", difficulty: "Easy", xp: 20, estimatedTime: 15, steps: ["Review recent member posts", "Identify genuine win", "Write spotlight post", "Tag the member", "Invite others to share", "Pin the spotlight"] }
+            ],
+            Curriculum: [
+                { id: "curriculum_outcomes", title: "Write 5 Measurable Learning Outcomes", difficulty: "Medium", xp: 30, estimatedTime: 40, steps: ["Write module goal", "Identify learner transformation", "Review Bloom's verbs", "Draft 5 outcomes", "Remove vague words", "Check alignment", "Save outcomes"] },
+                { id: "curriculum_lesson_flow", title: "Design Complete Lesson Flow with Timing", difficulty: "Medium", xp: 45, estimatedTime: 60, steps: ["Write lesson objective", "Design hook", "Outline 3 teaching sections", "Add practice activities", "Design reflection", "Assign time estimates", "Review pacing", "Create materials list"] },
+                { id: "curriculum_mastery_check", title: "Build One Mastery Check Assessment", difficulty: "Medium", xp: 40, estimatedTime: 45, steps: ["Select outcome to assess", "Define mastery criteria", "Choose assessment type", "Write clear instructions", "Create assessment task", "Create answer key", "Test assessment", "Revise"] },
+                { id: "curriculum_rubric", title: "Build a Rubric for One Assessment", difficulty: "Medium", xp: 35, estimatedTime: 45, steps: ["List skills to measure", "Turn skills into criteria", "Define performance levels", "Write descriptors", "Add examples", "Review for clarity", "Save rubric"] }
+            ],
+            RA: [
+                { id: "ra_interview_prep", title: "Prepare Complete Interview Mission Kit", difficulty: "Medium", xp: 35, estimatedTime: 45, steps: ["Read protocol completely", "Highlight key probes", "Add transition notes", "Confirm logistics", "Send confirmation", "Test recording software", "Prepare backup", "Create note template"] },
+                { id: "ra_transcribe", title: "Transcribe and Clean One Interview Segment", difficulty: "Medium", xp: 45, estimatedTime: 90, steps: ["Open audio and software", "Set up speaker labels", "Transcribe 5 min", "Take break", "Transcribe next 5 min", "Take break", "Transcribe final 5 min", "Correct errors", "Remove identifiers", "Save versions"] },
+                { id: "ra_code_batch", title: "Code One Transcript Batch with Memo", difficulty: "Hard", xp: 80, estimatedTime: 90, steps: ["Open transcript and codebook", "Review existing codes", "Code first 3 pages", "Code next 3 pages", "Take break", "Code next 4 pages", "Review consistency", "Write analytic memo", "Update codebook", "Save files"] }
+            ],
+            Rituals: [
+                { id: "ritual_morning", title: "Morning Startup Ritual (5 min)", difficulty: "Easy", xp: 15, estimatedTime: 5, steps: ["Open mission board", "Review calendar", "Scan active tasks", "Select top 3 priorities", "Choose must-win mission", "Define first micro-step", "Set timer", "Begin first step"] },
+                { id: "ritual_shutdown", title: "Evening Shutdown Ritual (10 min)", difficulty: "Easy", xp: 15, estimatedTime: 10, steps: ["Review what you finished", "Capture unfinished items", "Pick tomorrow's first task", "Save open tabs", "Clear physical workspace", "Close work apps"] },
+                { id: "ritual_antiprocrastination", title: "5-Minute Anti-Procrastination Start", difficulty: "Easy", xp: 20, estimatedTime: 5, steps: ["Identify avoided task", "Set 5-min timer", "Remove distractions", "Take deep breath", "Start smallest step", "Decide continue or stop", "Log accomplishment"] },
+                { id: "ritual_weekly_reset", title: "Weekly Reset Ritual (30 min)", difficulty: "Medium", xp: 45, estimatedTime: 30, steps: ["Review daily logs", "List 5-7 wins", "Identify patterns", "Triage backlog", "Archive Drop items", "Set next week's top 3", "Prepare Monday's mission", "Schedule next reset"] },
+                { id: "ritual_energy_audit", title: "Energy Audit & Focus Check", difficulty: "Easy", xp: 15, estimatedTime: 5, steps: ["Rate energy 1-10", "If low, plan break", "Drink water", "Check posture", "Identify focus level", "Match task to energy"] }
+            ],
+            Documentation: [
+                { id: "docs_daily_log", title: "Write Daily Mission Log", difficulty: "Easy", xp: 15, estimatedTime: 10, steps: ["Open daily log template", "Write date", "Record 3-5 accomplishments", "Record blockers", "Note key decisions", "Write next action", "Add tags", "Save"] },
+                { id: "docs_evidence", title: "Save Proof-of-Work Evidence Pack", difficulty: "Easy", xp: 20, estimatedTime: 15, steps: ["Identify output to capture", "Take 3-5 screenshots", "Export files", "Rename with naming standard", "Place in correct folder", "Add links to log"] },
+                { id: "docs_version", title: "Save New Version of Draft or File", difficulty: "Easy", xp: 15, estimatedTime: 5, steps: ["Open current draft", "Save new version with format", "Move old version to archive", "Add change log note"] }
+            ],
+            MiniQuest: [
+                { id: "mq_start_30sec", title: "Start for 30 Seconds", difficulty: "Very Easy", xp: 5, estimatedTime: 1, steps: ["Open avoided task", "Set 30-second timer", "Work without pressure", "Stop when timer ends"] },
+                { id: "mq_write_one_line", title: "Write One Line", difficulty: "Very Easy", xp: 5, estimatedTime: 1, steps: ["Open document", "Write one sentence", "Save and close", "Celebrate"] },
+                { id: "mq_clarity_question", title: "Answer One Clarifying Question", difficulty: "Very Easy", xp: 10, estimatedTime: 2, steps: ["Ask: What would make today a win?", "Write answer in one sentence", "Stop - no more questions", "Put answer where you can see it"] },
+                { id: "mq_clear_desktop", title: "Clear Desktop Clutter", difficulty: "Very Easy", xp: 10, estimatedTime: 3, steps: ["Look at desktop", "Delete 3 unneeded files", "Move 3 files to folders", "Close 3 browser tabs", "Admire clean desktop"] },
+                { id: "mq_rename_files", title: "Rename 5 Files Correctly", difficulty: "Easy", xp: 10, estimatedTime: 3, steps: ["Open unorganized folder", "Pick 5 files", "Use format: YYYY-MM-DD_Description", "Apply to all 5", "Stop"] },
+                { id: "mq_reflect_sentences", title: "Write 3-Sentence Reflection", difficulty: "Very Easy", xp: 10, estimatedTime: 3, steps: ["Sentence 1: What happened?", "Sentence 2: How do I feel?", "Sentence 3: What do I need tomorrow?", "Stop"] },
+                { id: "mq_record_win", title: "Record One Win", difficulty: "Very Easy", xp: 5, estimatedTime: 1, steps: ["Think: What went well?", "Write one specific win", "It can be tiny", "Save in log"] }
+            ],
+            Recovery: [
+                { id: "recovery_2min", title: "2-Minute Re-Entry", difficulty: "Easy", xp: 10, estimatedTime: 2, steps: ["Open stalled task", "Set 2-minute timer", "Work gently", "Stop when timer ends", "Celebrate that you started"] },
+                { id: "recovery_open_only", title: "Open the Task Only", difficulty: "Very Easy", xp: 5, estimatedTime: 1, steps: ["Find the file", "Open it", "Look for 10 seconds", "Close or continue - both win"] },
+                { id: "recovery_list_3", title: "List 3 Things Only", difficulty: "Easy", xp: 10, estimatedTime: 3, steps: ["Write 3 things on your mind", "Circle the easiest one", "Do NOT add more", "Put list where you can see it"] },
+                { id: "recovery_sort", title: "Sort Into Keep / Drop / Delay", difficulty: "Easy", xp: 15, estimatedTime: 5, steps: ["List 5-7 backlog tasks", "Mark each as Keep/Drop/Delay", "Delete or archive Drop items", "Move Delay to Later list", "Focus only on Keep items"] },
+                { id: "recovery_grounding", title: "Grounding Ritual", difficulty: "Easy", xp: 10, estimatedTime: 3, steps: ["Stop what you're doing", "Sit still for 10 seconds", "Take 5 deep breaths", "Relax shoulders and jaw", "Drink water"] },
+                { id: "recovery_hydrate", title: "Drink Water & Stretch", difficulty: "Very Easy", xp: 5, estimatedTime: 2, steps: ["Stand up", "Get water", "Drink full glass", "Take 3 deep breaths", "Stretch arms overhead"] }
+            ]
+        };
+        
+        // Flatten task bank for searching
+        function getAllTasks() {
+            let all = [];
+            for (let theme in MASTER_TASK_BANK) {
+                MASTER_TASK_BANK[theme].forEach(task => {
+                    all.push({ ...task, theme: theme });
+                });
+            }
+            return all;
+        }
+        
+        // Boss System
+        let activeBoss = null;
+        let defeatedBosses = [];
+        
+        const BOSS_DEFINITIONS = {
+            literature_hydra: { id: 'literature_hydra', name: '🐉 The Literature Hydra', description: 'A multi-headed beast of endless PDFs and contradictory theories.', hp: 100, phases: ['Head of Overwhelm', 'Head of Contradiction', 'Head of Synthesis', 'Heart of Citation'], rewards: { xp: 300, coins: 150, item: 'Hydra Fang' } },
+            methodology_golem: { id: 'methodology_golem', name: '🗿 The Methodology Golem', description: 'A stone guardian blocking the path until your design is unshakeable.', hp: 125, phases: ['Foundation', 'Design Core', 'Operationalization', 'Ethics Seal', 'The Heart'], rewards: { xp: 350, coins: 175, item: 'Golem Core' } }
+        };
+        
+        function checkBossTriggers() {
+            if (activeBoss) return;
+            if (state.level >= 5 && !defeatedBosses.includes('literature_hydra')) {
+                startBossBattle('literature_hydra');
+            }
+        }
+        
+        function startBossBattle(bossId) {
+            const boss = BOSS_DEFINITIONS[bossId];
+            if (!boss) return;
+            activeBoss = { ...boss, currentHp: boss.hp, currentPhase: 0, damageDealt: 0, tasksCompleted: [] };
+            showToast(`⚔️ BOSS BATTLE STARTED: ${boss.name}! ⚔️`);
+            renderBossBattleUI();
+        }
+        
+        function dealBossDamage(task) {
+            if (!activeBoss) return;
+            let damage = { 'Easy': 5, 'Medium': 10, 'Hard': 20, 'Elite': 40 }[task.difficulty] || 10;
+            if (task.domain === 'PhD' && activeBoss.id === 'literature_hydra') damage *= 2;
+            activeBoss.currentHp = Math.max(0, activeBoss.currentHp - damage);
+            activeBoss.damageDealt += damage;
+            activeBoss.tasksCompleted.push({ title: task.title, damage: damage });
+            if (activeBoss.currentHp <= 0) defeatBoss();
+            renderBossBattleUI();
+            showToast(`💥 ${damage} damage to ${activeBoss.name}! Remaining HP: ${activeBoss.currentHp}`);
+        }
+        
+        function defeatBoss() {
+            if (!activeBoss) return;
+            state.xp += activeBoss.rewards.xp;
+            state.coins += activeBoss.rewards.coins;
+            defeatedBosses.push(activeBoss.id);
+            if (!state.avatar.inventory) state.avatar.inventory = [];
+            state.avatar.inventory.push(activeBoss.rewards.item.toLowerCase().replace(' ', '_'));
+            showToast(`🎉 VICTORY! ${activeBoss.name} defeated! +${activeBoss.rewards.xp} XP! 🎉`);
+            activeBoss = null;
+            saveState();
+            updateUI();
+        }
+        
+        function renderBossBattleUI() {
+            const container = document.getElementById('bossBattleContainer');
+            if (!container) return;
+            if (!activeBoss) {
+                container.innerHTML = `<div class="boss-status"><p>⚔️ No active boss. Complete PhD tasks to summon the Literature Hydra!</p><div class="defeated-bosses"><h4>Defeated:</h4>${defeatedBosses.length ? defeatedBosses.map(b => `<span>✅ ${BOSS_DEFINITIONS[b]?.name || b}</span>`).join(' ') : '<span>None yet</span>'}</div></div>`;
+                return;
+            }
+            const hpPercent = (activeBoss.currentHp / activeBoss.hp) * 100;
+            container.innerHTML = `<div class="boss-battle-active"><div class="boss-header"><h2>⚔️ ${activeBoss.name} ⚔️</h2><p>${activeBoss.description}</p></div><div class="boss-stats"><div class="boss-hp-bar"><div class="boss-hp-fill" style="width:${hpPercent}%"></div><span>${activeBoss.currentHp}/${activeBoss.hp} HP</span></div></div><div class="boss-damage-log"><h4>Recent Strikes:</h4><ul>${activeBoss.tasksCompleted.slice(-5).reverse().map(t => `<li>💥 ${t.title} - ${t.damage} damage</li>`).join('')}</ul></div><div class="boss-tips"><h4>⚡ Weakness:</h4><ul><li>Complete PhD research tasks for 2x damage!</li><li>Hard difficulty tasks deal bonus damage</li></ul></div></div>`;
+        }
         
         // Helper functions
         function getTodayStr() { return new Date().toISOString().slice(0, 10); }
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+        function showToast(msg) { const t = document.getElementById('rewardToast'); if(t) { t.innerHTML = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); } }
         
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-        
-        function showToast(msg) {
-            const toast = document.getElementById('rewardToast');
-            if (toast) {
-                toast.innerHTML = msg;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            }
-        }
-        
-        function saveState() {
-            localStorage.setItem('akatsuki_state', JSON.stringify(state));
-        }
+        function saveState() { localStorage.setItem('akatsuki_state', JSON.stringify(state)); }
         
         function loadState() {
             const saved = localStorage.getItem('akatsuki_state');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    state = { ...state, ...parsed };
-                } catch(e) { console.error(e); }
-            }
+            if(saved) { try { const p = JSON.parse(saved); state = { ...state, ...p }; } catch(e) {} }
             state.activeTasks = state.activeTasks || [];
             state.completedHistory = state.completedHistory || [];
             state.avatar = state.avatar || { name: 'Shadow Scholar', equipped: [], inventory: [] };
-            
-            if (!state.lastResetDate) state.lastResetDate = getTodayStr();
-            
-            if (state.activeTasks.length === 0) {
-                DAILY_TASKS.forEach(t => {
-                    state.activeTasks.push({
-                        id: Date.now() + '_' + Math.random(),
-                        title: t.title,
-                        domain: t.domain,
-                        difficulty: t.difficulty,
-                        xp: t.xp,
-                        repeatability: 'Daily',
-                        priority: t.priority,
-                        steps: t.steps.map(s => ({ text: s, completed: false })),
-                        notes: '',
-                        startedAt: new Date().toISOString(),
-                        completed: false
-                    });
-                });
+            if(!state.lastResetDate) state.lastResetDate = getTodayStr();
+            if(state.activeTasks.length === 0) {
+                DAILY_TASKS.forEach(t => { state.activeTasks.push({ id: Date.now() + '_' + Math.random(), title: t.title, domain: t.domain, difficulty: t.difficulty, xp: t.xp, repeatability: 'Daily', priority: t.priority, steps: t.steps.map(s => ({ text: s, completed: false })), notes: '', startedAt: new Date().toISOString(), completed: false }); });
                 saveState();
             }
+            if(state.bossProgress) { activeBoss = state.bossProgress.activeBoss; defeatedBosses = state.bossProgress.defeatedBosses || []; }
             updateUI();
         }
         
@@ -612,47 +797,42 @@
             const currentLevelXp = (state.level - 1) * xpPerLevel;
             const nextLevelXp = state.level * xpPerLevel;
             const progress = ((state.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
-            
-            const fill = document.getElementById('xpFill');
-            if (fill) fill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
-            
-            const current = document.getElementById('xpCurrent');
-            const next = document.getElementById('xpNext');
-            const nextLevel = document.getElementById('nextLevel');
-            if (current) current.textContent = state.xp;
-            if (next) next.textContent = nextLevelXp;
-            if (nextLevel) nextLevel.textContent = state.level + 1;
+            const fill = document.getElementById('xpFill'); if(fill) fill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+            const current = document.getElementById('xpCurrent'); if(current) current.textContent = state.xp;
+            const next = document.getElementById('xpNext'); if(next) next.textContent = nextLevelXp;
+            const nextLevel = document.getElementById('nextLevel'); if(nextLevel) nextLevel.textContent = state.level + 1;
+        }
+        
+        function getMultipliers() {
+            let xpMult = 1.0, coinMult = 1.0;
+            if(state.avatar.equipped) {
+                state.avatar.equipped.forEach(itemId => {
+                    const item = SHOP_ITEMS.find(i => i.id === itemId);
+                    if(item && item.effect) {
+                        const xpMatch = item.effect.match(/(\d+)% XP/);
+                        const coinMatch = item.effect.match(/(\d+)% Coins/);
+                        if(xpMatch) xpMult += parseInt(xpMatch[1]) / 100;
+                        if(coinMatch) coinMult += parseInt(coinMatch[1]) / 100;
+                    }
+                });
+            }
+            return { xpMult, coinMult };
         }
         
         function completeTask(taskId) {
             const task = state.activeTasks.find(t => t.id === taskId);
-            if (!task || task.completed) return;
-            
-            const xpGain = task.xp;
-            const coinGain = Math.floor(xpGain * 0.2);
-            
+            if(!task || task.completed) return;
+            const { xpMult, coinMult } = getMultipliers();
+            const xpGain = Math.floor(task.xp * xpMult);
+            const coinGain = Math.floor(xpGain * 0.2 * coinMult);
             task.completed = true;
             task.finishedAt = new Date().toISOString();
             state.xp += xpGain;
             state.coins += coinGain;
-            
-            state.completedHistory.push({
-                taskId: task.id,
-                title: task.title,
-                completedAt: task.finishedAt,
-                xpGained: xpGain,
-                coinsGained: coinGain,
-                notes: task.notes || ''
-            });
-            
-            // Level up check
+            state.completedHistory.push({ taskId: task.id, title: task.title, completedAt: task.finishedAt, xpGained: xpGain, coinsGained: coinGain, notes: task.notes || '' });
+            dealBossDamage(task);
             const newLevel = Math.floor(state.xp / 500) + 1;
-            if (newLevel > state.level) {
-                state.level = newLevel;
-                state.coins += 100;
-                showToast(`✨ Level ${state.level}! +100 coins`);
-            }
-            
+            if(newLevel > state.level) { state.level = newLevel; state.coins += 100; showToast(`✨ Level ${state.level}! +100 coins`); }
             updateXPBar();
             saveState();
             updateUI();
@@ -660,208 +840,129 @@
         }
         
         function addTask(title, domain, difficulty, xp, stepsArray) {
-            state.activeTasks.push({
-                id: Date.now() + '_' + Math.random(),
-                title: title,
-                domain: domain,
-                difficulty: difficulty,
-                xp: parseInt(xp),
-                repeatability: 'One-time',
-                priority: 'Important',
-                steps: stepsArray.map(s => ({ text: s, completed: false })),
-                notes: '',
-                startedAt: new Date().toISOString(),
-                completed: false
-            });
-            saveState();
-            updateUI();
+            const newTask = { id: Date.now() + '_' + Math.random(), title, domain, difficulty, xp: parseInt(xp), repeatability: 'One-time', priority: 'Important', steps: stepsArray.map(s => ({ text: s, completed: false })), notes: '', startedAt: new Date().toISOString(), completed: false };
+            if(undoManager) { undoManager.execute(TaskCommands.addTask(newTask, { state, saveState, renderAll: updateUI })); }
+            else { state.activeTasks.push(newTask); saveState(); updateUI(); }
             showToast(`Added: ${title}`);
         }
         
         function deleteTask(taskId) {
-            if (!confirm('Delete this task?')) return;
-            state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
-            saveState();
-            updateUI();
+            if(!confirm('Delete this task?')) return;
+            const taskData = state.activeTasks.find(t => t.id === taskId);
+            if(undoManager && taskData) { undoManager.execute(TaskCommands.deleteTask(taskId, taskData, { state, saveState, renderAll: updateUI })); }
+            else { state.activeTasks = state.activeTasks.filter(t => t.id !== taskId); saveState(); updateUI(); }
             showToast('Task deleted');
         }
         
-        // Render functions
-        function updateUI() {
-            // Header
-            document.getElementById('level').textContent = state.level;
-            document.getElementById('xp').textContent = state.xp;
-            document.getElementById('coins').textContent = state.coins;
-            document.getElementById('streak').textContent = state.streak;
-            
-            // Dashboard
-            const activeCount = state.activeTasks.filter(t => !t.completed).length;
-            const completedToday = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === getTodayStr()).length;
-            document.getElementById('activeCount').textContent = activeCount;
-            document.getElementById('completedToday').textContent = completedToday;
-            document.getElementById('totalXP').textContent = state.xp;
-            document.getElementById('streakDisplay').textContent = state.streak;
-            
-            // Win the day
-            const hasImportant = state.activeTasks.some(t => t.completed && (t.priority === 'Critical' || t.priority === 'Important'));
-            const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
-            const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
-            document.getElementById('winImportant').innerHTML = hasImportant ? '✅' : '⬜';
-            document.getElementById('winRitual').innerHTML = hasRitual ? '✅' : '⬜';
-            document.getElementById('winDoc').innerHTML = hasDoc ? '✅' : '⬜';
-            document.getElementById('winResult').innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅ WIN THE DAY!' : '❌ NOT YET';
-            
-            // Avatar
-            document.getElementById('avatarName').value = state.avatar.name;
-            const totalXP = state.completedHistory.reduce((s, h) => s + (h.xpGained || 0), 0);
-            document.getElementById('totalXPEarned').textContent = totalXP;
-            document.getElementById('missionsCompleted').textContent = state.completedHistory.length;
-            
-            // Shop coins
-            document.getElementById('shopCoins').textContent = state.coins;
-            
-            // Render sections
-            renderActiveMissions();
-            renderTaskBank();
-            renderShop();
-            renderHistory();
-            renderAchievements();
-            renderAvatarEquipment();
+        // Step Editor
+        class StepEditorLocal {
+            constructor(opt) { this.state = opt.state; this.saveState = opt.saveState; this.renderAll = opt.renderAll; this.undoManager = opt.undoManager; }
+            renderEditableSteps(taskId, steps) {
+                return `<ul class="step-list editable">${steps.map((step, idx) => `<li class="step-item editable-step" data-step-index="${idx}" data-task-id="${taskId}"><input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}><span class="step-text">${escapeHtml(step.text)}</span><div class="step-controls"><button class="step-edit-btn" data-step="${idx}">✏️</button><button class="step-delete-btn" data-step="${idx}">🗑️</button>${idx > 0 ? `<button class="step-move-up" data-step="${idx}">↑</button>` : ''}${idx < steps.length-1 ? `<button class="step-move-down" data-step="${idx}">↓</button>` : ''}</div></li>`).join('')}<li class="step-item add-step-item"><button class="step-add-btn" data-task-id="${taskId}">+ Add Step</button></li></ul>`;
+            }
+            setupDelegation(container) {
+                container.addEventListener('click', (e) => {
+                    const editBtn = e.target.closest('.step-edit-btn');
+                    if(editBtn) { const li = editBtn.closest('.step-item'); const stepIdx = parseInt(li.dataset.stepIndex); const taskId = li.dataset.taskId; const task = this.state.activeTasks.find(t => t.id === taskId); if(task && task.steps[stepIdx]) { const oldText = task.steps[stepIdx].text; const newText = prompt('Edit step:', oldText); if(newText && newText !== oldText) { if(this.undoManager) this.undoManager.execute(TaskCommands.editStep(taskId, stepIdx, oldText, newText, { state: this.state, saveState: this.saveState, renderAll: this.renderAll })); else { task.steps[stepIdx].text = newText; this.saveState(); this.renderAll(); } } } }
+                    const deleteBtn = e.target.closest('.step-delete-btn');
+                    if(deleteBtn && confirm('Delete this step?')) { const li = deleteBtn.closest('.step-item'); const stepIdx = parseInt(li.dataset.stepIndex); const taskId = li.dataset.taskId; const task = this.state.activeTasks.find(t => t.id === taskId); if(task && task.steps[stepIdx]) { const stepData = { ...task.steps[stepIdx] }; if(this.undoManager) this.undoManager.execute(TaskCommands.deleteStep(taskId, stepIdx, stepData, { state: this.state, saveState: this.saveState, renderAll: this.renderAll })); else { task.steps.splice(stepIdx, 1); this.saveState(); this.renderAll(); } } }
+                    const moveUpBtn = e.target.closest('.step-move-up');
+                    if(moveUpBtn) { const li = moveUpBtn.closest('.step-item'); const stepIdx = parseInt(li.dataset.stepIndex); const taskId = li.dataset.taskId; const task = this.state.activeTasks.find(t => t.id === taskId); if(task && stepIdx > 0) { const steps = [...task.steps]; [steps[stepIdx-1], steps[stepIdx]] = [steps[stepIdx], steps[stepIdx-1]]; task.steps = steps; this.saveState(); this.renderAll(); } }
+                    const moveDownBtn = e.target.closest('.step-move-down');
+                    if(moveDownBtn) { const li = moveDownBtn.closest('.step-item'); const stepIdx = parseInt(li.dataset.stepIndex); const taskId = li.dataset.taskId; const task = this.state.activeTasks.find(t => t.id === taskId); if(task && stepIdx < task.steps.length-1) { const steps = [...task.steps]; [steps[stepIdx], steps[stepIdx+1]] = [steps[stepIdx+1], steps[stepIdx]]; task.steps = steps; this.saveState(); this.renderAll(); } }
+                    const addBtn = e.target.closest('.step-add-btn');
+                    if(addBtn) { const taskId = addBtn.dataset.taskId; const stepText = prompt('Enter new step:'); if(stepText) { if(this.undoManager) this.undoManager.execute(TaskCommands.addStep(taskId, null, stepText, { state: this.state, saveState: this.saveState, renderAll: this.renderAll })); else { const task = this.state.activeTasks.find(t => t.id === taskId); if(task) { task.steps.push({ text: stepText, completed: false }); this.saveState(); this.renderAll(); } } } }
+                });
+            }
         }
+        
+        let stepEditor = null;
         
         function renderActiveMissions() {
             const container = document.getElementById('activeMissionsList');
-            if (!container) return;
-            
-            let tasks = state.activeTasks;
-            const statusFilter = document.getElementById('filterStatus')?.value || 'active';
-            if (statusFilter === 'active') tasks = tasks.filter(t => !t.completed);
-            
+            if(!container) return;
+            let tasks = state.activeTasks.filter(t => !t.completed);
             const domainFilter = document.getElementById('filterDomain')?.value || '';
-            if (domainFilter) tasks = tasks.filter(t => t.domain === domainFilter);
-            
+            if(domainFilter) tasks = tasks.filter(t => t.domain === domainFilter);
             const difficultyFilter = document.getElementById('filterDifficulty')?.value || '';
-            if (difficultyFilter) tasks = tasks.filter(t => t.difficulty === difficultyFilter);
-            
-            if (tasks.length === 0) {
-                container.innerHTML = '<div class="ak-card">✨ No missions. Add from Task Bank or Generator!</div>';
-                return;
-            }
-            
-            container.innerHTML = tasks.map(task => `
-                <div class="mission-item" data-task-id="${task.id}">
-                    <div class="mission-header">
-                        <div class="mission-title">${escapeHtml(task.title)}</div>
-                        <div class="mission-badge">
-                            <span class="badge ${task.difficulty.toLowerCase()}">${task.difficulty}</span>
-                            <span class="badge ${task.priority.toLowerCase()}">${task.priority}</span>
-                            ${task.completed ? '<span class="badge" style="background:#00cc66">✓ DONE</span>' : ''}
-                        </div>
-                    </div>
-                    <div class="mission-meta">
-                        <span>📁 ${task.domain}</span>
-                        <span>🔄 ${task.repeatability || 'One-time'}</span>
-                        <span>⭐ ${task.xp} XP</span>
-                    </div>
-                    <ul class="step-list">
-                        ${task.steps.map((step, idx) => `
-                            <li class="step-item ${step.completed ? 'completed' : ''}" data-step-index="${idx}">
-                                <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}>
-                                <label>${escapeHtml(step.text)}</label>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <div class="mission-actions">
-                        <button class="view-details" data-id="${task.id}">📝 Details</button>
-                        <button class="delete-task" data-id="${task.id}">🗑️ Delete</button>
-                    </div>
-                </div>
-            `).join('');
+            if(difficultyFilter) tasks = tasks.filter(t => t.difficulty === difficultyFilter);
+            if(tasks.length === 0) { container.innerHTML = '<div class="ak-card">✨ No active missions. Add from Task Bank!</div>'; return; }
+            container.innerHTML = tasks.map(task => `<div class="mission-item" data-task-id="${task.id}"><div class="mission-header"><div class="mission-title">${escapeHtml(task.title)}</div><div class="mission-badge"><span class="badge ${task.difficulty.toLowerCase()}">${task.difficulty}</span><span class="badge ${task.priority.toLowerCase()}">${task.priority}</span></div></div><div class="mission-meta"><span>📁 ${task.domain}</span><span>🔄 ${task.repeatability || 'One-time'}</span><span>⭐ ${task.xp} XP</span></div>${stepEditor ? stepEditor.renderEditableSteps(task.id, task.steps) : `<ul class="step-list">${task.steps.map((step, idx) => `<li class="step-item ${step.completed ? 'completed' : ''}" data-step-index="${idx}"><input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}><label>${escapeHtml(step.text)}</label></li>`).join('')}</ul>`}<div class="mission-actions"><button class="view-details" data-id="${task.id}">📝 Details</button><button class="delete-task" data-id="${task.id}">🗑️ Delete</button></div></div>`).join('');
         }
         
         function renderTaskBank() {
             const container = document.getElementById('taskBankList');
-            if (!container) return;
-            
-            const bankTasks = [
-                { title: "Write Literature Review Section", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find 10 sources", "Read and annotate", "Write synthesis", "Add citations"] },
-                { title: "Create Weekly Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post and engage"] },
-                { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
-                { title: "Code Interview Transcript", domain: "Research Assistantship", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] },
-                { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, steps: ["Open board", "Review calendar", "Pick top 3", "Start"] },
-                { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, steps: ["Write accomplishments", "Note blockers", "Record next action"] }
-            ];
-            
-            const searchTerm = document.getElementById('bankSearch')?.value.toLowerCase() || '';
-            const domainFilter = document.getElementById('bankDomainFilter')?.value || '';
-            const difficultyFilter = document.getElementById('bankDifficultyFilter')?.value || '';
-            
-            let filtered = bankTasks;
-            if (searchTerm) filtered = filtered.filter(t => t.title.toLowerCase().includes(searchTerm));
-            if (domainFilter) filtered = filtered.filter(t => t.domain === domainFilter);
-            if (difficultyFilter) filtered = filtered.filter(t => t.difficulty === difficultyFilter);
-            
-            container.innerHTML = filtered.map(t => `
-                <div class="mission-item">
-                    <div class="mission-header">
-                        <div class="mission-title">${escapeHtml(t.title)}</div>
-                        <div class="mission-badge"><span class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</span></div>
-                    </div>
-                    <div class="mission-meta"><span>📁 ${t.domain}</span><span>⭐ ${t.xp} XP</span></div>
-                    <button class="add-task" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
-                </div>
-            `).join('');
+            if(!container) return;
+            let allTasks = getAllTasks();
+            const search = document.getElementById('taskBankSearch')?.value.toLowerCase() || '';
+            const theme = document.getElementById('taskBankTheme')?.value || '';
+            const difficulty = document.getElementById('taskBankDifficulty')?.value || '';
+            const maxTime = document.getElementById('taskBankTime')?.value || '';
+            if(search) allTasks = allTasks.filter(t => t.title.toLowerCase().includes(search));
+            if(theme) allTasks = allTasks.filter(t => t.theme === theme);
+            if(difficulty) allTasks = allTasks.filter(t => t.difficulty === difficulty);
+            if(maxTime) allTasks = allTasks.filter(t => t.estimatedTime <= parseInt(maxTime));
+            container.innerHTML = allTasks.map(task => `<div class="task-bank-item"><div class="task-header"><h4>${escapeHtml(task.title)}</h4><div class="task-badges"><span class="badge ${task.difficulty.toLowerCase()}">${task.difficulty}</span><span class="badge">${task.theme}</span></div></div><div class="task-meta"><span>⭐ ${task.xp} XP</span><span>⏱️ ${task.estimatedTime} min</span></div><div class="task-preview-steps"><details><summary>Show steps (${task.steps.length})</summary><ul>${task.steps.map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ul></details></div><button class="add-task-btn" data-title="${escapeHtml(task.title)}" data-domain="${task.theme}" data-difficulty="${task.difficulty}" data-xp="${task.xp}" data-steps='${JSON.stringify(task.steps)}'>+ Add to Missions</button></div>`).join('');
+            document.querySelectorAll('.add-task-btn').forEach(btn => { btn.onclick = () => addTask(btn.dataset.title, btn.dataset.domain, btn.dataset.difficulty, btn.dataset.xp, JSON.parse(btn.dataset.steps)); });
+        }
+        
+        function renderMiniQuests() {
+            const container = document.getElementById('miniQuestsList');
+            if(!container) return;
+            const miniQuests = MASTER_TASK_BANK.MiniQuest || [];
+            container.innerHTML = miniQuests.map(q => `<div class="mission-item"><div class="mission-header"><div class="mission-title">⚡ ${escapeHtml(q.title)}</div><span class="badge easy">${q.difficulty}</span></div><div class="mission-meta"><span>⭐ ${q.xp} XP</span><span>⏱️ ${q.estimatedTime} min</span></div><button class="add-miniquest" data-title="${escapeHtml(q.title)}" data-domain="Mini-Quests" data-difficulty="${q.difficulty}" data-xp="${q.xp}" data-steps='${JSON.stringify(q.steps)}'>+ Add Mini-Quest</button></div>`).join('');
+            document.querySelectorAll('.add-miniquest').forEach(btn => { btn.onclick = () => addTask(btn.dataset.title, 'Mini-Quests', btn.dataset.difficulty, btn.dataset.xp, JSON.parse(btn.dataset.steps)); });
+        }
+        
+        function renderRecoveryMissions() {
+            const container = document.getElementById('recoveryMissionsList');
+            if(!container) return;
+            const recovery = MASTER_TASK_BANK.Recovery || [];
+            container.innerHTML = recovery.map(r => `<div class="mission-item"><div class="mission-header"><div class="mission-title">🔄 ${escapeHtml(r.title)}</div><span class="badge easy">${r.difficulty}</span></div><div class="mission-meta"><span>⭐ ${r.xp} XP</span><span>⏱️ ${r.estimatedTime} min</span></div><button class="add-recovery" data-title="${escapeHtml(r.title)}" data-domain="Recovery" data-difficulty="${r.difficulty}" data-xp="${r.xp}" data-steps='${JSON.stringify(r.steps)}'>+ Add Recovery</button></div>`).join('');
+            document.querySelectorAll('.add-recovery').forEach(btn => { btn.onclick = () => addTask(btn.dataset.title, 'Recovery', btn.dataset.difficulty, btn.dataset.xp, JSON.parse(btn.dataset.steps)); });
+        }
+        
+        function renderBossesList() {
+            const container = document.getElementById('bossesList');
+            if(!container) return;
+            container.innerHTML = Object.entries(BOSS_DEFINITIONS).map(([id, boss]) => `<div class="mission-item"><div class="mission-header"><h3>${boss.name}</h3><span class="badge elite">Elite</span></div><p>${boss.description}</p><p><strong>Reward:</strong> ${boss.rewards.xp} XP, ${boss.rewards.coins} coins, ${boss.rewards.item}</p><button class="start-boss" data-id="${id}">⚔️ Start Boss Battle</button></div>`).join('');
+            document.querySelectorAll('.start-boss').forEach(btn => { btn.onclick = () => startBossBattle(btn.dataset.id); });
         }
         
         function renderShop() {
             const container = document.getElementById('shopItemsList');
-            if (!container) return;
-            
-            container.innerHTML = SHOP_ITEMS.map(item => {
-                const owned = state.avatar.inventory?.includes(item.id);
-                return `
-                    <div class="shop-item">
-                        <h4>${item.name}</h4>
-                        <p class="price">💰 ${item.cost} coins</p>
-                        <p class="effect">${item.desc}</p>
-                        <p class="effect"><strong>${item.effect}</strong></p>
-                        ${owned ? '<button class="buy-btn" disabled>✓ Owned</button>' : `<button class="buy-item" data-id="${item.id}" data-cost="${item.cost}" data-name="${item.name}">Purchase</button>`}
-                    </div>
-                `;
-            }).join('');
+            if(!container) return;
+            document.getElementById('shopCoins').textContent = state.coins;
+            container.innerHTML = SHOP_ITEMS.map(item => { const owned = state.avatar.inventory?.includes(item.id); return `<div class="shop-item"><h4>${item.name}</h4><p class="price">💰 ${item.cost} coins</p><p class="effect">${item.description}</p><p class="effect"><strong>${item.effect}</strong></p>${owned ? '<button class="buy-btn" disabled>✓ Owned</button>' : `<button class="buy-item" data-id="${item.id}" data-cost="${item.cost}" data-name="${item.name}">Purchase</button>`}</div>`; }).join('');
+        }
+        
+        function renderAvatar() {
+            const nameInput = document.getElementById('avatarName'); if(nameInput) { nameInput.value = state.avatar.name; nameInput.onchange = (e) => { state.avatar.name = e.target.value; saveState(); }; }
+            const { xpMult, coinMult } = getMultipliers();
+            document.getElementById('xpMult').textContent = xpMult.toFixed(2);
+            document.getElementById('coinMult').textContent = coinMult.toFixed(2);
+            const totalXP = state.completedHistory.reduce((s, h) => s + (h.xpGained || 0), 0);
+            document.getElementById('totalXPEarned').textContent = totalXP;
+            document.getElementById('missionsCompleted').textContent = state.completedHistory.length;
+            const equippedContainer = document.getElementById('equippedList');
+            if(equippedContainer) { if(!state.avatar.equipped?.length) equippedContainer.innerHTML = '<div class="gear-item">No gear equipped. Visit the Shop!</div>'; else equippedContainer.innerHTML = state.avatar.equipped.map(itemId => { const item = SHOP_ITEMS.find(i => i.id === itemId); return `<div class="gear-item">${item ? item.name : itemId} <button class="unequip-item" data-id="${itemId}">✖</button></div>`; }).join(''); }
+            const inventoryContainer = document.getElementById('inventoryList');
+            if(inventoryContainer) { const owned = (state.avatar.inventory || []).filter(id => !(state.avatar.equipped || []).includes(id)); if(!owned.length) inventoryContainer.innerHTML = '<div class="gear-item">No items in inventory. Buy from Shop!</div>'; else inventoryContainer.innerHTML = owned.map(itemId => { const item = SHOP_ITEMS.find(i => i.id === itemId); return `<div class="gear-item">${item ? item.name : itemId} <button class="equip-item" data-id="${itemId}">⚔️ Equip</button></div>`; }).join(''); }
         }
         
         function renderHistory() {
             const container = document.getElementById('weeklyHistory');
-            if (!container) return;
-            
-            if (state.completedHistory.length === 0) {
-                container.innerHTML = '<div class="ak-card">No completed missions yet.</div>';
-                return;
-            }
-            
-            const last7 = [];
-            for (let i = 0; i < 7; i++) {
-                let d = new Date();
-                d.setDate(d.getDate() - i);
-                last7.push(d.toISOString().slice(0,10));
-            }
-            
+            if(!container) return;
+            if(state.completedHistory.length === 0) { container.innerHTML = '<div class="ak-card">No completed missions yet.</div>'; return; }
+            const last7 = []; for(let i=0;i<7;i++) { let d = new Date(); d.setDate(d.getDate() - i); last7.push(d.toISOString().slice(0,10)); }
             let html = '';
-            for (const day of last7) {
-                const dayTasks = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === day);
-                html += `<div class="ak-card"><h3>📅 ${day}</h3><ul>`;
-                if (dayTasks.length === 0) html += '<li>✨ No missions</li>';
-                else dayTasks.forEach(t => html += `<li>✅ ${escapeHtml(t.title)} (+${t.xpGained} XP)${t.notes ? `<br><span class="note">📝 ${escapeHtml(t.notes)}</span>` : ''}</li>`);
-                html += `</ul></div>`;
-            }
+            for(const day of last7) { const dayTasks = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === day); html += `<div class="ak-card"><h3>📅 ${day}</h3><ul>${dayTasks.length ? dayTasks.map(t => `<li>✅ ${escapeHtml(t.title)} (+${t.xpGained} XP)</li>`).join('') : '<li>✨ No missions</li>'}</ul></div>`; }
             container.innerHTML = html;
         }
         
         function renderAchievements() {
             const container = document.getElementById('achievementsList');
-            if (!container) return;
-            
+            if(!container) return;
             const achievements = [
                 { id: 'first_blood', name: 'First Blood', icon: '🩸', desc: 'Complete first mission', unlocked: state.completedHistory.length > 0 },
                 { id: 'streak_3', name: 'Spark Ignited', icon: '⚡', desc: '3-day streak', unlocked: state.streak >= 3 },
@@ -869,447 +970,167 @@
                 { id: 'level_5', name: 'Rising Shadow', icon: '⭐', desc: 'Reach level 5', unlocked: state.level >= 5 },
                 { id: 'level_10', name: 'Akatsuki Commander', icon: '👑', desc: 'Reach level 10', unlocked: state.level >= 10 }
             ];
-            
-            container.innerHTML = achievements.map(a => `
-                <div class="achievement-item ${a.unlocked ? 'unlocked' : 'locked'}">
-                    <div class="achievement-icon">${a.icon}</div>
-                    <h4>${a.name}</h4>
-                    <p>${a.desc}</p>
-                    ${a.unlocked ? '<span class="badge">✓ UNLOCKED</span>' : '<span class="badge">🔒 LOCKED</span>'}
-                </div>
-            `).join('');
+            container.innerHTML = achievements.map(a => `<div class="achievement-item ${a.unlocked ? 'unlocked' : 'locked'}"><div class="achievement-icon">${a.icon}</div><h4>${a.name}</h4><p>${a.desc}</p>${a.unlocked ? '<span class="badge">✓ UNLOCKED</span>' : '<span class="badge">🔒 LOCKED</span>'}</div>`).join('');
         }
         
-        function renderAvatarEquipment() {
-            const equippedContainer = document.getElementById('equippedList');
-            if (equippedContainer) {
-                if (!state.avatar.equipped || state.avatar.equipped.length === 0) {
-                    equippedContainer.innerHTML = '<div class="gear-item">No gear equipped. Visit the Shop!</div>';
-                } else {
-                    equippedContainer.innerHTML = state.avatar.equipped.map(itemId => {
-                        const item = SHOP_ITEMS.find(i => i.id === itemId);
-                        return `<div class="gear-item">${item ? item.name : itemId} <button class="unequip-item" data-id="${itemId}">✖</button></div>`;
-                    }).join('');
-                }
-            }
-            
-            const inventoryContainer = document.getElementById('inventoryList');
-            if (inventoryContainer) {
-                const owned = (state.avatar.inventory || []).filter(id => !(state.avatar.equipped || []).includes(id));
-                if (owned.length === 0) {
-                    inventoryContainer.innerHTML = '<div class="gear-item">No items in inventory. Buy from Shop!</div>';
-                } else {
-                    inventoryContainer.innerHTML = owned.map(itemId => {
-                        const item = SHOP_ITEMS.find(i => i.id === itemId);
-                        return `<div class="gear-item">${item ? item.name : itemId} <button class="equip-item" data-id="${itemId}">⚔️ Equip</button></div>`;
-                    }).join('');
-                }
-            }
+        function renderDashboard() {
+            const activeCount = state.activeTasks.filter(t => !t.completed).length;
+            const completedToday = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === getTodayStr()).length;
+            document.getElementById('activeCount').textContent = activeCount;
+            document.getElementById('completedToday').textContent = completedToday;
+            document.getElementById('totalXP').textContent = state.xp;
+            document.getElementById('streakDisplay').textContent = state.streak;
+            document.getElementById('level').textContent = state.level;
+            document.getElementById('xp').textContent = state.xp;
+            document.getElementById('coins').textContent = state.coins;
+            document.getElementById('streak').textContent = state.streak;
+            const hasImportant = state.activeTasks.some(t => t.completed && (t.priority === 'Critical' || t.priority === 'Important'));
+            const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
+            const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
+            document.getElementById('winImportant').innerHTML = hasImportant ? '✅' : '⬜';
+            document.getElementById('winRitual').innerHTML = hasRitual ? '✅' : '⬜';
+            document.getElementById('winDoc').innerHTML = hasDoc ? '✅' : '⬜';
+            document.getElementById('winResult').innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅ WIN THE DAY!' : '❌ NOT YET';
         }
         
         function generateReport() {
-            let report = `═══════════════════════════════════════════\n`;
-            report += `              🌙 AKATSUKI MISSION REPORT\n`;
-            report += `═══════════════════════════════════════════\n\n`;
-            report += `📅 GENERATED: ${new Date().toLocaleString()}\n`;
-            report += `👤 SCHOLAR: ${state.avatar.name}\n`;
-            report += `🏆 LEVEL: ${state.level} | XP: ${state.xp} | STREAK: ${state.streak} days\n`;
-            report += `💰 COINS: ${state.coins}\n\n`;
-            report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-            report += `📜 COMPLETED MISSIONS\n`;
-            report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-            
-            if (state.completedHistory.length === 0) {
-                report += `No missions completed yet.\n`;
-            } else {
-                state.completedHistory.forEach((c, i) => {
-                    report += `${i+1}. ${c.title}\n`;
-                    report += `   📅 Completed: ${new Date(c.completedAt).toLocaleString()}\n`;
-                    report += `   🎯 XP Gained: ${c.xpGained} | 💰 Coins: ${c.coinsGained || 0}\n`;
-                    if (c.notes) report += `   📝 Notes: ${c.notes}\n`;
-                    report += `\n`;
-                });
-            }
-            
+            let report = `═══════════════════════════════════════════\n              🌙 AKATSUKI MISSION REPORT\n═══════════════════════════════════════════\n\n📅 GENERATED: ${new Date().toLocaleString()}\n👤 SCHOLAR: ${state.avatar.name}\n🏆 LEVEL: ${state.level} | XP: ${state.xp} | STREAK: ${state.streak} days\n💰 COINS: ${state.coins}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📜 COMPLETED MISSIONS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+            if(state.completedHistory.length === 0) report += `No missions completed yet.\n`;
+            else state.completedHistory.forEach((c,i) => { report += `${i+1}. ${c.title}\n   📅 Completed: ${new Date(c.completedAt).toLocaleString()}\n   🎯 XP Gained: ${c.xpGained} | 💰 Coins: ${c.coinsGained || 0}\n${c.notes ? `   📝 Notes: ${c.notes}\n` : ''}\n`; });
             const output = document.getElementById('reportOutput');
-            if (output) {
-                output.textContent = report;
-                output.style.display = 'block';
-                const blob = new Blob([report], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `akatsuki_report_${getTodayStr()}.txt`;
-                a.click();
-                URL.revokeObjectURL(url);
-            }
+            if(output) { output.textContent = report; output.style.display = 'block'; const blob = new Blob([report], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `akatsuki_report_${getTodayStr()}.txt`; a.click(); URL.revokeObjectURL(url); }
         }
         
         function generateTask() {
             const goal = document.getElementById('genGoal')?.value;
-            if (!goal) { showToast('Enter a goal first'); return; }
-            
+            if(!goal) { showToast('Enter a goal first'); return; }
             const difficulty = document.getElementById('genDifficulty').value;
             const priority = document.getElementById('genPriority').value;
             const repeatability = document.getElementById('genRepeatability').value;
             const xpMap = { 'Easy': 20, 'Medium': 40, 'Hard': 80, 'Elite': 250 };
             const xpVal = xpMap[difficulty] || 40;
-            
-            const newTask = {
-                id: Date.now() + '_' + Math.random(),
-                title: goal,
-                domain: 'General',
-                difficulty: difficulty,
-                xp: xpVal,
-                repeatability: repeatability,
-                priority: priority,
-                steps: [
-                    { text: `Define scope: ${goal.substring(0,50)}`, completed: false },
-                    { text: 'Break down into sub-tasks', completed: false },
-                    { text: 'Execute main work', completed: false },
-                    { text: 'Review and document results', completed: false }
-                ],
-                notes: '',
-                startedAt: new Date().toISOString(),
-                completed: false
-            };
-            
-            const preview = document.getElementById('generatedPreview');
-            if (preview) {
-                preview.innerHTML = `<div class="mission-item"><strong>📋 ${escapeHtml(goal)}</strong><br>${difficulty} · ${xpVal} XP</div>`;
-            }
-            
-            const addBtn = document.getElementById('addGeneratedBtn');
-            if (addBtn) {
-                addBtn.style.display = 'inline-block';
-                addBtn.onclick = () => {
-                    state.activeTasks.push(newTask);
-                    saveState();
-                    updateUI();
-                    if (preview) preview.innerHTML = '';
-                    addBtn.style.display = 'none';
-                    document.getElementById('genGoal').value = '';
-                    showToast(`Added: ${newTask.title}`);
-                };
-            }
+            const newTask = { id: Date.now() + '_' + Math.random(), title: goal, domain: 'General', difficulty, xp: xpVal, repeatability, priority, steps: [{ text: `Define scope: ${goal.substring(0,50)}`, completed: false }, { text: 'Break down into sub-tasks', completed: false }, { text: 'Execute main work', completed: false }, { text: 'Review and document results', completed: false }], notes: '', startedAt: new Date().toISOString(), completed: false };
+            const preview = document.getElementById('generatedPreview'); if(preview) preview.innerHTML = `<div class="mission-item"><strong>📋 ${escapeHtml(goal)}</strong><br>${difficulty} · ${xpVal} XP</div>`;
+            const addBtn = document.getElementById('addGeneratedBtn'); if(addBtn) { addBtn.style.display = 'inline-block'; addBtn.onclick = () => { state.activeTasks.push(newTask); saveState(); updateUI(); if(preview) preview.innerHTML = ''; addBtn.style.display = 'none'; document.getElementById('genGoal').value = ''; showToast(`Added: ${newTask.title}`); }; }
         }
         
         function generateChain() {
             const goal = document.getElementById('genGoal')?.value;
-            if (!goal) { showToast('Enter a goal first'); return; }
-            
+            if(!goal) { showToast('Enter a goal first'); return; }
             const difficulty = document.getElementById('genDifficulty').value;
             const xpMap = { 'Easy': 20, 'Medium': 40, 'Hard': 80, 'Elite': 250 };
             const xpVal = xpMap[difficulty] || 40;
-            
             const tasks = [];
-            for (let i = 1; i <= 3; i++) {
-                tasks.push({
-                    id: Date.now() + '_' + Math.random(),
-                    title: i === 1 ? goal : `${goal} (Part ${i} of 3)`,
-                    domain: 'General',
-                    difficulty: difficulty,
-                    xp: xpVal,
-                    repeatability: 'One-time',
-                    priority: i === 1 ? 'Critical' : 'Important',
-                    steps: [
-                        { text: `Step 1 for this task`, completed: false },
-                        { text: `Step 2 for this task`, completed: false },
-                        { text: `Step 3 for this task`, completed: false }
-                    ],
-                    notes: '',
-                    startedAt: new Date().toISOString(),
-                    completed: false
-                });
-            }
-            
-            const preview = document.getElementById('generatedPreview');
-            if (preview) {
-                preview.innerHTML = `<div class="mission-item"><strong>🔗 Chain: ${escapeHtml(goal)}</strong><br>3 tasks · ${xpVal * 3} total XP</div>`;
-            }
-            
-            const addBtn = document.getElementById('addGeneratedBtn');
-            if (addBtn) {
-                addBtn.style.display = 'inline-block';
-                addBtn.onclick = () => {
-                    tasks.forEach(t => state.activeTasks.push(t));
-                    saveState();
-                    updateUI();
-                    if (preview) preview.innerHTML = '';
-                    addBtn.style.display = 'none';
-                    document.getElementById('genGoal').value = '';
-                    showToast(`Added chain: ${goal}`);
-                };
-            }
+            for(let i=1;i<=3;i++) tasks.push({ id: Date.now() + '_' + Math.random(), title: i===1 ? goal : `${goal} (Part ${i} of 3)`, domain: 'General', difficulty, xp: xpVal, repeatability: 'One-time', priority: i===1 ? 'Critical' : 'Important', steps: [{ text: `Step 1 for this task`, completed: false }, { text: `Step 2`, completed: false }, { text: `Step 3`, completed: false }], notes: '', startedAt: new Date().toISOString(), completed: false });
+            const preview = document.getElementById('generatedPreview'); if(preview) preview.innerHTML = `<div class="mission-item"><strong>🔗 Chain: ${escapeHtml(goal)}</strong><br>3 tasks · ${xpVal * 3} total XP</div>`;
+            const addBtn = document.getElementById('addGeneratedBtn'); if(addBtn) { addBtn.style.display = 'inline-block'; addBtn.onclick = () => { tasks.forEach(t => state.activeTasks.push(t)); saveState(); updateUI(); if(preview) preview.innerHTML = ''; addBtn.style.display = 'none'; document.getElementById('genGoal').value = ''; showToast(`Added chain: ${goal}`); }; }
         }
         
         function batchImport() {
             const text = document.getElementById('batchImport')?.value;
-            if (!text) { showToast('Paste tasks to import'); return; }
-            
-            const lines = text.split('\n');
+            if(!text) { showToast('Paste tasks to import'); return; }
             let imported = 0;
-            for (const line of lines) {
-                if (!line.trim()) continue;
+            for(const line of text.split('\n')) {
+                if(!line.trim()) continue;
                 const parts = line.split('|').map(p => p.trim());
-                if (parts.length >= 2) {
+                if(parts.length >= 2) {
                     const steps = (parts[4] || 'Plan,Execute,Review').split(',').map(s => ({ text: s.trim(), completed: false }));
-                    state.activeTasks.push({
-                        id: Date.now() + '_' + Math.random(),
-                        title: parts[0],
-                        domain: parts[1] || 'General',
-                        difficulty: parts[2] || 'Medium',
-                        xp: parseInt(parts[3]) || 30,
-                        repeatability: 'One-time',
-                        priority: 'Important',
-                        steps: steps,
-                        notes: '',
-                        startedAt: new Date().toISOString(),
-                        completed: false
-                    });
+                    state.activeTasks.push({ id: Date.now() + '_' + Math.random(), title: parts[0], domain: parts[1] || 'General', difficulty: parts[2] || 'Medium', xp: parseInt(parts[3]) || 30, repeatability: 'One-time', priority: 'Important', steps, notes: '', startedAt: new Date().toISOString(), completed: false });
                     imported++;
                 }
             }
-            if (imported > 0) {
-                saveState();
-                updateUI();
-                showToast(`Imported ${imported} tasks!`);
-                document.getElementById('batchImport').value = '';
-            } else {
-                showToast('No valid tasks found');
-            }
+            if(imported > 0) { saveState(); updateUI(); showToast(`Imported ${imported} tasks!`); document.getElementById('batchImport').value = ''; }
+            else showToast('No valid tasks found');
         }
         
         function exportData() {
-            const data = { version: '2.0', exportDate: new Date().toISOString(), state: state };
+            const data = { version: '2.0', exportDate: new Date().toISOString(), state };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `akatsuki_save_${getTodayStr()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('Data exported');
+            const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `akatsuki_save_${getTodayStr()}.json`; a.click(); URL.revokeObjectURL(url); showToast('Data exported');
         }
         
-        // Event delegation
+        function updateUI() {
+            renderDashboard();
+            renderActiveMissions();
+            renderTaskBank();
+            renderMiniQuests();
+            renderRecoveryMissions();
+            renderBossesList();
+            renderShop();
+            renderAvatar();
+            renderHistory();
+            renderAchievements();
+            renderBossBattleUI();
+            updateXPBar();
+            checkBossTriggers();
+        }
+        
         function setupEventDelegation() {
             const content = document.querySelector('.ak-content');
-            if (!content) return;
-            
-            // Checkbox changes
+            if(!content) return;
             content.addEventListener('change', (e) => {
-                if (e.target.classList.contains('step-checkbox')) {
+                if(e.target.classList.contains('step-checkbox')) {
                     const li = e.target.closest('.step-item');
                     const stepIdx = parseInt(li.dataset.stepIndex);
                     const missionDiv = li.closest('.mission-item');
                     const taskId = missionDiv.dataset.taskId;
                     const task = state.activeTasks.find(t => t.id === taskId);
-                    
-                    if (task && task.steps[stepIdx]) {
-                        task.steps[stepIdx].completed = e.target.checked;
-                        if (e.target.checked) li.classList.add('completed');
-                        else li.classList.remove('completed');
-                        
-                        const allDone = task.steps.every(s => s.completed);
-                        if (allDone && !task.completed) completeTask(taskId);
-                        saveState();
-                        updateUI();
+                    if(task && task.steps[stepIdx]) {
+                        const oldCompleted = task.steps[stepIdx].completed;
+                        if(undoManager) undoManager.execute(TaskCommands.toggleStep(taskId, stepIdx, oldCompleted, { state, saveState, renderAll: updateUI, completeTask }));
+                        else { task.steps[stepIdx].completed = e.target.checked; saveState(); updateUI(); const allDone = task.steps.every(s => s.completed); if(allDone && !task.completed) completeTask(taskId); }
                     }
                 }
             });
-            
-            // Button clicks
             content.addEventListener('click', (e) => {
-                const target = e.target;
-                
-                // Add from bank
-                if (target.classList.contains('add-task')) {
-                    const steps = JSON.parse(target.dataset.steps);
-                    addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
+                if(e.target.classList.contains('view-details')) {
+                    const task = state.activeTasks.find(t => t.id === e.target.dataset.id);
+                    if(task) { currentModalTaskId = task.id; document.getElementById('modalTitle').textContent = task.title; document.getElementById('modalBody').innerHTML = `<p>Domain: ${task.domain}</p><p>XP: ${task.xp}</p><p>Started: ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>`; document.getElementById('taskNotes').value = task.notes || ''; document.getElementById('taskModal').style.display = 'flex'; }
                 }
-                
-                // Add boss
-                if (target.classList.contains('add-boss')) {
-                    const steps = JSON.parse(target.dataset.steps);
-                    addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
+                if(e.target.classList.contains('delete-task')) deleteTask(e.target.dataset.id);
+                if(e.target.classList.contains('buy-item')) {
+                    const id = e.target.dataset.id, cost = parseInt(e.target.dataset.cost), name = e.target.dataset.name;
+                    if(state.coins >= cost) { state.coins -= cost; if(!state.avatar.inventory) state.avatar.inventory = []; state.avatar.inventory.push(id); saveState(); updateUI(); showToast(`Purchased: ${name}`); } else showToast(`Need ${cost - state.coins} more coins`);
                 }
-                
-                // Add mini-quest
-                if (target.classList.contains('add-miniquest')) {
-                    const steps = JSON.parse(target.dataset.steps);
-                    addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
-                }
-                
-                // Add recovery
-                if (target.classList.contains('add-recovery')) {
-                    const steps = JSON.parse(target.dataset.steps);
-                    addTask(target.dataset.title, target.dataset.domain, target.dataset.difficulty, target.dataset.xp, steps);
-                }
-                
-                // View details
-                if (target.classList.contains('view-details')) {
-                    const task = state.activeTasks.find(t => t.id === target.dataset.id);
-                    if (task) {
-                        document.getElementById('modalTitle').textContent = task.title;
-                        document.getElementById('modalBody').innerHTML = `<p>Domain: ${task.domain}</p><p>XP: ${task.xp}</p><p>Started: ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>`;
-                        document.getElementById('taskNotes').value = task.notes || '';
-                        document.getElementById('taskModal').style.display = 'flex';
-                        
-                        document.getElementById('saveTaskNotes').onclick = () => {
-                            task.notes = document.getElementById('taskNotes').value;
-                            saveState();
-                            document.getElementById('taskModal').style.display = 'none';
-                            showToast('Notes saved');
-                        };
-                        document.getElementById('deleteTaskBtn').onclick = () => {
-                            deleteTask(task.id);
-                            document.getElementById('taskModal').style.display = 'none';
-                        };
-                    }
-                }
-                
-                // Delete task
-                if (target.classList.contains('delete-task')) {
-                    deleteTask(target.dataset.id);
-                }
-                
-                // Buy item
-                if (target.classList.contains('buy-item')) {
-                    const id = target.dataset.id;
-                    const cost = parseInt(target.dataset.cost);
-                    const name = target.dataset.name;
-                    if (state.coins >= cost) {
-                        state.coins -= cost;
-                        if (!state.avatar.inventory) state.avatar.inventory = [];
-                        state.avatar.inventory.push(id);
-                        saveState();
-                        updateUI();
-                        showToast(`Purchased: ${name}`);
-                    } else {
-                        showToast(`Need ${cost - state.coins} more coins`);
-                    }
-                }
-                
-                // Equip item
-                if (target.classList.contains('equip-item')) {
-                    const id = target.dataset.id;
-                    if (!state.avatar.equipped.includes(id)) {
-                        state.avatar.equipped.push(id);
-                        saveState();
-                        updateUI();
-                        showToast('Item equipped');
-                    }
-                }
-                
-                // Unequip item
-                if (target.classList.contains('unequip-item')) {
-                    const id = target.dataset.id;
-                    state.avatar.equipped = state.avatar.equipped.filter(i => i !== id);
-                    saveState();
-                    updateUI();
-                    showToast('Item unequipped');
-                }
+                if(e.target.classList.contains('equip-item')) { const id = e.target.dataset.id; if(!state.avatar.equipped.includes(id)) { state.avatar.equipped.push(id); saveState(); updateUI(); showToast('Item equipped'); } }
+                if(e.target.classList.contains('unequip-item')) { const id = e.target.dataset.id; state.avatar.equipped = state.avatar.equipped.filter(i => i !== id); saveState(); updateUI(); showToast('Item unequipped'); }
             });
         }
         
         function setupEventListeners() {
-            // Tab switching
-            document.querySelectorAll('.ak-tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tabId = btn.dataset.tab;
-                    document.querySelectorAll('.ak-tab').forEach(t => t.classList.remove('active'));
-                    document.getElementById(tabId).classList.add('active');
-                    document.querySelectorAll('.ak-tab-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                });
-            });
-            
-            // Generator buttons
+            document.querySelectorAll('.ak-tab-btn').forEach(btn => { btn.addEventListener('click', () => { const tabId = btn.dataset.tab; document.querySelectorAll('.ak-tab').forEach(t => t.classList.remove('active')); document.getElementById(tabId).classList.add('active'); document.querySelectorAll('.ak-tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }); });
             document.getElementById('generateSingleBtn')?.addEventListener('click', generateTask);
             document.getElementById('generateChainBtn')?.addEventListener('click', generateChain);
             document.getElementById('batchImportExecute')?.addEventListener('click', batchImport);
-            
-            // Quick actions
-            document.getElementById('genQuickBtn')?.addEventListener('click', () => {
-                document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
-            });
-            document.getElementById('batchImportBtn')?.addEventListener('click', () => {
-                document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click();
-            });
-            
-            // Report
+            document.getElementById('genQuickBtn')?.addEventListener('click', () => document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click());
+            document.getElementById('batchImportBtn')?.addEventListener('click', () => document.querySelector('.ak-tab-btn[data-tab="generator"]')?.click());
             document.getElementById('exportReportBtn')?.addEventListener('click', generateReport);
             document.getElementById('generateReportBtn')?.addEventListener('click', generateReport);
-            
-            // Reset
-            document.getElementById('forceResetBtn')?.addEventListener('click', () => {
-                state.lastResetDate = getTodayStr();
-                saveState();
-                showToast('Daily reset completed');
-            });
-            document.getElementById('forceWeeklyResetBtn')?.addEventListener('click', () => {
-                showToast('Weekly reset completed');
-            });
-            document.getElementById('clearAllBtn')?.addEventListener('click', () => {
-                if (confirm('Wipe all progress?')) { localStorage.clear(); location.reload(); }
-            });
-            
-            // Data
+            document.getElementById('forceResetBtn')?.addEventListener('click', () => { state.lastResetDate = getTodayStr(); saveState(); showToast('Daily reset completed'); });
+            document.getElementById('clearAllBtn')?.addEventListener('click', () => { if(confirm('Wipe all progress?')) { localStorage.clear(); location.reload(); } });
             document.getElementById('exportDataBtn')?.addEventListener('click', exportData);
-            document.getElementById('importDataBtn')?.addEventListener('click', () => {
-                document.getElementById('importDataInput')?.click();
-            });
-            document.getElementById('importDataInput')?.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    try {
-                        const imported = JSON.parse(ev.target.result);
-                        if (imported.state) {
-                            state = { ...state, ...imported.state };
-                            saveState();
-                            updateUI();
-                            showToast('Data imported');
-                        }
-                    } catch(err) { showToast('Invalid file'); }
-                };
-                reader.readAsText(file);
-            });
-            
-            // Avatar name
-            document.getElementById('avatarName')?.addEventListener('change', (e) => {
-                state.avatar.name = e.target.value;
-                saveState();
-            });
-            
-            // Filters
+            document.getElementById('importDataBtn')?.addEventListener('click', () => document.getElementById('importDataInput')?.click());
+            document.getElementById('importDataInput')?.addEventListener('change', (e) => { const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const imported = JSON.parse(ev.target.result); if(imported.state) { state = { ...state, ...imported.state }; saveState(); updateUI(); showToast('Data imported'); } } catch(err) { showToast('Invalid file'); } }; reader.readAsText(file); });
+            document.getElementById('avatarName')?.addEventListener('change', (e) => { state.avatar.name = e.target.value; saveState(); });
             document.getElementById('filterDomain')?.addEventListener('change', () => updateUI());
             document.getElementById('filterDifficulty')?.addEventListener('change', () => updateUI());
             document.getElementById('filterStatus')?.addEventListener('change', () => updateUI());
-            document.getElementById('bankSearch')?.addEventListener('input', () => renderTaskBank());
-            document.getElementById('bankDomainFilter')?.addEventListener('change', () => renderTaskBank());
-            document.getElementById('bankDifficultyFilter')?.addEventListener('change', () => renderTaskBank());
-            
-            // Modal close
-            document.querySelector('.close')?.addEventListener('click', () => {
-                document.getElementById('taskModal').style.display = 'none';
-            });
-            window.addEventListener('click', (e) => {
-                const modal = document.getElementById('taskModal');
-                if (e.target === modal) modal.style.display = 'none';
-            });
-            
-            // Undo/Redo placeholders
-            document.getElementById('undoBtn')?.addEventListener('click', () => showToast('Undo coming soon'));
-            document.getElementById('redoBtn')?.addEventListener('click', () => showToast('Redo coming soon'));
+            document.getElementById('taskBankSearch')?.addEventListener('input', () => renderTaskBank());
+            document.getElementById('taskBankTheme')?.addEventListener('change', () => renderTaskBank());
+            document.getElementById('taskBankDifficulty')?.addEventListener('change', () => renderTaskBank());
+            document.getElementById('taskBankTime')?.addEventListener('change', () => renderTaskBank());
+            document.querySelector('.close')?.addEventListener('click', () => document.getElementById('taskModal').style.display = 'none');
+            window.addEventListener('click', (e) => { if(e.target === document.getElementById('taskModal')) document.getElementById('taskModal').style.display = 'none'; });
+            document.getElementById('saveTaskNotes')?.addEventListener('click', () => { if(currentModalTaskId) { const task = state.activeTasks.find(t => t.id === currentModalTaskId); if(task) { task.notes = document.getElementById('taskNotes').value; saveState(); showToast('Notes saved!'); } } document.getElementById('taskModal').style.display = 'none'; });
+            document.getElementById('deleteTaskBtn')?.addEventListener('click', () => { if(currentModalTaskId) deleteTask(currentModalTaskId); document.getElementById('taskModal').style.display = 'none'; });
         }
         
-        // Initialize
         function init() {
             console.log('Initializing Akatsuki Quest...');
             loadState();
+            undoManager = new UndoRedoManager(50);
+            stepEditor = new StepEditorLocal({ state, saveState, renderAll: updateUI, undoManager });
+            stepEditor.setupDelegation(document.querySelector('.ak-content'));
             setupEventListeners();
             setupEventDelegation();
             updateUI();
