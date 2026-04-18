@@ -14,31 +14,17 @@
         body {
             background: #0a0a0c;
             color: #e6e6e6;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-        
-        .app {
-            max-width: 1200px;
-            margin: 0 auto;
+            font-family: 'Segoe UI', system-ui;
             padding: 20px;
         }
         
-        /* Header */
         .header {
             background: #111113;
             padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            border-bottom: 1px solid #2a2a2d;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border: 1px solid #2a2a2d;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #d62828;
+            margin-bottom: 20px;
         }
         
         .stats {
@@ -52,149 +38,53 @@
             border-radius: 20px;
         }
         
-        /* XP Bar */
-        .xp-container {
+        .xp-bar-container {
             background: #111113;
-            padding: 12px 20px;
-            border-radius: 12px;
+            padding: 10px 20px;
             margin-bottom: 20px;
-            border: 1px solid #2a2a2d;
         }
         
         .xp-bar {
-            height: 10px;
+            height: 8px;
             background: #1a1a1e;
-            border-radius: 5px;
+            border-radius: 4px;
             overflow: hidden;
         }
         
         .xp-fill {
             height: 100%;
-            background: linear-gradient(90deg, #d62828, #ff4444);
+            background: #d62828;
             width: 0%;
             transition: width 0.3s;
         }
         
-        .xp-text {
-            font-size: 0.75rem;
-            color: #888;
-            margin-top: 5px;
-            text-align: right;
-        }
-        
-        /* Layout */
-        .layout {
+        .mission-list {
             display: flex;
-            gap: 20px;
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            width: 220px;
-            background: #111113;
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid #2a2a2d;
-            height: fit-content;
-        }
-        
-        .tab-btn {
-            width: 100%;
-            padding: 10px;
-            text-align: left;
-            background: none;
-            border: none;
-            color: #e6e6e6;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 5px;
-        }
-        
-        .tab-btn:hover {
-            background: #1e1e22;
-        }
-        
-        .tab-btn.active {
-            background: #d62828;
-        }
-        
-        /* Content */
-        .content {
-            flex: 1;
-            background: #111113;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #2a2a2d;
-        }
-        
-        .tab {
-            display: none;
-        }
-        
-        .tab.active {
-            display: block;
-        }
-        
-        /* Cards */
-        .card {
-            background: #1a1a1e;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #2a2a2d;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            flex-direction: column;
             gap: 15px;
-            margin-bottom: 20px;
         }
         
-        /* Mission Items */
-        .mission-item {
-            background: #1a1a1e;
+        .mission-card {
+            background: #111113;
             border-left: 4px solid #d62828;
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .mission-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
         }
         
         .mission-title {
             font-weight: bold;
+            margin-bottom: 8px;
         }
-        
-        .badge {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: #2a2a2d;
-        }
-        
-        .badge.easy { background: #2d6a4f; }
-        .badge.medium { background: #e9c46a; color: #000; }
-        .badge.hard { background: #e76f51; }
-        .badge.critical { background: #d62828; }
         
         .mission-meta {
-            font-size: 0.75rem;
+            font-size: 12px;
             color: #888;
             margin-bottom: 10px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
         }
         
         .step-list {
             list-style: none;
-            margin: 10px 0;
+            margin-top: 10px;
         }
         
         .step-item {
@@ -202,6 +92,7 @@
             align-items: center;
             gap: 10px;
             padding: 5px 0;
+            cursor: pointer;
         }
         
         .step-item.completed label {
@@ -213,77 +104,17 @@
             width: 18px;
             height: 18px;
             cursor: pointer;
+            accent-color: #d62828;
         }
         
         button {
             background: #d62828;
             border: none;
             color: white;
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 5px;
-        }
-        
-        button:hover {
-            background: #b71f1f;
-        }
-        
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .shop-item {
-            background: #1a1a1e;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #2a2a2d;
-        }
-        
-        .price {
-            color: #ffd700;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        .modal-content {
-            background: #111113;
-            border-radius: 12px;
-            padding: 20px;
-            width: 400px;
-            max-width: 90%;
-            border: 1px solid #2a2a2d;
-        }
-        
-        .close {
-            float: right;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        textarea, input, select {
-            background: #1a1a1e;
-            border: 1px solid #2a2a2d;
-            color: white;
-            padding: 8px;
-            border-radius: 6px;
-            width: 100%;
-            margin: 5px 0;
+            margin-top: 10px;
         }
         
         .toast {
@@ -295,780 +126,282 @@
             border-radius: 8px;
             transform: translateX(400px);
             transition: transform 0.3s;
-            z-index: 2000;
         }
         
         .toast.show {
             transform: translateX(0);
         }
-        
-        .form-row {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-        
-        .form-row label {
-            flex: 1;
-        }
-        
-        @media (max-width: 700px) {
-            .layout {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="app">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">🌙 AKATSUKI PH.D QUEST</div>
-            <div class="stats">
-                <div class="stat">LVL <span id="level">1</span></div>
-                <div class="stat">⭐ <span id="xp">0</span> XP</div>
-                <div class="stat">💰 <span id="coins">150</span></div>
-                <div class="stat">🔥 <span id="streak">0</span></div>
-            </div>
-        </div>
-
-        <!-- XP Bar -->
-        <div class="xp-container">
-            <div class="xp-bar">
-                <div class="xp-fill" id="xpFill"></div>
-            </div>
-            <div class="xp-text"><span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span></div>
-        </div>
-
-        <!-- Main Layout -->
-        <div class="layout">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <button class="tab-btn active" data-tab="dashboard">📊 DASHBOARD</button>
-                <button class="tab-btn" data-tab="active">📋 ACTIVE MISSIONS</button>
-                <button class="tab-btn" data-tab="generator">⚙️ GENERATOR</button>
-                <button class="tab-btn" data-tab="bank">📚 TASK BANK</button>
-                <button class="tab-btn" data-tab="shop">🛒 SHOP</button>
-                <button class="tab-btn" data-tab="history">📜 HISTORY</button>
-                <button class="tab-btn" data-tab="settings">⚙️ SETTINGS</button>
-                <hr style="margin: 15px 0; border-color: #2a2a2d;">
-                <button id="undoBtn" style="background:#333;">↩️ UNDO</button>
-                <button id="redoBtn" style="background:#333; margin-top:5px;">↪️ REDO</button>
-            </div>
-
-            <!-- Content -->
-            <div class="content">
-                <!-- Dashboard Tab -->
-                <div id="dashboard" class="tab active">
-                    <h2>⚡ SHADOW DASHBOARD</h2>
-                    <div class="dashboard-grid">
-                        <div class="card">
-                            <h3>🎯 WIN THE DAY</h3>
-                            <div>Important: <span id="winImportant">⬜</span> 0/1</div>
-                            <div>Ritual: <span id="winRitual">⬜</span> 0/1</div>
-                            <div>Documentation: <span id="winDoc">⬜</span> 0/1</div>
-                            <div class="win-result" id="winResult">❌ NOT YET</div>
-                        </div>
-                        <div class="card">
-                            <h3>📊 PROGRESS</h3>
-                            <div>Active: <span id="activeCount">0</span></div>
-                            <div>Completed Today: <span id="completedToday">0</span></div>
-                            <div>Total XP: <span id="totalXP">0</span></div>
-                            <div>Streak: <span id="streakDisplay">0</span> days</div>
-                        </div>
-                        <div class="card">
-                            <h3>⚡ QUICK ACTIONS</h3>
-                            <button id="genQuickBtn">✨ Quick Generate</button>
-                            <button id="exportReportBtn">📄 Export Report</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Missions Tab -->
-                <div id="active" class="tab">
-                    <h2>📋 ACTIVE MISSIONS</h2>
-                    <div id="activeMissionsList"></div>
-                </div>
-
-                <!-- Generator Tab -->
-                <div id="generator" class="tab">
-                    <h2>⚙️ TASK GENERATOR</h2>
-                    <div class="card">
-                        <label>🎯 GOAL</label>
-                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review..."></textarea>
-                        <div class="form-row">
-                            <label>Difficulty: 
-                                <select id="genDifficulty">
-                                    <option value="Easy">Easy</option>
-                                    <option value="Medium" selected>Medium</option>
-                                    <option value="Hard">Hard</option>
-                                </select>
-                            </label>
-                            <label>Priority: 
-                                <select id="genPriority">
-                                    <option value="Critical">Critical</option>
-                                    <option value="Important" selected>Important</option>
-                                    <option value="Maintenance">Maintenance</option>
-                                </select>
-                            </label>
-                        </div>
-                        <button id="generateBtn">✨ Generate Task</button>
-                        <div id="generatedPreview" style="margin-top:15px;"></div>
-                        <button id="addGeneratedBtn" style="display:none;">➕ Add to Active</button>
-                    </div>
-                </div>
-
-                <!-- Task Bank Tab -->
-                <div id="bank" class="tab">
-                    <h2>📚 TASK BANK</h2>
-                    <input type="text" id="bankSearch" placeholder="Search...">
-                    <div id="taskBankList"></div>
-                </div>
-
-                <!-- Shop Tab -->
-                <div id="shop" class="tab">
-                    <h2>🛒 SHOP</h2>
-                    <p>Your coins: <strong id="shopCoins">150</strong> 💰</p>
-                    <div id="shopItemsList" class="shop-grid"></div>
-                </div>
-
-                <!-- History Tab -->
-                <div id="history" class="tab">
-                    <h2>📜 HISTORY</h2>
-                    <div id="weeklyHistory"></div>
-                    <button id="generateReportBtn">📄 Generate Report</button>
-                    <pre id="reportOutput" style="background:#1a1a1e; padding:10px; margin-top:10px; display:none;"></pre>
-                </div>
-
-                <!-- Settings Tab -->
-                <div id="settings" class="tab">
-                    <h2>⚙️ SETTINGS</h2>
-                    <div class="card">
-                        <button id="forceResetBtn">Force Daily Reset</button>
-                        <button id="clearAllBtn" style="background:#8b0000;">⚠️ Wipe All Progress</button>
-                    </div>
-                    <div class="card">
-                        <button id="exportDataBtn">Export Save Data</button>
-                        <input type="file" id="importDataInput" accept=".json" style="display:none">
-                        <button id="importDataBtn">Import Save Data</button>
-                    </div>
-                </div>
-            </div>
+    <div class="header">
+        <div>🌙 AKATSUKI QUEST</div>
+        <div class="stats">
+            <div class="stat">LVL <span id="level">1</span></div>
+            <div class="stat">⭐ <span id="xp">0</span> XP</div>
+            <div class="stat">💰 <span id="coins">150</span></div>
+            <div class="stat">🔥 <span id="streak">0</span></div>
         </div>
     </div>
-
-    <!-- Task Modal -->
-    <div id="taskModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3 id="modalTitle"></h3>
-            <div id="modalBody"></div>
-            <label>📝 NOTES:</label>
-            <textarea id="taskNotes" rows="3"></textarea>
-            <button id="saveTaskNotes">💾 Save Notes</button>
-            <button id="deleteTaskBtn" style="background:#8b0000;">🗑️ Delete Task</button>
+    
+    <div class="xp-bar-container">
+        <div class="xp-bar">
+            <div class="xp-fill" id="xpFill"></div>
+        </div>
+        <div style="font-size: 12px; text-align: right; margin-top: 5px;">
+            <span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span>
         </div>
     </div>
-
-    <!-- Toast -->
-    <div id="toast" class="toast"></div>
-
+    
+    <h2>📋 ACTIVE MISSIONS</h2>
+    <div id="missionList" class="mission-list"></div>
+    
+    <div class="toast" id="toast"></div>
+    
     <script>
         // ============================================================
-        // AKATSUKI QUEST - COMPLETE WORKING SCRIPT
+        // SIMPLE WORKING VERSION - NO EXTERNAL DEPENDENCIES
         // ============================================================
         
-        (function() {
-            // State
-            let state = {
-                xp: 0,
-                coins: 150,
-                level: 1,
-                streak: 0,
-                lastResetDate: new Date().toISOString().slice(0,10),
-                activeTasks: [],
-                completedHistory: [],
-                avatar: { name: 'Shadow Scholar', inventory: [] }
-            };
-            
-            // Daily tasks
-            const DAILY_TASKS = [
-                { title: "Morning Startup Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Critical",
-                  steps: ["Open mission board", "Review today's calendar", "Pick top 3 priorities", "Start first block"] },
-                { title: "Daily Mission Log", domain: "Documentation", difficulty: "Easy", xp: 15, priority: "Important",
-                  steps: ["Write what you accomplished", "Note any blockers", "Record tomorrow's first task"] },
-                { title: "Shutdown Ritual", domain: "Rituals", difficulty: "Easy", xp: 10, priority: "Important",
-                  steps: ["Review completed tasks", "Clear workspace", "Set tomorrow's first action"] }
-            ];
-            
-            // Helper functions
-            function showToast(msg) {
-                const toast = document.getElementById('toast');
-                toast.innerHTML = msg;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
+        console.log('Script starting...');
+        
+        // State
+        let state = {
+            xp: 0,
+            coins: 150,
+            level: 1,
+            streak: 0,
+            activeTasks: [],
+            completedHistory: []
+        };
+        
+        // Daily tasks
+        const DAILY_TASKS = [
+            { 
+                id: 'task_1', 
+                title: "Morning Startup Ritual", 
+                domain: "Rituals", 
+                difficulty: "Easy", 
+                xp: 10, 
+                steps: [
+                    { text: "Open mission board", completed: false },
+                    { text: "Review today's calendar", completed: false },
+                    { text: "Pick top 3 priorities", completed: false },
+                    { text: "Start first block", completed: false }
+                ]
+            },
+            { 
+                id: 'task_2', 
+                title: "Daily Mission Log", 
+                domain: "Documentation", 
+                difficulty: "Easy", 
+                xp: 15, 
+                steps: [
+                    { text: "Write what you accomplished", completed: false },
+                    { text: "Note any blockers", completed: false },
+                    { text: "Record tomorrow's first task", completed: false }
+                ]
+            },
+            { 
+                id: 'task_3', 
+                title: "Shutdown Ritual", 
+                domain: "Rituals", 
+                difficulty: "Easy", 
+                xp: 10, 
+                steps: [
+                    { text: "Review completed tasks", completed: false },
+                    { text: "Clear workspace", completed: false },
+                    { text: "Set tomorrow's first action", completed: false }
+                ]
+            }
+        ];
+        
+        // Helper functions
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+        
+        function saveState() {
+            localStorage.setItem('akatsuki_state', JSON.stringify(state));
+            console.log('State saved');
+        }
+        
+        function loadState() {
+            const saved = localStorage.getItem('akatsuki_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = { ...state, ...parsed };
+                    console.log('State loaded', state);
+                } catch(e) { console.error(e); }
             }
             
-            function getTodayStr() {
-                return new Date().toISOString().slice(0,10);
+            // Add daily tasks if no active tasks
+            if (state.activeTasks.length === 0) {
+                state.activeTasks = JSON.parse(JSON.stringify(DAILY_TASKS));
+                console.log('Added default tasks');
             }
             
-            function escapeHtml(str) {
-                if (!str) return '';
-                return str.replace(/[&<>]/g, function(m) {
-                    if (m === '&') return '&amp;';
-                    if (m === '<') return '&lt;';
-                    if (m === '>') return '&gt;';
-                    return m;
-                });
+            updateXPLevel();
+            saveState();
+        }
+        
+        function updateXPLevel() {
+            const xpPerLevel = 500;
+            const newLevel = Math.floor(state.xp / xpPerLevel) + 1;
+            if (newLevel > state.level) {
+                state.coins += 100;
+                showToast(`✨ Level Up! Level ${newLevel}! +100 coins`);
+            }
+            state.level = newLevel;
+            updateXPBar();
+        }
+        
+        function updateXPBar() {
+            const xpPerLevel = 500;
+            const currentLevelXp = (state.level - 1) * xpPerLevel;
+            const nextLevelXp = state.level * xpPerLevel;
+            const progress = ((state.xp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100;
+            
+            const xpFill = document.getElementById('xpFill');
+            if (xpFill) xpFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+            
+            const xpCurrent = document.getElementById('xpCurrent');
+            const xpNext = document.getElementById('xpNext');
+            const nextLevelSpan = document.getElementById('nextLevel');
+            if (xpCurrent) xpCurrent.innerText = state.xp;
+            if (xpNext) xpNext.innerText = nextLevelXp;
+            if (nextLevelSpan) nextLevelSpan.innerText = state.level + 1;
+            
+            const levelSpan = document.getElementById('level');
+            const xpSpan = document.getElementById('xp');
+            const coinsSpan = document.getElementById('coins');
+            if (levelSpan) levelSpan.innerText = state.level;
+            if (xpSpan) xpSpan.innerText = state.xp;
+            if (coinsSpan) coinsSpan.innerText = state.coins;
+        }
+        
+        function updateTaskCompletion(task) {
+            const allStepsDone = task.steps.every(s => s.completed);
+            if (allStepsDone && !task.completed) {
+                completeTask(task.id);
+            }
+        }
+        
+        function completeTask(taskId) {
+            const task = state.activeTasks.find(t => t.id === taskId);
+            if (!task || task.completed) return;
+            
+            const xpGain = task.xp;
+            const coinGain = Math.floor(xpGain * 0.2);
+            
+            task.completed = true;
+            task.finishedAt = new Date().toISOString();
+            state.xp += xpGain;
+            state.coins += coinGain;
+            
+            state.completedHistory.push({
+                taskId: task.id,
+                title: task.title,
+                completedAt: task.finishedAt,
+                xpGained: xpGain,
+                coinsGained: coinGain
+            });
+            
+            showToast(`✅ Completed: ${task.title} (+${xpGain} XP, +${coinGain} coins)`);
+            updateXPLevel();
+            saveState();
+            renderMissions();
+        }
+        
+        function renderMissions() {
+            const container = document.getElementById('missionList');
+            if (!container) {
+                console.error('missionList element not found!');
+                return;
             }
             
-            function saveState() {
-                localStorage.setItem('akatsuki_state', JSON.stringify(state));
+            const activeTasks = state.activeTasks.filter(t => !t.completed);
+            
+            if (activeTasks.length === 0) {
+                container.innerHTML = '<div style="background:#111113; padding:20px; border-radius:8px;">✨ All done! Great work! ✨</div>';
+                return;
             }
             
-            function loadState() {
-                const saved = localStorage.getItem('akatsuki_state');
-                if (saved) {
-                    try {
-                        const parsed = JSON.parse(saved);
-                        state = { ...state, ...parsed };
-                        state.activeTasks = state.activeTasks || [];
-                        state.completedHistory = state.completedHistory || [];
-                    } catch(e) {}
+            container.innerHTML = activeTasks.map(task => `
+                <div class="mission-card" data-task-id="${task.id}">
+                    <div class="mission-title">${escapeHtml(task.title)}</div>
+                    <div class="mission-meta">${task.domain} | ${task.difficulty} | ${task.xp} XP</div>
+                    <ul class="step-list">
+                        ${task.steps.map((step, idx) => `
+                            <li class="step-item ${step.completed ? 'completed' : ''}" data-step-index="${idx}">
+                                <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}>
+                                <label>${escapeHtml(step.text)}</label>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `).join('');
+            
+            // Attach checkbox event listeners
+            document.querySelectorAll('.step-checkbox').forEach(checkbox => {
+                checkbox.removeEventListener('change', handleCheckboxChange);
+                checkbox.addEventListener('change', handleCheckboxChange);
+            });
+            
+            console.log('Rendered', activeTasks.length, 'missions');
+        }
+        
+        function handleCheckboxChange(e) {
+            const checkbox = e.target;
+            const li = checkbox.closest('.step-item');
+            const stepIndex = parseInt(li.dataset.stepIndex);
+            const missionCard = li.closest('.mission-card');
+            const taskId = missionCard.dataset.taskId;
+            
+            const task = state.activeTasks.find(t => t.id === taskId);
+            if (task && task.steps[stepIndex]) {
+                task.steps[stepIndex].completed = checkbox.checked;
+                
+                if (checkbox.checked) {
+                    li.classList.add('completed');
+                } else {
+                    li.classList.remove('completed');
                 }
                 
-                if (state.activeTasks.length === 0) {
-                    DAILY_TASKS.forEach(t => {
-                        state.activeTasks.push({
-                            id: Date.now() + '_' + Math.random(),
-                            title: t.title,
-                            domain: t.domain,
-                            difficulty: t.difficulty,
-                            xp: t.xp,
-                            repeatability: 'Daily',
-                            priority: t.priority,
-                            steps: t.steps.map(s => ({ text: s, completed: false })),
-                            notes: '',
-                            startedAt: new Date().toISOString(),
-                            completed: false
-                        });
-                    });
-                }
-                
-                updateXPLevel();
+                updateTaskCompletion(task);
                 saveState();
-            }
-            
-            function updateXPLevel() {
-                const xpPerLevel = 500;
-                const newLevel = Math.floor(state.xp / xpPerLevel) + 1;
-                if (newLevel > state.level) {
-                    state.coins += 100;
-                    showToast(`✨ Level Up! Level ${newLevel} +100 coins`);
-                }
-                state.level = newLevel;
                 updateXPBar();
             }
-            
-            function updateXPBar() {
-                const xpPerLevel = 500;
-                const currentXp = (state.level - 1) * xpPerLevel;
-                const nextXp = state.level * xpPerLevel;
-                const progress = ((state.xp - currentXp) / (nextXp - currentXp)) * 100;
-                
-                const fill = document.getElementById('xpFill');
-                if (fill) fill.style.width = Math.min(100, Math.max(0, progress)) + '%';
-                
-                const currentSpan = document.getElementById('xpCurrent');
-                const nextSpan = document.getElementById('xpNext');
-                const nextLevelSpan = document.getElementById('nextLevel');
-                if (currentSpan) currentSpan.innerText = state.xp;
-                if (nextSpan) nextSpan.innerText = nextXp;
-                if (nextLevelSpan) nextLevelSpan.innerText = state.level + 1;
-            }
-            
-            function completeTask(taskId) {
-                const task = state.activeTasks.find(t => t.id === taskId);
-                if (!task || task.completed) return;
-                
-                const xpGain = task.xp || 15;
-                const coinGain = Math.floor(xpGain * 0.2);
-                
-                task.completed = true;
-                task.finishedAt = new Date().toISOString();
-                state.xp += xpGain;
-                state.coins += coinGain;
-                
-                state.completedHistory.push({
-                    taskId: task.id,
-                    title: task.title,
-                    completedAt: task.finishedAt,
-                    xpGained: xpGain,
-                    coinsGained: coinGain,
-                    notes: task.notes || ''
-                });
-                
-                showToast(`✅ ${task.title} +${xpGain} XP, +${coinGain} coins`);
-                updateXPLevel();
-                saveState();
-                renderAll();
-            }
-            
-            // Render functions
-            function renderAll() {
-                renderHeader();
-                renderDashboard();
-                renderActiveMissions();
-                renderTaskBank();
-                renderShop();
-                renderHistory();
-            }
-            
-            function renderHeader() {
-                const levelEl = document.getElementById('level');
-                const xpEl = document.getElementById('xp');
-                const coinsEl = document.getElementById('coins');
-                const streakEl = document.getElementById('streak');
-                if (levelEl) levelEl.innerText = state.level;
-                if (xpEl) xpEl.innerText = state.xp;
-                if (coinsEl) coinsEl.innerText = state.coins;
-                if (streakEl) streakEl.innerText = state.streak;
-            }
-            
-            function renderDashboard() {
-                const activeCount = state.activeTasks.filter(t => !t.completed).length;
-                const completedToday = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === getTodayStr()).length;
-                
-                const activeEl = document.getElementById('activeCount');
-                const completedEl = document.getElementById('completedToday');
-                const totalEl = document.getElementById('totalXP');
-                const streakEl = document.getElementById('streakDisplay');
-                if (activeEl) activeEl.innerText = activeCount;
-                if (completedEl) completedEl.innerText = completedToday;
-                if (totalEl) totalEl.innerText = state.xp;
-                if (streakEl) streakEl.innerText = state.streak;
-                
-                const hasImportant = state.activeTasks.some(t => t.completed && t.priority === 'Critical');
-                const hasRitual = state.activeTasks.some(t => t.completed && t.domain === 'Rituals');
-                const hasDoc = state.activeTasks.some(t => t.completed && t.domain === 'Documentation');
-                
-                const winImportant = document.getElementById('winImportant');
-                const winRitual = document.getElementById('winRitual');
-                const winDoc = document.getElementById('winDoc');
-                const winResult = document.getElementById('winResult');
-                
-                if (winImportant) winImportant.innerHTML = hasImportant ? '✅' : '⬜';
-                if (winRitual) winRitual.innerHTML = hasRitual ? '✅' : '⬜';
-                if (winDoc) winDoc.innerHTML = hasDoc ? '✅' : '⬜';
-                if (winResult) winResult.innerHTML = (hasImportant && hasRitual && hasDoc) ? '✅ WIN THE DAY!' : '❌ NOT YET';
-            }
-            
-            function renderActiveMissions() {
-                const container = document.getElementById('activeMissionsList');
-                if (!container) return;
-                
-                const activeTasks = state.activeTasks.filter(t => !t.completed);
-                
-                if (activeTasks.length === 0) {
-                    container.innerHTML = '<div class="card">✨ No active missions. Add from Task Bank!</div>';
-                    return;
-                }
-                
-                container.innerHTML = activeTasks.map(task => `
-                    <div class="mission-item" data-task-id="${task.id}">
-                        <div class="mission-header">
-                            <div class="mission-title">${escapeHtml(task.title)}</div>
-                            <div class="badge ${task.difficulty.toLowerCase()}">${task.difficulty}</div>
-                        </div>
-                        <div class="mission-meta">
-                            <span>📁 ${task.domain}</span>
-                            <span>⭐ ${task.xp} XP</span>
-                        </div>
-                        <ul class="step-list">
-                            ${task.steps.map((step, idx) => `
-                                <li class="step-item ${step.completed ? 'completed' : ''}" data-step-index="${idx}">
-                                    <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''}>
-                                    <label>${escapeHtml(step.text)}</label>
-                                </li>
-                            `).join('')}
-                        </ul>
-                        <button class="view-details" data-task-id="${task.id}">📝 Details</button>
-                    </div>
-                `).join('');
-                
-                // Attach checkbox listeners
-                document.querySelectorAll('.step-checkbox').forEach(cb => {
-                    cb.addEventListener('change', function(e) {
-                        e.stopPropagation();
-                        const li = this.closest('.step-item');
-                        const stepIndex = parseInt(li.dataset.stepIndex);
-                        const missionDiv = li.closest('.mission-item');
-                        const taskId = missionDiv.dataset.taskId;
-                        const task = state.activeTasks.find(t => t.id === taskId);
-                        
-                        if (task && task.steps[stepIndex]) {
-                            task.steps[stepIndex].completed = this.checked;
-                            if (this.checked) li.classList.add('completed');
-                            else li.classList.remove('completed');
-                            
-                            const allDone = task.steps.every(s => s.completed);
-                            if (allDone && !task.completed) {
-                                completeTask(taskId);
-                            } else {
-                                saveState();
-                                renderDashboard();
-                                renderHeader();
-                            }
-                        }
-                    });
-                });
-                
-                // Attach details buttons
-                document.querySelectorAll('.view-details').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const taskId = this.dataset.taskId;
-                        openTaskModal(taskId);
-                    });
-                });
-            }
-            
-            function openTaskModal(taskId) {
-                const task = state.activeTasks.find(t => t.id === taskId);
-                if (!task) return;
-                
-                const modal = document.getElementById('taskModal');
-                document.getElementById('modalTitle').innerText = task.title;
-                document.getElementById('modalBody').innerHTML = `
-                    <p><strong>Domain:</strong> ${task.domain}</p>
-                    <p><strong>Difficulty:</strong> ${task.difficulty}</p>
-                    <p><strong>XP:</strong> ${task.xp}</p>
-                    <p><strong>Started:</strong> ${task.startedAt ? new Date(task.startedAt).toLocaleString() : 'N/A'}</p>
-                    <p><strong>Finished:</strong> ${task.finishedAt ? new Date(task.finishedAt).toLocaleString() : 'In progress'}</p>
-                `;
-                document.getElementById('taskNotes').value = task.notes || '';
-                
-                const saveBtn = document.getElementById('saveTaskNotes');
-                const newSaveBtn = saveBtn.cloneNode(true);
-                saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-                newSaveBtn.onclick = () => {
-                    task.notes = document.getElementById('taskNotes').value;
-                    saveState();
-                    modal.style.display = 'none';
-                    showToast('Notes saved!');
-                };
-                
-                const deleteBtn = document.getElementById('deleteTaskBtn');
-                const newDeleteBtn = deleteBtn.cloneNode(true);
-                deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
-                newDeleteBtn.onclick = () => {
-                    if (confirm('Delete this task?')) {
-                        state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
-                        saveState();
-                        modal.style.display = 'none';
-                        renderAll();
-                        showToast('Task deleted');
-                    }
-                };
-                
-                modal.style.display = 'flex';
-                const closeBtn = modal.querySelector('.close');
-                closeBtn.onclick = () => modal.style.display = 'none';
-                window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-            }
-            
-            function renderTaskBank() {
-                const container = document.getElementById('taskBankList');
-                if (!container) return;
-                
-                const sampleTasks = [
-                    { title: "Write Literature Review", domain: "PhD", difficulty: "Hard", xp: 90, steps: ["Find sources", "Read articles", "Write synthesis", "Add citations"] },
-                    { title: "Create Skool Post", domain: "Skool", difficulty: "Medium", xp: 35, steps: ["Choose topic", "Write hook", "Add 3 tips", "Post"] },
-                    { title: "Design Lesson Plan", domain: "Curriculum", difficulty: "Medium", xp: 40, steps: ["Define outcomes", "Create activities", "Build assessment", "Review"] },
-                    { title: "Code Transcript", domain: "Research", difficulty: "Hard", xp: 80, steps: ["Open transcript", "Apply codes", "Write memo", "Save"] }
-                ];
-                
-                container.innerHTML = sampleTasks.map(t => `
-                    <div class="mission-item">
-                        <div class="mission-header">
-                            <div class="mission-title">${escapeHtml(t.title)}</div>
-                            <div class="badge ${t.difficulty.toLowerCase()}">${t.difficulty}</div>
-                        </div>
-                        <div class="mission-meta">
-                            <span>📁 ${t.domain}</span>
-                            <span>⭐ ${t.xp} XP</span>
-                        </div>
-                        <button class="add-task" data-title="${escapeHtml(t.title)}" data-domain="${t.domain}" data-difficulty="${t.difficulty}" data-xp="${t.xp}" data-steps='${JSON.stringify(t.steps)}'>+ Add to Active</button>
-                    </div>
-                `).join('');
-                
-                document.querySelectorAll('.add-task').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const steps = JSON.parse(this.dataset.steps);
-                        const newTask = {
-                            id: Date.now() + '_' + Math.random(),
-                            title: this.dataset.title,
-                            domain: this.dataset.domain,
-                            difficulty: this.dataset.difficulty,
-                            xp: parseInt(this.dataset.xp),
-                            repeatability: 'One-time',
-                            priority: 'Important',
-                            steps: steps.map(s => ({ text: s, completed: false })),
-                            notes: '',
-                            startedAt: new Date().toISOString(),
-                            completed: false
-                        };
-                        state.activeTasks.push(newTask);
-                        saveState();
-                        renderAll();
-                        showToast(`Added: ${newTask.title}`);
-                    });
-                });
-            }
-            
-            function renderShop() {
-                const container = document.getElementById('shopItemsList');
-                const coinsSpan = document.getElementById('shopCoins');
-                if (coinsSpan) coinsSpan.innerText = state.coins;
-                if (!container) return;
-                
-                const items = [
-                    { id: 'cloak', name: 'Akatsuki Cloak', cost: 150, desc: '+5% XP' },
-                    { id: 'mask', name: 'ANBU Mask', cost: 100, desc: '+3% XP' },
-                    { id: 'ring', name: 'Akatsuki Ring', cost: 80, desc: '+2% XP, +2% Coins' }
-                ];
-                
-                container.innerHTML = items.map(item => `
-                    <div class="shop-item">
-                        <h4>${item.name}</h4>
-                        <div class="price">💰 ${item.cost} coins</div>
-                        <div>${item.desc}</div>
-                        <button class="buy-item" data-id="${item.id}" data-cost="${item.cost}">Purchase</button>
-                    </div>
-                `).join('');
-                
-                document.querySelectorAll('.buy-item').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cost = parseInt(this.dataset.cost);
-                        if (state.coins >= cost) {
-                            state.coins -= cost;
-                            saveState();
-                            renderShop();
-                            renderHeader();
-                            showToast(`Purchased! -${cost} coins`);
-                        } else {
-                            showToast(`Not enough coins! Need ${cost - state.coins} more`);
-                        }
-                    });
-                });
-            }
-            
-            function renderHistory() {
-                const container = document.getElementById('weeklyHistory');
-                if (!container) return;
-                
-                const last7Days = [];
-                for (let i = 0; i < 7; i++) {
-                    let d = new Date();
-                    d.setDate(d.getDate() - i);
-                    last7Days.push(d.toISOString().slice(0,10));
-                }
-                
-                let html = '';
-                for (const day of last7Days) {
-                    const completions = state.completedHistory.filter(h => h.completedAt?.slice(0,10) === day);
-                    html += `<div class="card"><h3>📅 ${day}</h3><ul>`;
-                    if (completions.length === 0) {
-                        html += '<li>✨ No completions</li>';
-                    } else {
-                        completions.forEach(c => {
-                            html += `<li><strong>✅ ${escapeHtml(c.title)}</strong> (+${c.xpGained} XP)`;
-                            if (c.notes) html += `<br><span style="font-size:0.8rem;">📝 ${escapeHtml(c.notes)}</span>`;
-                            html += `</li>`;
-                        });
-                    }
-                    html += `</ul></div>`;
-                }
-                container.innerHTML = html;
-            }
-            
-            function generateReport() {
-                let report = `═══════════════════════════════════\n`;
-                report += `     🌙 AKATSUKI REPORT\n`;
-                report += `═══════════════════════════════════\n\n`;
-                report += `📅 ${new Date().toLocaleString()}\n`;
-                report += `👤 ${state.avatar.name}\n`;
-                report += `🏆 Level ${state.level} | ${state.xp} XP | ${state.coins} coins\n`;
-                report += `🔥 Streak: ${state.streak} days\n\n`;
-                report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-                report += `📜 COMPLETED MISSIONS\n`;
-                report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-                
-                if (state.completedHistory.length === 0) {
-                    report += `No missions completed yet.\n`;
-                } else {
-                    state.completedHistory.forEach((c, i) => {
-                        report += `${i+1}. ${c.title}\n`;
-                        report += `   +${c.xpGained} XP on ${new Date(c.completedAt).toLocaleDateString()}\n`;
-                        if (c.notes) report += `   📝 ${c.notes}\n`;
-                        report += `\n`;
-                    });
-                }
-                
-                const output = document.getElementById('reportOutput');
-                if (output) {
-                    output.innerText = report;
-                    output.style.display = 'block';
-                    const blob = new Blob([report], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `akatsuki_report_${getTodayStr()}.txt`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                }
-            }
-            
-            function setupEventListeners() {
-                // Tab switching
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const tabId = btn.dataset.tab;
-                        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-                        document.getElementById(tabId).classList.add('active');
-                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                    });
-                });
-                
-                // Undo/Redo (placeholder)
-                document.getElementById('undoBtn')?.addEventListener('click', () => showToast('Undo coming soon'));
-                document.getElementById('redoBtn')?.addEventListener('click', () => showToast('Redo coming soon'));
-                
-                // Reset
-                document.getElementById('forceResetBtn')?.addEventListener('click', () => {
-                    state.lastResetDate = getTodayStr();
-                    saveState();
-                    showToast('Daily reset completed!');
-                });
-                
-                document.getElementById('clearAllBtn')?.addEventListener('click', () => {
-                    if (confirm('Wipe all progress?')) {
-                        localStorage.clear();
-                        location.reload();
-                    }
-                });
-                
-                // Report
-                document.getElementById('exportReportBtn')?.addEventListener('click', generateReport);
-                document.getElementById('generateReportBtn')?.addEventListener('click', generateReport);
-                
-                // Quick generate
-                document.getElementById('genQuickBtn')?.addEventListener('click', () => {
-                    document.querySelector('.tab-btn[data-tab="generator"]')?.click();
-                });
-                
-                // Task generator
-                document.getElementById('generateBtn')?.addEventListener('click', () => {
-                    const goal = document.getElementById('genGoal')?.value;
-                    if (!goal) {
-                        showToast('Enter a goal first');
-                        return;
-                    }
-                    
-                    const difficulty = document.getElementById('genDifficulty')?.value || 'Medium';
-                    const priority = document.getElementById('genPriority')?.value || 'Important';
-                    const xp = difficulty === 'Easy' ? 20 : difficulty === 'Medium' ? 40 : 80;
-                    
-                    const newTask = {
-                        id: Date.now() + '_' + Math.random(),
-                        title: goal,
-                        domain: 'General',
-                        difficulty: difficulty,
-                        xp: xp,
-                        repeatability: 'One-time',
-                        priority: priority,
-                        steps: [
-                            { text: `Clarify: ${goal.substring(0,50)}`, completed: false },
-                            { text: 'Break down into sub-tasks', completed: false },
-                            { text: 'Execute main work', completed: false },
-                            { text: 'Review and document', completed: false }
-                        ],
-                        notes: '',
-                        startedAt: new Date().toISOString(),
-                        completed: false
-                    };
-                    
-                    const preview = document.getElementById('generatedPreview');
-                    if (preview) {
-                        preview.innerHTML = `<div class="card"><strong>📋 ${escapeHtml(goal)}</strong><br>${difficulty} · ${xp} XP</div>`;
-                    }
-                    
-                    const addBtn = document.getElementById('addGeneratedBtn');
-                    if (addBtn) {
-                        addBtn.style.display = 'inline-block';
-                        const newBtn = addBtn.cloneNode(true);
-                        addBtn.parentNode.replaceChild(newBtn, addBtn);
-                        newBtn.onclick = () => {
-                            state.activeTasks.push(newTask);
-                            saveState();
-                            if (preview) preview.innerHTML = '';
-                            newBtn.style.display = 'none';
-                            renderAll();
-                            showToast(`Added: ${newTask.title}`);
-                            document.querySelector('.tab-btn[data-tab="active"]')?.click();
-                        };
-                    }
-                });
-                
-                // Export/Import
-                document.getElementById('exportDataBtn')?.addEventListener('click', () => {
-                    const data = JSON.stringify({ version: '1.0', state: state }, null, 2);
-                    const blob = new Blob([data], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `akatsuki_save_${getTodayStr()}.json`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    showToast('Data exported!');
-                });
-                
-                document.getElementById('importDataBtn')?.addEventListener('click', () => {
-                    document.getElementById('importDataInput')?.click();
-                });
-                
-                document.getElementById('importDataInput')?.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        try {
-                            const imported = JSON.parse(ev.target.result);
-                            if (imported.state) {
-                                state = { ...state, ...imported.state };
-                                saveState();
-                                renderAll();
-                                showToast('Data imported!');
-                            }
-                        } catch(err) {
-                            showToast('Invalid file');
-                        }
-                    };
-                    reader.readAsText(file);
-                });
-            }
-            
-            // Initialize
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        // Initialize
+        function init() {
+            console.log('Initializing app...');
             loadState();
-            setupEventListeners();
-            renderAll();
-            console.log('Akatsuki Quest Ready!');
-        })();
+            renderMissions();
+            console.log('App ready!');
+        }
+        
+        // Start when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
