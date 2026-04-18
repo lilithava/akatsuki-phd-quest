@@ -1,340 +1,256 @@
 {
   "meta": {
     "name": "Akatsuki Mission Templates",
-    "version": "1.0.0",
-    "description": "Reusable mission templates for the Task Generator. Each template defines structure, micro-steps, difficulty defaults, and domain/theme mappings."
+    "version": "2.0.0",
+    "description": "Reusable mission templates for the Task Generator. Each template defines structure, micro-steps, and dynamic generation rules.",
+    "lastUpdated": "2026-04-18"
   },
 
+  "templateCategories": [
+    { "id": "research", "name": "Research Tasks", "icon": "🔬", "defaultDomain": "PhD" },
+    { "id": "teaching", "name": "Teaching & Curriculum", "icon": "📖", "defaultDomain": "Curriculum" },
+    { "id": "community", "name": "Community Building", "icon": "👥", "defaultDomain": "Skool" },
+    { "id": "documentation", "name": "Documentation", "icon": "📝", "defaultDomain": "Documentation" },
+    { "id": "rituals", "name": "Discipline Rituals", "icon": "🌙", "defaultDomain": "Rituals" }
+  ],
+
   "templates": [
-
-    /* ============================================================
-       PH.D — RESEARCH / WRITING / ANALYSIS
-    ============================================================ */
-
     {
-      "id": "phd_read_article",
-      "label": "Read & Annotate Article",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
+      "id": "research_literature_review",
+      "name": "Literature Review Mission",
+      "category": "research",
+      "icon": "📚",
+      "description": "Find, read, and synthesize academic sources",
+      "unlockAtLevel": 1,
       "defaultDifficulty": "Medium",
-      "missionType": "Standard Mission",
-      "estimatedTime": 40,
-      "microSteps": [
-        "Open the article and scan abstract + conclusion.",
-        "Identify the research question and theoretical frame.",
-        "Highlight 3–5 key arguments or findings.",
-        "Capture 3 synthesis bullets in your notes.",
-        "Save citation + PDF in your source bank."
-      ],
-      "successCriteria": "Article annotated with clear takeaways.",
-      "failureCondition": "Reading without capturing notes.",
-      "tags": ["reading", "annotation", "literature"]
-    },
-
-    {
-      "id": "phd_write_section",
-      "label": "Draft Section (500–700 words)",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
-      "defaultDifficulty": "Hard",
-      "missionType": "Deep Work Mission",
+      "defaultPriority": "Critical",
+      "defaultEnergy": "Standard Focus",
       "estimatedTime": 90,
-      "microSteps": [
-        "Open outline and choose one subsection.",
-        "Gather relevant notes and citations.",
-        "Write topic sentence + argument frame.",
-        "Draft 2–3 evidence paragraphs.",
-        "Write synthesis + transition sentence.",
-        "Save version and log progress."
-      ],
-      "successCriteria": "500+ usable words added to draft.",
-      "failureCondition": "Editing outline without drafting prose.",
-      "tags": ["writing", "drafting", "deep-work"]
+      "xpRange": { "min": 35, "max": 85 },
+      
+      "dynamicSteps": {
+        "base": [
+          "Define research question and scope",
+          "Search academic databases for relevant sources",
+          "Screen abstracts and select ${sourceCount} key articles",
+          "Read and annotate selected sources",
+          "Extract key quotes and arguments",
+          "Write synthesis connecting the sources",
+          "Identify gaps and future research directions",
+          "Save citations to reference manager"
+        ],
+        "variables": {
+          "sourceCount": { "type": "select", "options": [5, 10, 15, 20], "default": 10 }
+        }
+      },
+      
+      "successCriteria": "${sourceCount} sources annotated with synthesis notes",
+      "failureCondition": "Sources collected but not read or annotated",
+      "reward": "+${xpGain} XP, research progress",
+      "recoveryMission": "Read and annotate 1 source only",
+      "tags": ["literature", "research", "reading"]
     },
 
     {
-      "id": "phd_analysis_batch",
-      "label": "Analyze Data Batch",
-      "domain": "PhD",
-      "theme": "Shadow Research Missions",
+      "id": "research_data_analysis",
+      "name": "Data Analysis Mission",
+      "category": "research",
+      "icon": "📊",
+      "description": "Code, analyze, and interpret research data",
+      "unlockAtLevel": 3,
       "defaultDifficulty": "Hard",
-      "missionType": "Deep Work Mission",
+      "defaultPriority": "Critical",
+      "defaultEnergy": "Deep Focus",
       "estimatedTime": 120,
-      "microSteps": [
-        "Open dataset or transcript batch.",
-        "Review coding scheme or analytic frame.",
-        "Apply codes or analytic categories.",
-        "Write memo capturing emerging patterns.",
-        "Save coded batch + memo in analysis folder."
-      ],
-      "successCriteria": "Batch coded + memo written.",
-      "failureCondition": "Reading without coding or memoing.",
-      "tags": ["analysis", "coding", "deep-work"]
+      "xpRange": { "min": 60, "max": 120 },
+      
+      "dynamicSteps": {
+        "base": [
+          "Review codebook and analysis framework",
+          "Open ${dataType} dataset",
+          "Apply codes to ${pageCount} pages/items",
+          "Write analytic memos on emerging patterns",
+          "Identify ${themeCount} key themes",
+          "Find supporting quotes for each theme",
+          "Draft preliminary findings section"
+        ],
+        "variables": {
+          "dataType": { "type": "select", "options": ["transcript", "survey", "field notes", "archival"], "default": "transcript" },
+          "pageCount": { "type": "range", "min": 5, "max": 30, "default": 10 },
+          "themeCount": { "type": "range", "min": 3, "max": 7, "default": 5 }
+        }
+      },
+      
+      "successCriteria": "${pageCount} pages coded with ${themeCount} themes identified",
+      "failureCondition": "Data reviewed without coding or memoing",
+      "reward": "+${xpGain} XP, analysis progress",
+      "recoveryMission": "Code 2 pages and write 1 memo",
+      "tags": ["analysis", "coding", "qualitative"]
     },
 
-    /* ============================================================
-       SKOOL — COMMUNITY / CONTENT / ENGAGEMENT
-    ============================================================ */
-
     {
-      "id": "skool_daily_post",
-      "label": "Publish Daily Lesson Post",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "defaultDifficulty": "Medium",
-      "missionType": "Standard Mission",
+      "id": "community_daily_post",
+      "name": "Daily Community Post",
+      "category": "community",
+      "icon": "📢",
+      "description": "Create engaging content for Skool community",
+      "unlockAtLevel": 1,
+      "defaultDifficulty": "Easy",
+      "defaultPriority": "Important",
+      "defaultEnergy": "Standard Focus",
       "estimatedTime": 30,
-      "microSteps": [
-        "Choose one concrete teaching point.",
-        "Write hook sentence.",
-        "Add 3 teaching bullets.",
-        "Add one action prompt.",
-        "Publish + reply to first comment."
-      ],
-      "successCriteria": "Post published with clear value.",
-      "failureCondition": "Posting vague or filler content.",
-      "tags": ["content", "community", "engagement"]
+      "repeatability": "Daily",
+      "xpRange": { "min": 15, "max": 35 },
+      
+      "dynamicSteps": {
+        "base": [
+          "Choose ${postType} as today's focus",
+          "Write attention-grabbing hook sentence",
+          "Add ${tipCount} actionable teaching points",
+          "Include ${exampleCount} real examples",
+          "Add call-to-action for member engagement",
+          "Publish post and pin if appropriate",
+          "Respond to first ${responseCount} comments"
+        ],
+        "variables": {
+          "postType": { "type": "select", "options": ["lesson", "question", "challenge", "resource", "win spotlight"], "default": "lesson" },
+          "tipCount": { "type": "range", "min": 2, "max": 5, "default": 3 },
+          "exampleCount": { "type": "range", "min": 1, "max": 3, "default": 2 },
+          "responseCount": { "type": "range", "min": 1, "max": 5, "default": 3 }
+        }
+      },
+      
+      "successCriteria": "Post published with ${tipCount} tips and member engagement",
+      "failureCondition": "Posting vague or low-value content",
+      "reward": "+${xpGain} XP, community streak",
+      "recoveryMission": "Publish 1 concise takeaway post",
+      "tags": ["content", "engagement", "daily"]
     },
 
     {
-      "id": "skool_weekly_challenge",
-      "label": "Run Weekly Challenge",
-      "domain": "Skool",
-      "theme": "Clan Leadership & Skool Community",
-      "defaultDifficulty": "Hard",
-      "missionType": "Standard Mission",
+      "id": "teaching_lesson_design",
+      "name": "Lesson Design Mission",
+      "category": "teaching",
+      "icon": "📝",
+      "description": "Create complete lesson or module",
+      "unlockAtLevel": 2,
+      "defaultDifficulty": "Medium",
+      "defaultPriority": "Important",
+      "defaultEnergy": "Standard Focus",
       "estimatedTime": 90,
-      "microSteps": [
-        "Define challenge goal + outcome.",
-        "Write instructions + checkpoints.",
-        "Publish challenge post.",
-        "Engage with participant updates.",
-        "Post end-of-week recap."
-      ],
-      "successCriteria": "Challenge completed with member engagement.",
-      "failureCondition": "Challenge posted without follow-up.",
-      "tags": ["challenge", "community", "leadership"]
-    },
-
-    /* ============================================================
-       CURRICULUM — LESSONS / OUTCOMES / ASSESSMENTS
-    ============================================================ */
-
-    {
-      "id": "curriculum_outcomes",
-      "label": "Write 5 Learning Outcomes",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
-      "defaultDifficulty": "Medium",
-      "missionType": "Standard Mission",
-      "estimatedTime": 40,
-      "microSteps": [
-        "Identify lesson/module goal.",
-        "Choose measurable verbs.",
-        "Draft 5 outcome statements.",
-        "Check alignment with lesson flow.",
-        "Refine wording for clarity."
-      ],
-      "successCriteria": "5 measurable outcomes created.",
-      "failureCondition": "Outcomes remain vague or unmeasurable.",
-      "tags": ["curriculum", "learning-outcomes"]
+      "xpRange": { "min": 40, "max": 80 },
+      
+      "dynamicSteps": {
+        "base": [
+          "Define ${outcomeCount} measurable learning outcomes",
+          "Design hook and opening activity",
+          "Create ${sectionCount} main teaching sections",
+          "Develop ${activityCount} practice activities",
+          "Build assessment to measure mastery",
+          "Create ${slideCount} supporting slides/visuals",
+          "Write instructor notes and timing guide"
+        ],
+        "variables": {
+          "outcomeCount": { "type": "range", "min": 3, "max": 6, "default": 4 },
+          "sectionCount": { "type": "range", "min": 2, "max": 5, "default": 3 },
+          "activityCount": { "type": "range", "min": 2, "max": 4, "default": 3 },
+          "slideCount": { "type": "range", "min": 5, "max": 15, "default": 10 }
+        }
+      },
+      
+      "successCriteria": "Complete lesson with ${outcomeCount} outcomes and assessments",
+      "failureCondition": "Lesson outline without detailed activities",
+      "reward": "+${xpGain} XP, curriculum progress",
+      "recoveryMission": "Write outcomes and outline only",
+      "tags": ["curriculum", "teaching", "design"]
     },
 
     {
-      "id": "curriculum_mastery_check",
-      "label": "Build Mastery Check",
-      "domain": "Curriculum",
-      "theme": "Village Knowledge Expansion",
+      "id": "ritual_daily_startup",
+      "name": "Morning Startup Ritual",
+      "category": "rituals",
+      "icon": "🌅",
+      "description": "Begin the day with clarity and intention",
+      "unlockAtLevel": 1,
+      "defaultDifficulty": "Easy",
+      "defaultPriority": "Critical",
+      "defaultEnergy": "Low Energy",
+      "estimatedTime": 10,
+      "repeatability": "Daily",
+      "xpRange": { "min": 10, "max": 15 },
+      
+      "dynamicSteps": {
+        "base": [
+          "Open mission board and review commitments",
+          "Check calendar for ${eventCount} key events",
+          "Select ${priorityCount} top priorities",
+          "Choose one must-win mission",
+          "Define first micro-step",
+          "Set timer for focus block",
+          "Begin immediately"
+        ],
+        "variables": {
+          "eventCount": { "type": "range", "min": 1, "max": 5, "default": 3 },
+          "priorityCount": { "type": "range", "min": 2, "max": 5, "default": 3 }
+        }
+      },
+      
+      "successCriteria": "Top priorities selected and first action defined",
+      "failureCondition": "Starting day reactively without plan",
+      "reward": "+${xpGain} XP, startup streak",
+      "recoveryMission": "Pick one must-win task only",
+      "tags": ["ritual", "startup", "daily"]
+    },
+
+    {
+      "id": "documentation_weekly_review",
+      "name": "Weekly Review Mission",
+      "category": "documentation",
+      "icon": "📊",
+      "description": "Review week's progress and plan next week",
+      "unlockAtLevel": 2,
       "defaultDifficulty": "Medium",
-      "missionType": "Standard Mission",
+      "defaultPriority": "Important",
+      "defaultEnergy": "Standard Focus",
       "estimatedTime": 45,
-      "microSteps": [
-        "Pick target skill.",
-        "Define what success looks like.",
-        "Write task prompt.",
-        "Add submission format.",
-        "Add scoring or rubric note."
-      ],
-      "successCriteria": "One mastery check created.",
-      "failureCondition": "Activity cannot measure mastery.",
-      "tags": ["assessment", "curriculum"]
-    },
-
-    /* ============================================================
-       RA — INTERVIEWS / CODING / ANALYSIS
-    ============================================================ */
-
-    {
-      "id": "ra_interview_prep",
-      "label": "Prepare Interview Kit",
-      "domain": "Research Assistantship",
-      "theme": "Intelligence Gathering",
-      "defaultDifficulty": "Medium",
-      "missionType": "Standard Mission",
-      "estimatedTime": 30,
-      "microSteps": [
-        "Review interview purpose.",
-        "Highlight key probes.",
-        "Confirm logistics + location/link.",
-        "Test recording setup.",
-        "Prepare note template."
-      ],
-      "successCriteria": "Interview kit ready.",
-      "failureCondition": "Interview begins without prep.",
-      "tags": ["interview", "ra"]
-    },
-
-    {
-      "id": "ra_code_transcript",
-      "label": "Code Transcript Segment",
-      "domain": "Research Assistantship",
-      "theme": "Intelligence Gathering",
-      "defaultDifficulty": "Hard",
-      "missionType": "Deep Work Mission",
-      "estimatedTime": 90,
-      "microSteps": [
-        "Open transcript.",
-        "Review codebook.",
-        "Apply codes to segment.",
-        "Mark ambiguities.",
-        "Write memo on patterns."
-      ],
-      "successCriteria": "Segment coded + memo written.",
-      "failureCondition": "Reading without coding.",
-      "tags": ["coding", "analysis", "ra"]
-    },
-
-    /* ============================================================
-       DOCUMENTATION — LOGS / EVIDENCE / ARCHIVES
-    ============================================================ */
-
-    {
-      "id": "docs_daily_log",
-      "label": "Write Daily Log",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "defaultDifficulty": "Easy",
-      "missionType": "Ritual",
-      "estimatedTime": 10,
-      "microSteps": [
-        "Open log template.",
-        "Record key work completed.",
-        "Record blockers.",
-        "Record next action.",
-        "Save + tag entry."
-      ],
-      "successCriteria": "Daily log saved.",
-      "failureCondition": "Day ends with no written record.",
-      "tags": ["documentation", "ritual"]
-    },
-
-    {
-      "id": "docs_evidence_pack",
-      "label": "Save Evidence Pack",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "defaultDifficulty": "Easy",
-      "missionType": "Standard Mission",
-      "estimatedTime": 15,
-      "microSteps": [
-        "Identify output to capture.",
-        "Take screenshots or export files.",
-        "Rename files correctly.",
-        "Place in correct folder.",
-        "Link in log or dashboard."
-      ],
-      "successCriteria": "Evidence stored correctly.",
-      "failureCondition": "Work done without proof.",
-      "tags": ["evidence", "documentation"]
-    },
-
-    /* ============================================================
-       RITUALS — STARTUP / SHUTDOWN / RESET
-    ============================================================ */
-
-    {
-      "id": "ritual_startup",
-      "label": "Morning Startup Ritual",
-      "domain": "Rituals",
-      "theme": "Discipline & Rituals",
-      "defaultDifficulty": "Easy",
-      "missionType": "Ritual",
-      "estimatedTime": 5,
-      "microSteps": [
-        "Open mission board.",
-        "Review calendar.",
-        "Mark top 3 missions.",
-        "Select one must-win task.",
-        "Start first block."
-      ],
-      "successCriteria": "Day begins with clarity.",
-      "failureCondition": "Starting reactively.",
-      "tags": ["ritual", "startup"]
-    },
-
-    {
-      "id": "ritual_shutdown",
-      "label": "Shutdown Ritual",
-      "domain": "Rituals",
-      "theme": "Discipline & Rituals",
-      "defaultDifficulty": "Easy",
-      "missionType": "Ritual",
-      "estimatedTime": 10,
-      "microSteps": [
-        "Review what was finished.",
-        "Capture unfinished items.",
-        "Pick tomorrow’s first task.",
-        "Save open tabs or references.",
-        "Clear workspace."
-      ],
-      "successCriteria": "Day closed cleanly.",
-      "failureCondition": "Stopping without closure.",
-      "tags": ["ritual", "shutdown"]
-    },
-
-    /* ============================================================
-       RECOVERY — BACKLOG / RESET / RE-ENTRY
-    ============================================================ */
-
-    {
-      "id": "recovery_reentry",
-      "label": "Re-Entry Mission",
-      "domain": "Recovery",
-      "theme": "Recovery & Reset Protocols",
-      "defaultDifficulty": "Easy",
-      "missionType": "Recovery Mission",
-      "estimatedTime": 10,
-      "microSteps": [
-        "Pick one stalled mission.",
-        "Define smallest possible next step.",
-        "Do 5 minutes of progress.",
-        "Capture a note of what changed.",
-        "Decide next micro-step."
-      ],
-      "successCriteria": "Momentum restored.",
-      "failureCondition": "Avoiding the mission entirely.",
-      "tags": ["recovery", "reset"]
-    },
-
-    {
-      "id": "recovery_backlog",
-      "label": "Backlog Triage",
-      "domain": "Recovery",
-      "theme": "Recovery & Reset Protocols",
-      "defaultDifficulty": "Medium",
-      "missionType": "Recovery Mission",
-      "estimatedTime": 20,
-      "microSteps": [
-        "List all overdue missions.",
-        "Mark 1–2 that matter most.",
-        "Convert heavy missions into smaller tasks.",
-        "Archive or defer low-value items.",
-        "Commit to one re-entry action."
-      ],
-      "successCriteria": "Backlog reduced + clarity restored.",
-      "failureCondition": "Letting backlog grow unchecked.",
-      "tags": ["recovery", "triage"]
+      "repeatability": "Weekly",
+      "xpRange": { "min": 35, "max": 55 },
+      
+      "dynamicSteps": {
+        "base": [
+          "Review daily logs from past week",
+          "Identify ${winCount} wins and achievements",
+          "Note ${blockerCount} blockers or challenges",
+          "Extract ${insightCount} key insights",
+          "Triage backlog: keep/drop/delay",
+          "Set ${nextWeekCount} priorities for next week",
+          "Prepare Monday's first mission"
+        ],
+        "variables": {
+          "winCount": { "type": "range", "min": 3, "max": 7, "default": 5 },
+          "blockerCount": { "type": "range", "min": 1, "max": 5, "default": 3 },
+          "insightCount": { "type": "range", "min": 2, "max": 5, "default": 3 },
+          "nextWeekCount": { "type": "range", "min": 2, "max": 5, "default": 3 }
+        }
+      },
+      
+      "successCriteria": "Week reviewed and ${nextWeekCount} priorities set",
+      "failureCondition": "Week ends with no reflection or planning",
+      "reward": "+${xpGain} XP, documentation streak",
+      "recoveryMission": "Write 5-bullet weekly summary",
+      "tags": ["review", "planning", "weekly"]
     }
+  ],
 
-  ]
+  "generationRules": {
+    "defaultChainLengths": {
+      "today": 2,
+      "week": 3,
+      "month": 4
+    },
+    "templateSelection": {
+      "priority": ["matching_tags", "user_level", "recent_usage"],
+      "fallbackTemplate": "research_literature_review"
+    }
+  }
 }
