@@ -1,20 +1,5 @@
-// Akatsuki Data Loader - Loads all JSON files into window.AK_DATA
-window.AK_DATA = {
-    rules: null,
-    phd: null,
-    skool: null,
-    curriculum: null,
-    ra: null,
-    docs: null,
-    rituals: null,
-    bosses: null,
-    recovery: null,
-    mini: null,
-    achievements: null,
-    shop: null,
-    avatar: null,
-    templates: null
-};
+// Akatsuki Data Loader
+window.AK_DATA = {};
 
 async function loadJSON(path) {
     try {
@@ -52,23 +37,11 @@ async function loadAllData() {
             console.log(`✅ Loaded: ${file.key}`);
         } else {
             console.warn(`⚠️ Failed to load: ${file.key}`);
+            window.AK_DATA[file.key] = null;
         }
     }
     
-    // Set default rules if missing
-    if (!window.AK_DATA.rules) {
-        window.AK_DATA.rules = {
-            xpRules: { xpPerLevel: 500, coinRatio: 0.2 },
-            difficulties: [
-                { id: "Easy", defaultXp: 15 },
-                { id: "Medium", defaultXp: 35 },
-                { id: "Hard", defaultXp: 90 },
-                { id: "Elite", defaultXp: 250 }
-            ]
-        };
-    }
-    
-    console.log('🎯 All data loaded', Object.keys(window.AK_DATA).filter(k => window.AK_DATA[k]));
+    console.log('🎯 All data loaded:', Object.keys(window.AK_DATA).filter(k => window.AK_DATA[k]));
 }
 
 // Start loading immediately
