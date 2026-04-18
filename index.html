@@ -3,168 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akatsuki PhD Quest – RPG</title>
+    <title>Akatsuki PhD Quest - Shadow Missions</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="ak-app">
-        <!-- Header with XP, level, coins, streak -->
+        <!-- Header -->
         <header class="ak-header">
             <div class="ak-logo">
                 <span class="ak-logo-icon">🌙</span>
-                <span class="ak-title">Akatsuki PhD Quest</span>
+                <span class="ak-title">AKATSUKI PH.D QUEST</span>
             </div>
             <div class="ak-header-stats">
-                <div class="stat-box">Level <span id="level">1</span></div>
-                <div class="stat-box">XP <span id="xp">0</span></div>
-                <div class="stat-box">💰 Coins <span id="coins">0</span></div>
-                <div class="stat-box">🔥 Streak <span id="streak">0</span></div>
+                <div class="stat-box">LVL <span id="level">1</span></div>
+                <div class="stat-box">⭐ <span id="xp">0</span> XP</div>
+                <div class="stat-box">💰 <span id="coins">150</span></div>
+                <div class="stat-box">🔥 <span id="streak">0</span></div>
             </div>
         </header>
 
-        <!-- Main layout: sidebar + content -->
+        <!-- XP Bar -->
+        <div class="ak-xp-container">
+            <div class="ak-xp-bar">
+                <div class="ak-xp-fill" id="xpFill" style="width: 0%"></div>
+            </div>
+            <div class="ak-xp-text"><span id="xpCurrent">0</span> / <span id="xpNext">500</span> XP to Level <span id="nextLevel">2</span></div>
+        </div>
+
         <div class="ak-layout">
+            <!-- Sidebar -->
             <aside class="ak-sidebar">
-                <button class="ak-tab-btn active" data-tab="dashboard">📊 Dashboard</button>
-                <button class="ak-tab-btn" data-tab="active">📋 Active Missions</button>
-                <button class="ak-tab-btn" data-tab="generator">⚙️ Task Generator</button>
-                <button class="ak-tab-btn" data-tab="bank">📚 Task Bank</button>
-                <button class="ak-tab-btn" data-tab="avatar">🎭 Avatar</button>
-                <button class="ak-tab-btn" data-tab="shop">🛒 Shop</button>
-                <button class="ak-tab-btn" data-tab="history">📜 History</button>
-                <button class="ak-tab-btn" data-tab="settings">⚙️ Settings</button>
+                <button class="ak-tab-btn active" data-tab="dashboard">📊 DASHBOARD</button>
+                <button class="ak-tab-btn" data-tab="active">📋 ACTIVE MISSIONS</button>
+                <button class="ak-tab-btn" data-tab="generator">⚙️ TASK GENERATOR</button>
+                <button class="ak-tab-btn" data-tab="bank">📚 TASK BANK</button>
+                <button class="ak-tab-btn" data-tab="avatar">🎭 AVATAR</button>
+                <button class="ak-tab-btn" data-tab="shop">🛒 SHOP</button>
+                <button class="ak-tab-btn" data-tab="history">📜 HISTORY</button>
+                <button class="ak-tab-btn" data-tab="achievements">🏆 ACHIEVEMENTS</button>
+                <button class="ak-tab-btn" data-tab="settings">⚙️ SETTINGS</button>
                 <div class="ak-undo-redo">
-                    <button id="undoBtn" title="Undo">↩️ Undo</button>
-                    <button id="redoBtn" title="Redo">↪️ Redo</button>
+                    <button id="undoBtn">↩️ UNDO</button>
+                    <button id="redoBtn">↪️ REDO</button>
                 </div>
             </aside>
 
             <main class="ak-content">
-                <!-- Dashboard Tab -->
+                <!-- DASHBOARD -->
                 <div id="dashboard" class="ak-tab active">
-                    <h2>Shadow Dashboard</h2>
+                    <h2>⚡ SHADOW DASHBOARD</h2>
                     <div class="ak-dashboard-grid">
                         <div class="ak-card">
-                            <h3>Today's Progress</h3>
-                            <p>Win the Day: <span id="winTheDay">❌</span></p>
-                            <p>Important: <span id="impCount">0</span>/1</p>
-                            <p>Ritual: <span id="ritualCount">0</span>/1</p>
-                            <p>Documentation: <span id="docCount">0</span>/1</p>
+                            <h3>🎯 WIN THE DAY</h3>
+                            <div class="win-condition">
+                                <div class="win-item"><span class="win-check" id="winImportant">⬜</span> Critical/Important Mission</div>
+                                <div class="win-item"><span class="win-check" id="winRitual">⬜</span> Ritual Mission</div>
+                                <div class="win-item"><span class="win-check" id="winDoc">⬜</span> Documentation Mission</div>
+                                <div class="win-result" id="winResult">❌ NOT ACHIEVED</div>
+                            </div>
                         </div>
                         <div class="ak-card">
-                            <h3>Active Stats</h3>
-                            <p>Active missions: <span id="activeCount">0</span></p>
-                            <p>Completed today: <span id="completedToday">0</span></p>
-                            <p>Total XP: <span id="totalXP">0</span></p>
+                            <h3>📊 PROGRESS</h3>
+                            <p>Active Missions: <span id="activeCount">0</span></p>
+                            <p>Completed Today: <span id="completedToday">0</span></p>
+                            <p>Total XP Earned: <span id="totalXP">0</span></p>
+                            <p>Current Streak: <span id="streakDisplay">0</span> days</p>
                         </div>
                         <div class="ak-card">
-                            <h3>Quick Actions</h3>
+                            <h3>⚡ QUICK ACTIONS</h3>
                             <button id="genQuickBtn">✨ Quick Generate</button>
+                            <button id="batchImportBtn">📦 Batch Import Tasks</button>
                             <button id="exportReportBtn">📄 Export Report</button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Active Missions Tab -->
-                <div id="active" class="ak-tab">
-                    <h2>Active Missions</h2>
-                    <div id="activeMissionsList" class="ak-mission-list"></div>
-                </div>
-
-                <!-- Task Generator Tab -->
-                <div id="generator" class="ak-tab">
-                    <h2>Task Generator</h2>
                     <div class="ak-card">
-                        <label>Goal / Idea:</label>
-                        <input type="text" id="genGoal" placeholder="e.g., Write literature review on AI displacement">
-                        <div class="ak-form-row">
-                            <label>Domain: <select id="genDomain">
-                                <option value="PhD">PhD Research</option>
-                                <option value="Skool">Skool Community</option>
-                                <option value="Curriculum">Curriculum</option>
-                                <option value="Documentation">Documentation</option>
-                                <option value="Rituals">Rituals</option>
-                            </select></label>
-                            <label>Difficulty: <select id="genDifficulty">
-                                <option value="Easy">Easy (20 XP)</option>
-                                <option value="Medium">Medium (40 XP)</option>
-                                <option value="Hard">Hard (80 XP)</option>
-                            </select></label>
-                        </div>
-                        <button id="generateBtn">Generate Mission Chain</button>
-                        <div id="generatedPreview"></div>
-                        <button id="addGeneratedBtn" style="display:none;">Add to Active Missions</button>
+                        <h3>🏆 RECENT ACHIEVEMENTS</h3>
+                        <div id="recentAchievements"></div>
                     </div>
                 </div>
 
-                <!-- Task Bank Tab -->
+                <!-- ACTIVE MISSIONS -->
+                <div id="active" class="ak-tab">
+                    <h2>📋 ACTIVE MISSIONS</h2>
+                    <div class="ak-filters">
+                        <select id="filterDomain"><option value="">All Domains</option></select>
+                        <select id="filterDifficulty"><option value="">All Difficulties</option></select>
+                        <select id="filterPriority"><option value="">All Priorities</option></select>
+                        <select id="filterEnergy"><option value="">All Energy Levels</option></select>
+                        <select id="filterRepeatability"><option value="">All Repeatability</option></select>
+                    </div>
+                    <div id="activeMissionsList" class="ak-mission-list"></div>
+                </div>
+
+                <!-- TASK GENERATOR -->
+                <div id="generator" class="ak-tab">
+                    <h2>⚙️ TASK GENERATOR</h2>
+                    <div class="ak-card">
+                        <label>🎯 GOAL / MISSION INTENT</label>
+                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review on AI displacement and worker identity..."></textarea>
+                        <div class="ak-form-row">
+                            <label>📁 THEME: <select id="genTheme"></select></label>
+                            <label>📂 SUBJECT: <select id="genSubject"></select></label>
+                            <label>🏷️ SIDE TOPIC: <select id="genSideTopic"></select></label>
+                        </div>
+                        <div class="ak-form-row">
+                            <label>⚔️ DIFFICULTY: <select id="genDifficulty">
+                                <option value="Easy">Easy (10-20 XP)</option>
+                                <option value="Medium">Medium (25-50 XP)</option>
+                                <option value="Hard">Hard (60-120 XP)</option>
+                                <option value="Elite">Elite (150-500 XP)</option>
+                            </select></label>
+                            <label>🔄 REPEATABILITY: <select id="genRepeatability">
+                                <option value="One-time">One-time</option>
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                            </select></label>
+                            <label>⚡ PRIORITY: <select id="genPriority">
+                                <option value="Critical">Critical</option>
+                                <option value="Important">Important</option>
+                                <option value="Maintenance">Maintenance</option>
+                            </select></label>
+                        </div>
+                        <div class="ak-form-row">
+                            <label>🔋 ENERGY: <select id="genEnergy">
+                                <option value="Low Energy">Low Energy</option>
+                                <option value="Standard Focus">Standard Focus</option>
+                                <option value="Deep Focus">Deep Focus</option>
+                            </select></label>
+                            <label>📍 CONTEXT: <select id="genContext">
+                                <option value="Home">Home</option>
+                                <option value="Office">Office</option>
+                                <option value="Library">Library</option>
+                                <option value="Online">Online</option>
+                            </select></label>
+                        </div>
+                        <button id="generateBtn">✨ GENERATE MISSION CHAIN</button>
+                        <div id="generatedPreview"></div>
+                        <button id="addGeneratedBtn" style="display:none;">➕ ADD TO ACTIVE MISSIONS</button>
+                    </div>
+                    <div class="ak-card">
+                        <h3>📦 BATCH IMPORT</h3>
+                        <textarea id="batchImport" rows="6" placeholder="Paste multiple tasks, one per line, using format:&#10;Title | Domain | Difficulty | XP | Steps (comma separated)&#10;&#10;Example:&#10;Write Lit Review | PhD | Hard | 85 | Find sources, Read articles, Write synthesis, Add citations"></textarea>
+                        <button id="batchImportExecute">📥 IMPORT TASKS</button>
+                    </div>
+                </div>
+
+                <!-- TASK BANK -->
                 <div id="bank" class="ak-tab">
-                    <h2>Task Bank</h2>
-                    <input type="text" id="bankSearch" placeholder="Filter tasks...">
+                    <h2>📚 TASK BANK</h2>
+                    <input type="text" id="bankSearch" placeholder="🔍 Search tasks..." class="ak-search">
+                    <div class="ak-filters">
+                        <select id="bankDomainFilter"><option value="">All Themes</option></select>
+                        <select id="bankDifficultyFilter"><option value="">All Difficulties</option></select>
+                    </div>
                     <div id="taskBankList" class="ak-mission-list"></div>
                 </div>
 
-                <!-- Avatar Tab -->
+                <!-- AVATAR -->
                 <div id="avatar" class="ak-tab">
-                    <h2>Avatar Customization</h2>
+                    <h2>🎭 AVATAR CUSTOMIZATION</h2>
                     <div class="ak-avatar-container">
                         <div class="ak-avatar-display">
                             <svg id="avatarSvg" viewBox="0 0 200 200" width="200" height="200">
-                                <circle cx="100" cy="100" r="80" fill="#1a1a2e" stroke="#d62828" stroke-width="3"/>
-                                <text x="100" y="105" text-anchor="middle" fill="#e6e6e6" font-size="14" id="avatarNameText">Scholar</text>
+                                <!-- Dynamic layers will be added here -->
                             </svg>
                         </div>
                         <div class="ak-avatar-info">
-                            <input type="text" id="avatarName" placeholder="Your name" maxlength="20">
+                            <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="20">
                             <div class="avatar-stats">
-                                <p>⚔️ XP Multiplier: <span id="xpMult">1.00</span>x</p>
-                                <p>💰 Coin Multiplier: <span id="coinMult">1.00</span>x</p>
+                                <p>⚔️ XP MULTIPLIER: <span id="xpMult">1.00</span>x</p>
+                                <p>💰 COIN MULTIPLIER: <span id="coinMult">1.00</span>x</p>
+                                <p>🏆 TOTAL XP EARNED: <span id="totalXPEarned">0</span></p>
+                                <p>📜 MISSIONS COMPLETED: <span id="missionsCompleted">0</span></p>
                             </div>
                         </div>
                     </div>
                     <div class="ak-equipped-gear">
-                        <h3>Equipped Gear</h3>
+                        <h3>⚔️ EQUIPPED GEAR</h3>
                         <div id="equippedList" class="gear-list"></div>
+                    </div>
+                    <div class="ak-owned-gear">
+                        <h3>📦 INVENTORY</h3>
+                        <div id="inventoryList" class="gear-list"></div>
                     </div>
                 </div>
 
-                <!-- Shop Tab -->
+                <!-- SHOP -->
                 <div id="shop" class="ak-tab">
-                    <h2>🛒 Forbidden Market</h2>
-                    <p>Your coins: <strong id="shopCoins">0</strong></p>
+                    <h2>🛒 FORBIDDEN MARKET</h2>
+                    <p>Your coins: <strong id="shopCoins">150</strong> 💰</p>
                     <div id="shopItemsList" class="ak-shop-grid"></div>
                 </div>
 
-                <!-- History Tab -->
+                <!-- HISTORY -->
                 <div id="history" class="ak-tab">
-                    <h2>Weekly History</h2>
+                    <h2>📜 MISSION HISTORY</h2>
                     <div id="weeklyHistory"></div>
-                    <button id="generateReportBtn">Generate Full Report</button>
-                    <pre id="reportOutput" style="background:#111; padding:1rem; white-space:pre-wrap; margin-top:1rem;"></pre>
+                    <button id="generateReportBtn">📄 GENERATE FULL REPORT</button>
+                    <pre id="reportOutput"></pre>
                 </div>
 
-                <!-- Settings Tab -->
+                <!-- ACHIEVEMENTS -->
+                <div id="achievements" class="ak-tab">
+                    <h2>🏆 ACHIEVEMENTS</h2>
+                    <div id="achievementsList" class="ak-achievements-grid"></div>
+                </div>
+
+                <!-- SETTINGS -->
                 <div id="settings" class="ak-tab">
-                    <h2>System Settings</h2>
+                    <h2>⚙️ SYSTEM SETTINGS</h2>
                     <div class="ak-card">
+                        <h3>🔄 RESET OPTIONS</h3>
                         <button id="forceResetBtn">Force Daily Reset</button>
-                        <button id="clearAllBtn" class="danger">Wipe All Progress (Danger)</button>
+                        <button id="forceWeeklyResetBtn">Force Weekly Reset</button>
+                        <button id="clearAllBtn" class="danger">⚠️ WIPE ALL PROGRESS</button>
+                    </div>
+                    <div class="ak-card">
+                        <h3>💾 DATA MANAGEMENT</h3>
+                        <button id="exportDataBtn">Export Save Data</button>
+                        <input type="file" id="importDataInput" accept=".json" style="display:none">
+                        <button id="importDataBtn">Import Save Data</button>
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Task Detail Modal -->
+    <!-- Task Edit Modal -->
     <div id="taskModal" class="ak-modal">
         <div class="ak-modal-content">
             <span class="close">&times;</span>
             <h3 id="modalTitle"></h3>
             <div id="modalBody"></div>
-            <label>Notes:</label>
+            <label>📝 NOTES:</label>
             <textarea id="taskNotes" rows="3"></textarea>
-            <div id="modalTimestamps"></div>
-            <button id="saveTaskNotes">Save Notes</button>
+            <div class="modal-actions">
+                <button id="saveTaskNotes">💾 SAVE NOTES</button>
+                <button id="deleteTaskBtn" class="danger">🗑️ DELETE TASK</button>
+            </div>
         </div>
     </div>
 
