@@ -49,7 +49,7 @@
             </aside>
 
             <main class="ak-content">
-                <!-- DASHBOARD -->
+                <!-- DASHBOARD TAB -->
                 <div id="dashboard" class="ak-tab active">
                     <h2>⚡ SHADOW DASHBOARD</h2>
                     <div class="ak-dashboard-grid">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
 
-                <!-- ACTIVE MISSIONS -->
+                <!-- ACTIVE MISSIONS TAB -->
                 <div id="active" class="ak-tab">
                     <h2>📋 ACTIVE MISSIONS</h2>
                     <div class="ak-filters">
@@ -95,60 +95,87 @@
                     <div id="activeMissionsList" class="ak-mission-list"></div>
                 </div>
 
-                <!-- TASK GENERATOR -->
+                <!-- TASK GENERATOR TAB -->
                 <div id="generator" class="ak-tab">
                     <h2>⚙️ TASK GENERATOR</h2>
                     <div class="ak-card">
                         <label>🎯 GOAL / MISSION INTENT</label>
-                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review on AI displacement and worker identity..."></textarea>
+                        <textarea id="genGoal" rows="2" placeholder="Example: Write literature review on AI displacement..."></textarea>
+                        
+                        <label>📁 THEME</label>
+                        <select id="genTheme">
+                            <option value="Shadow Research Missions">Shadow Research Missions</option>
+                            <option value="Village Knowledge Expansion">Village Knowledge Expansion</option>
+                            <option value="Clan Leadership & Skool Community">Clan Leadership & Skool Community</option>
+                            <option value="Intelligence Gathering">Intelligence Gathering</option>
+                            <option value="Eternal Documentation Scrolls">Eternal Documentation Scrolls</option>
+                            <option value="Discipline & Rituals">Discipline & Rituals</option>
+                        </select>
+                        
+                        <label>📂 SUBJECT</label>
+                        <select id="genSubject">
+                            <option value="">Select Theme First</option>
+                        </select>
+                        
+                        <label>🏷️ SIDE TOPIC</label>
+                        <select id="genSideTopic">
+                            <option value="">Select Subject First</option>
+                        </select>
+                        
                         <div class="ak-form-row">
-                            <label>📁 THEME: <select id="genTheme"></select></label>
-                            <label>📂 SUBJECT: <select id="genSubject"></select></label>
-                            <label>🏷️ SIDE TOPIC: <select id="genSideTopic"></select></label>
+                            <label>⚔️ DIFFICULTY: 
+                                <select id="genDifficulty">
+                                    <option value="Easy">Easy (10-20 XP)</option>
+                                    <option value="Medium" selected>Medium (25-50 XP)</option>
+                                    <option value="Hard">Hard (60-120 XP)</option>
+                                    <option value="Elite">Elite (150-500 XP)</option>
+                                </select>
+                            </label>
+                            <label>🔄 REPEATABILITY: 
+                                <select id="genRepeatability">
+                                    <option value="One-time" selected>One-time</option>
+                                    <option value="Daily">Daily</option>
+                                    <option value="Weekly">Weekly</option>
+                                </select>
+                            </label>
+                            <label>⚡ PRIORITY: 
+                                <select id="genPriority">
+                                    <option value="Critical">Critical</option>
+                                    <option value="Important" selected>Important</option>
+                                    <option value="Maintenance">Maintenance</option>
+                                </select>
+                            </label>
                         </div>
                         <div class="ak-form-row">
-                            <label>⚔️ DIFFICULTY: <select id="genDifficulty">
-                                <option value="Easy">Easy (10-20 XP)</option>
-                                <option value="Medium">Medium (25-50 XP)</option>
-                                <option value="Hard">Hard (60-120 XP)</option>
-                                <option value="Elite">Elite (150-500 XP)</option>
-                            </select></label>
-                            <label>🔄 REPEATABILITY: <select id="genRepeatability">
-                                <option value="One-time">One-time</option>
-                                <option value="Daily">Daily</option>
-                                <option value="Weekly">Weekly</option>
-                            </select></label>
-                            <label>⚡ PRIORITY: <select id="genPriority">
-                                <option value="Critical">Critical</option>
-                                <option value="Important">Important</option>
-                                <option value="Maintenance">Maintenance</option>
-                            </select></label>
+                            <label>🔋 ENERGY: 
+                                <select id="genEnergy">
+                                    <option value="Low Energy">Low Energy</option>
+                                    <option value="Standard Focus" selected>Standard Focus</option>
+                                    <option value="Deep Focus">Deep Focus</option>
+                                </select>
+                            </label>
+                            <label>📍 CONTEXT: 
+                                <select id="genContext">
+                                    <option value="Home">Home</option>
+                                    <option value="Office">Office</option>
+                                    <option value="Library">Library</option>
+                                    <option value="Online" selected>Online</option>
+                                </select>
+                            </label>
                         </div>
-                        <div class="ak-form-row">
-                            <label>🔋 ENERGY: <select id="genEnergy">
-                                <option value="Low Energy">Low Energy</option>
-                                <option value="Standard Focus">Standard Focus</option>
-                                <option value="Deep Focus">Deep Focus</option>
-                            </select></label>
-                            <label>📍 CONTEXT: <select id="genContext">
-                                <option value="Home">Home</option>
-                                <option value="Office">Office</option>
-                                <option value="Library">Library</option>
-                                <option value="Online">Online</option>
-                            </select></label>
-                        </div>
-                        <button id="generateBtn">✨ GENERATE MISSION CHAIN</button>
+                        <button id="generateBtn">✨ GENERATE MISSION</button>
                         <div id="generatedPreview"></div>
                         <button id="addGeneratedBtn" style="display:none;">➕ ADD TO ACTIVE MISSIONS</button>
                     </div>
+                    
                     <div class="ak-card">
                         <h3>📦 BATCH IMPORT</h3>
-                        <textarea id="batchImport" rows="6" placeholder="Paste multiple tasks, one per line, using format:&#10;Title | Domain | Difficulty | XP | Steps (comma separated)&#10;&#10;Example:&#10;Write Lit Review | PhD | Hard | 85 | Find sources, Read articles, Write synthesis, Add citations"></textarea>
+                        <textarea id="batchImport" rows="6" placeholder="Paste multiple tasks, one per line, using format:&#10;Title | Domain | Difficulty | XP | Step1, Step2, Step3&#10;&#10;Example:&#10;Write Lit Review | PhD | Hard | 85 | Find sources, Read articles, Write synthesis, Add citations"></textarea>
                         <button id="batchImportExecute">📥 IMPORT TASKS</button>
                     </div>
                 </div>
 
-                <!-- TASK BANK -->
+                <!-- TASK BANK TAB -->
                 <div id="bank" class="ak-tab">
                     <h2>📚 TASK BANK</h2>
                     <input type="text" id="bankSearch" placeholder="🔍 Search tasks..." class="ak-search">
@@ -159,17 +186,22 @@
                     <div id="taskBankList" class="ak-mission-list"></div>
                 </div>
 
-                <!-- AVATAR -->
+                <!-- AVATAR TAB -->
                 <div id="avatar" class="ak-tab">
                     <h2>🎭 AVATAR CUSTOMIZATION</h2>
                     <div class="ak-avatar-container">
                         <div class="ak-avatar-display">
                             <svg id="avatarSvg" viewBox="0 0 200 200" width="200" height="200">
-                                <!-- Dynamic layers will be added here -->
+                                <circle cx="100" cy="100" r="90" fill="#1a1a2e" stroke="#d62828" stroke-width="3"/>
+                                <circle cx="100" cy="95" r="45" fill="#e8c4a0"/>
+                                <ellipse cx="80" cy="85" rx="8" ry="10" fill="#2a2a2e"/>
+                                <ellipse cx="120" cy="85" rx="8" ry="10" fill="#2a2a2e"/>
+                                <path d="M 85 110 Q 100 120 115 110" fill="none" stroke="#2a2a2e" stroke-width="2"/>
+                                <text x="100" y="185" text-anchor="middle" fill="#e6e6e6" font-size="12" id="avatarNameText">Scholar</text>
                             </svg>
                         </div>
                         <div class="ak-avatar-info">
-                            <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="20">
+                            <input type="text" id="avatarName" placeholder="Scholar Name" maxlength="20" value="Shadow Scholar">
                             <div class="avatar-stats">
                                 <p>⚔️ XP MULTIPLIER: <span id="xpMult">1.00</span>x</p>
                                 <p>💰 COIN MULTIPLIER: <span id="coinMult">1.00</span>x</p>
@@ -188,14 +220,14 @@
                     </div>
                 </div>
 
-                <!-- SHOP -->
+                <!-- SHOP TAB -->
                 <div id="shop" class="ak-tab">
                     <h2>🛒 FORBIDDEN MARKET</h2>
                     <p>Your coins: <strong id="shopCoins">150</strong> 💰</p>
                     <div id="shopItemsList" class="ak-shop-grid"></div>
                 </div>
 
-                <!-- HISTORY -->
+                <!-- HISTORY TAB -->
                 <div id="history" class="ak-tab">
                     <h2>📜 MISSION HISTORY</h2>
                     <div id="weeklyHistory"></div>
@@ -203,13 +235,13 @@
                     <pre id="reportOutput"></pre>
                 </div>
 
-                <!-- ACHIEVEMENTS -->
+                <!-- ACHIEVEMENTS TAB -->
                 <div id="achievements" class="ak-tab">
                     <h2>🏆 ACHIEVEMENTS</h2>
                     <div id="achievementsList" class="ak-achievements-grid"></div>
                 </div>
 
-                <!-- SETTINGS -->
+                <!-- SETTINGS TAB -->
                 <div id="settings" class="ak-tab">
                     <h2>⚙️ SYSTEM SETTINGS</h2>
                     <div class="ak-card">
@@ -229,7 +261,7 @@
         </div>
     </div>
 
-    <!-- Task Edit Modal -->
+    <!-- Task Modal -->
     <div id="taskModal" class="ak-modal">
         <div class="ak-modal-content">
             <span class="close">&times;</span>
