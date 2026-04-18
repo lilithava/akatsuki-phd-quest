@@ -1,39 +1,19 @@
 {
   "meta": {
-    "name": "Akatsuki Documentation Task Bank – Eternal Documentation Scrolls",
-    "version": "1.0.0",
+    "name": "Eternal Documentation Scrolls",
+    "version": "2.0.0",
     "domain": "Documentation",
     "theme": "Eternal Documentation Scrolls",
-    "description": "Complete mission bank for documentation workflow: daily logs, weekly reviews, monthly summaries, evidence capture, file organization, version control, progress tracking, archiving, naming standards, and dashboard inputs."
+    "description": "Logs, evidence capture, version control, file organization, and proof-of-work missions.",
+    "lastUpdated": "2026-04-18"
   },
 
-  "subjects": [
-    "Daily Logs",
-    "Weekly Reviews",
-    "Monthly Summaries",
-    "Evidence Capture",
-    "File Organization",
-    "Version Control",
-    "Progress Tracking",
-    "Archive Maintenance",
-    "Naming Standards",
-    "Dashboard Inputs"
-  ],
-
   "tasks": [
-
-    /* ============================================================
-       DAILY LOGS
-    ============================================================ */
-
     {
       "id": "docs_daily_log",
       "title": "Write Daily Mission Log",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
       "subject": "Daily Logs",
-      "sideTopic": "work capture",
-      "missionType": "Ritual",
+      "sideTopic": "Work Capture",
       "difficulty": "Easy",
       "xp": 15,
       "repeatability": "Daily",
@@ -41,349 +21,190 @@
       "priority": "Important",
       "energy": "Low Energy",
       "context": "Home",
-      "successCriteria": "Log captures work done, blockers, and next move.",
-      "failureCondition": "Day ends with no written record.",
-      "reward": "Documentation streak progress.",
-      "recoveryMission": "Write a 3-bullet retro for the missed day.",
+      
+      "phase": "Daily",
+      "timeBlock": "Evening",
+      "prerequisites": [],
+      "outputs": ["daily log entry", "next actions list"],
+      
+      "successCriteria": "Log captures work done, blockers, decisions, and next move",
+      "failureCondition": "Day ends with no written record",
+      "reward": "+15 XP, +8 coins, documentation streak",
+      "recoveryMission": "Write a 3-bullet retro for the missed day",
+      
       "steps": [
-        { "label": "Open log template.", "completed": false },
-        { "label": "Write date and session title.", "completed": false },
-        { "label": "Record key work completed.", "completed": false },
-        { "label": "Record blockers or issues.", "completed": false },
-        { "label": "Record next action.", "completed": false },
-        { "label": "Save and tag entry.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open your daily log template (Notion, Obsidian, Google Doc) (1 min)",
+          "duration": "1 min",
+          "measurable": "Template open"
+        },
+        {
+          "number": 2,
+          "action": "Write today's date and session title (1 min)",
+          "duration": "1 min",
+          "measurable": "Date entered"
+        },
+        {
+          "number": 3,
+          "action": "Record 3-5 key work accomplishments (3 min)",
+          "duration": "3 min",
+          "measurable": "Accomplishments listed"
+        },
+        {
+          "number": 4,
+          "action": "Record any blockers, challenges, or stuck points (2 min)",
+          "duration": "2 min",
+          "measurable": "Blockers documented"
+        },
+        {
+          "number": 5,
+          "action": "Note 1-2 key decisions made today (2 min)",
+          "duration": "2 min",
+          "measurable": "Decisions noted"
+        },
+        {
+          "number": 6,
+          "action": "Write the single most important next action for tomorrow (1 min)",
+          "duration": "1 min",
+          "measurable": "Next action written"
+        },
+        {
+          "number": 7,
+          "action": "Tag entry with project names for easy filtering (1 min)",
+          "duration": "1 min",
+          "measurable": "Tags added"
+        },
+        {
+          "number": 8,
+          "action": "Save and close (1 min)",
+          "duration": "1 min",
+          "measurable": "File saved"
+        }
       ],
-      "tags": ["documentation", "ritual", "logging"],
-      "notes": "This is the backbone of your proof-of-work system."
+      
+      "tags": ["documentation", "daily", "log", "ritual"],
+      "notes": "This is the backbone of your proof-of-work system. Future you will thank present you for these logs when writing weekly/monthly reports."
     },
 
     {
-      "id": "docs_micro_log",
-      "title": "Capture Micro-Log After a Work Block",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Daily Logs",
-      "sideTopic": "micro-logging",
-      "missionType": "Mini-Quest",
+      "id": "docs_evidence_capture",
+      "title": "Save Proof-of-Work Evidence Pack",
+      "subject": "Evidence Capture",
+      "sideTopic": "Screenshots",
       "difficulty": "Easy",
-      "xp": 10,
+      "xp": 20,
+      "repeatability": "Repeatable",
+      "estimatedTime": 15,
+      "priority": "Maintenance",
+      "energy": "Low Energy",
+      "context": "Admin",
+      
+      "phase": "Daily",
+      "timeBlock": "Flexible",
+      "prerequisites": [],
+      "outputs": ["screenshots", "exports", "evidence links"],
+      
+      "successCriteria": "Screenshots or artifacts stored in correct folder with consistent naming",
+      "failureCondition": "Work completed but no evidence saved",
+      "reward": "+20 XP, +10 coins, proof bonus eligibility",
+      "recoveryMission": "Save 2 anchor screenshots only",
+      
+      "steps": [
+        {
+          "number": 1,
+          "action": "Identify the output to capture (completed task, milestone, deliverable) (1 min)",
+          "duration": "1 min",
+          "measurable": "Output identified"
+        },
+        {
+          "number": 2,
+          "action": "Take screenshots of key evidence (3-5 images) (4 min)",
+          "duration": "4 min",
+          "measurable": "Screenshots taken"
+        },
+        {
+          "number": 3,
+          "action": "Export any files or data needed (3 min)",
+          "duration": "3 min",
+          "measurable": "Files exported"
+        },
+        {
+          "number": 4,
+          "action": "Rename files using naming standard: YYYY-MM-DD_Project_Description (3 min)",
+          "duration": "3 min",
+          "measurable": "Files renamed"
+        },
+        {
+          "number": 5,
+          "action": "Place files in correct folder (by project/date) (2 min)",
+          "duration": "2 min",
+          "measurable": "Files moved"
+        },
+        {
+          "number": 6,
+          "action": "Add links to evidence in your daily log or dashboard (2 min)",
+          "duration": "2 min",
+          "measurable": "Links added"
+        }
+      ],
+      
+      "tags": ["evidence", "proof", "screenshots", "documentation"],
+      "notes": "Evidence packs protect you from forgetting your progress. One screenshot > ten sentences of description."
+    },
+
+    {
+      "id": "docs_version_save",
+      "title": "Save New Version of Draft or File",
+      "subject": "Version Control",
+      "sideTopic": "Versioning",
+      "difficulty": "Easy",
+      "xp": 15,
       "repeatability": "Repeatable",
       "estimatedTime": 5,
       "priority": "Maintenance",
       "energy": "Low Energy",
       "context": "Writing",
-      "successCriteria": "Short micro-log summarizing the last work block.",
-      "failureCondition": "Work done without any record.",
-      "reward": "Momentum and clarity.",
-      "recoveryMission": "Write a 1-sentence summary.",
+      
+      "phase": "Daily",
+      "timeBlock": "Evening",
+      "prerequisites": [],
+      "outputs": ["versioned file", "backup copy"],
+      
+      "successCriteria": "New version saved with correct naming format (v# or date)",
+      "failureCondition": "Overwriting files without version history",
+      "reward": "+15 XP, +8 coins, safer drafts",
+      "recoveryMission": "Save a backup copy only",
+      
       "steps": [
-        { "label": "Write what you just worked on.", "completed": false },
-        { "label": "Capture one insight or decision.", "completed": false },
-        { "label": "Note the next step.", "completed": false }
+        {
+          "number": 1,
+          "action": "Open the current draft or file (1 min)",
+          "duration": "1 min",
+          "measurable": "File open"
+        },
+        {
+          "number": 2,
+          "action": "Save new version with format: Filename_v#_YYYY-MM-DD (2 min)",
+          "duration": "2 min",
+          "measurable": "New version saved"
+        },
+        {
+          "number": 3,
+          "action": "Move old version to archive folder (1 min)",
+          "duration": "1 min",
+          "measurable": "Old version archived"
+        },
+        {
+          "number": 4,
+          "action": "Add brief change log note (what changed in this version) (1 min)",
+          "duration": "1 min",
+          "measurable": "Change log updated"
+        }
       ],
-      "tags": ["micro-log", "documentation"],
-      "notes": "Use this between tasks to maintain continuity."
-    },
-
-    /* ============================================================
-       WEEKLY REVIEWS
-    ============================================================ */
-
-    {
-      "id": "docs_weekly_review",
-      "title": "Complete Weekly Documentation Review",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Weekly Reviews",
-      "sideTopic": "patterns",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 40,
-      "repeatability": "Weekly",
-      "estimatedTime": 45,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "Weekly summary with patterns, wins, and adjustments.",
-      "failureCondition": "Week ends with no reflection.",
-      "reward": "Clarity and improved planning.",
-      "recoveryMission": "Write 3 bullets summarizing the week.",
-      "steps": [
-        { "label": "Review daily logs.", "completed": false },
-        { "label": "Identify patterns and themes.", "completed": false },
-        { "label": "List wins and completed missions.", "completed": false },
-        { "label": "List blockers and carryovers.", "completed": false },
-        { "label": "Write adjustments for next week.", "completed": false }
-      ],
-      "tags": ["weekly-review", "reflection"],
-      "notes": "Weekly reviews prevent drift and overwhelm."
-    },
-
-    /* ============================================================
-       MONTHLY SUMMARIES
-    ============================================================ */
-
-    {
-      "id": "docs_monthly_summary",
-      "title": "Write Monthly Summary Scroll",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Monthly Summaries",
-      "sideTopic": "recap",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 50,
-      "repeatability": "Monthly",
-      "estimatedTime": 60,
-      "priority": "Important",
-      "energy": "Standard Focus",
-      "context": "Writing",
-      "successCriteria": "Full monthly summary with milestones, progress, and insights.",
-      "failureCondition": "Month ends without a documented narrative.",
-      "reward": "High-level clarity and milestone tracking.",
-      "recoveryMission": "Write a 5-bullet monthly recap.",
-      "steps": [
-        { "label": "Review weekly summaries.", "completed": false },
-        { "label": "List major milestones achieved.", "completed": false },
-        { "label": "Capture key insights and lessons.", "completed": false },
-        { "label": "Identify long-term progress markers.", "completed": false },
-        { "label": "Write narrative summary.", "completed": false }
-      ],
-      "tags": ["monthly", "summary"],
-      "notes": "Monthly summaries help you see the bigger arc."
-    },
-
-    /* ============================================================
-       EVIDENCE CAPTURE
-    ============================================================ */
-
-    {
-      "id": "docs_evidence_pack",
-      "title": "Save Proof-of-Work Evidence Pack",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Evidence Capture",
-      "sideTopic": "screenshots",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Repeatable",
-      "estimatedTime": 15,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Home",
-      "successCriteria": "Screenshots or artifacts stored in correct folder.",
-      "failureCondition": "Work completed but no evidence saved.",
-      "reward": "Proof-of-work bonus eligibility.",
-      "recoveryMission": "Save 2 anchor screenshots.",
-      "steps": [
-        { "label": "Identify output to capture.", "completed": false },
-        { "label": "Take screenshots or export files.", "completed": false },
-        { "label": "Rename files correctly.", "completed": false },
-        { "label": "Place in correct folder.", "completed": false },
-        { "label": "Link in log or dashboard.", "completed": false }
-      ],
-      "tags": ["evidence", "proof"],
-      "notes": "Evidence packs protect you from forgetting your progress."
-    },
-
-    /* ============================================================
-       FILE ORGANIZATION
-    ============================================================ */
-
-    {
-      "id": "docs_folder_cleanup",
-      "title": "Run Folder Cleanup Pass",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "File Organization",
-      "sideTopic": "cleanup",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Weekly",
-      "estimatedTime": 20,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Admin",
-      "successCriteria": "Folders cleaned, duplicates removed, structure restored.",
-      "failureCondition": "Files scattered or mislabeled.",
-      "reward": "Cleaner workflow.",
-      "recoveryMission": "Clean one folder only.",
-      "steps": [
-        { "label": "Open documentation folder.", "completed": false },
-        { "label": "Sort files by type.", "completed": false },
-        { "label": "Rename files using naming standards.", "completed": false },
-        { "label": "Move files into correct folders.", "completed": false },
-        { "label": "Delete duplicates.", "completed": false }
-      ],
-      "tags": ["organization", "cleanup"],
-      "notes": "A clean folder system reduces cognitive load."
-    },
-
-    /* ============================================================
-       VERSION CONTROL
-    ============================================================ */
-
-    {
-      "id": "docs_version_save",
-      "title": "Save New Version of Draft or File",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Version Control",
-      "sideTopic": "versioning",
-      "missionType": "Mini-Quest",
-      "difficulty": "Easy",
-      "xp": 15,
-      "repeatability": "Repeatable",
-      "estimatedTime": 10,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Writing",
-      "successCriteria": "New version saved with correct naming format.",
-      "failureCondition": "Overwriting files without version history.",
-      "reward": "Safer drafts and traceability.",
-      "recoveryMission": "Save a backup copy only.",
-      "steps": [
-        { "label": "Open current draft.", "completed": false },
-        { "label": "Save new version with date + v#", "completed": false },
-        { "label": "Move old version to archive folder.", "completed": false }
-      ],
-      "tags": ["version-control", "backup"],
-      "notes": "Never overwrite your work — always version."
-    },
-
-    /* ============================================================
-       PROGRESS TRACKING
-    ============================================================ */
-
-    {
-      "id": "docs_progress_update",
-      "title": "Update Progress Tracker",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Progress Tracking",
-      "sideTopic": "kpi",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Daily",
-      "estimatedTime": 10,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Admin",
-      "successCriteria": "Tracker updated with accurate counts.",
-      "failureCondition": "Tracker becomes outdated.",
-      "reward": "Clear visibility of progress.",
-      "recoveryMission": "Update only the most important metric.",
-      "steps": [
-        { "label": "Open progress tracker.", "completed": false },
-        { "label": "Update mission counts.", "completed": false },
-        { "label": "Update streaks or KPIs.", "completed": false },
-        { "label": "Save tracker.", "completed": false }
-      ],
-      "tags": ["tracking", "metrics"],
-      "notes": "Tracking creates momentum."
-    },
-
-    /* ============================================================
-       ARCHIVE MAINTENANCE
-    ============================================================ */
-
-    {
-      "id": "docs_archive_pass",
-      "title": "Run Archive Maintenance Pass",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Archive Maintenance",
-      "sideTopic": "archiving",
-      "missionType": "Standard Mission",
-      "difficulty": "Medium",
-      "xp": 35,
-      "repeatability": "Monthly",
-      "estimatedTime": 40,
-      "priority": "Maintenance",
-      "energy": "Standard Focus",
-      "context": "Admin",
-      "successCriteria": "Old files archived, structure maintained.",
-      "failureCondition": "Archive becomes bloated or disorganized.",
-      "reward": "Long-term clarity and organization.",
-      "recoveryMission": "Archive 5 old files only.",
-      "steps": [
-        { "label": "Open archive folder.", "completed": false },
-        { "label": "Move old versions into archive.", "completed": false },
-        { "label": "Delete unnecessary duplicates.", "completed": false },
-        { "label": "Update archive index file.", "completed": false },
-        { "label": "Save and close.", "completed": false }
-      ],
-      "tags": ["archive", "organization"],
-      "notes": "Archives protect your long-term work history."
-    },
-
-    /* ============================================================
-       NAMING STANDARDS
-    ============================================================ */
-
-    {
-      "id": "docs_naming_pass",
-      "title": "Apply Naming Standards to One Folder",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Naming Standards",
-      "sideTopic": "file naming",
-      "missionType": "Mini-Quest",
-      "difficulty": "Easy",
-      "xp": 15,
-      "repeatability": "Repeatable",
-      "estimatedTime": 15,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Admin",
-      "successCriteria": "Files renamed using consistent format.",
-      "failureCondition": "Inconsistent naming conventions.",
-      "reward": "Cleaner structure and easier search.",
-      "recoveryMission": "Rename 3 files only.",
-      "steps": [
-        { "label": "Open folder.", "completed": false },
-        { "label": "Rename files using YYYY-MM-DD + descriptor.", "completed": false },
-        { "label": "Move renamed files into correct subfolders.", "completed": false }
-      ],
-      "tags": ["naming", "organization"],
-      "notes": "Consistent naming saves hours over time."
-    },
-
-    /* ============================================================
-       DASHBOARD INPUTS
-    ============================================================ */
-
-    {
-      "id": "docs_dashboard_update",
-      "title": "Update Dashboard Inputs",
-      "domain": "Documentation",
-      "theme": "Eternal Documentation Scrolls",
-      "subject": "Dashboard Inputs",
-      "sideTopic": "scoreboards",
-      "missionType": "Standard Mission",
-      "difficulty": "Easy",
-      "xp": 20,
-      "repeatability": "Daily",
-      "estimatedTime": 10,
-      "priority": "Maintenance",
-      "energy": "Low Energy",
-      "context": "Admin",
-      "successCriteria": "Dashboard updated with accurate numbers.",
-      "failureCondition": "Dashboard becomes outdated.",
-      "reward": "Real-time visibility.",
-      "recoveryMission": "Update only the most important metric.",
-      "steps": [
-        { "label": "Open dashboard file.", "completed": false },
-        { "label": "Update XP, streaks, and mission counts.", "completed": false },
-        { "label": "Add new evidence links if needed.", "completed": false },
-        { "label": "Save dashboard.", "completed": false }
-      ],
-      "tags": ["dashboard", "tracking"],
-      "notes": "Dashboard inputs feed your visual progress system."
+      
+      "tags": ["version-control", "backup", "safety"],
+      "notes": "Never overwrite your work — always version. Future you will need to see what changed and when."
     }
-
   ]
 }
